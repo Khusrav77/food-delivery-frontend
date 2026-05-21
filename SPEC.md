@@ -271,26 +271,22 @@ POST   /promo-codes/validate    → { valid: boolean, discount: number }
 
 ---
 
-## 7. Модели из iOS-приложения (справка)
+## 7. Недостающие таблицы для полного MVP
 
-Из существующего iOS-клиента (`FoodDeliveryApp`):
+В текущей схеме БД реализована только часть меню. Для полного MVP нужно добавить таблицы:
 
-```swift
-// Соответствие: iOS → Backend DB
-ProductCategory   → categories (+ products)
-Product           → products + menu_items (ProductBase=product, ProductDetail=menu_item)
-Price             → menu_items.price (regularPrice / discountedPrice)
-Promotion         → (отдельная таблица — нужно добавить в схему БД)
-Nutrition         → (отдельная таблица — нужно добавить в схему БД)
-MyOrder           → orders (нужна таблица в схеме)
-CartItem          → cart + cart_items (нужны таблицы в схеме)
-Address           → addresses (нужна таблица в схеме)
-Payment           → payment_methods (нужна таблица в схеме)
-PromoCode         → promo_codes (нужна таблица в схеме)
-UserBase/UserFull → users (нужна таблица в схеме)
-```
-
-> **Вывод:** В текущей схеме БД реализована только часть меню. Для полного MVP нужно добавить таблицы: `users`, `orders`, `order_items`, `cart`, `cart_items`, `addresses`, `payment_methods`, `promo_codes`, `promotions`, `nutrition`.
+| Таблица | Назначение |
+|---|---|
+| `users` | Покупатели, администраторы, курьеры |
+| `restaurants` | Рестораны (если мультиресторанность) |
+| `orders` | Заказы с типом доставки, оплаты, статусом |
+| `order_items` | Позиции в заказе (menu_item + количество) |
+| `cart` / `cart_items` | Корзина пользователя |
+| `addresses` | Адреса доставки пользователя |
+| `payment_methods` | Сохранённые карты/способы оплаты |
+| `promo_codes` | Промокоды с датами, лимитами, скидками |
+| `promotions` | Баннеры и акционные периоды |
+| `nutrition` | Пищевая ценность (калории, белки, жиры, углеводы) |
 
 ---
 

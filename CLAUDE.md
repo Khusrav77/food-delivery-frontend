@@ -2,25 +2,40 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project docs (in `.claude/docs/`)
+
+- **`.claude/docs/AI_TEAM.md`** — AI team system prompt: стек, FSD-архитектура, роли (Analyst/Architect/TeamLead/Designer/Developer/Reviewer), workflow modes, антипаттерны, Definition of Done. **Читать перед каждой задачей.**
+- **`.claude/docs/SPEC.md`** — Product specification: схема БД, TypeScript-типы, API эндпоинты, модули MVP, открытые вопросы к бэкенду.
+
 ## Operating contract
 
-При работе над этим репозиторием следуй **`AI_TEAM.md`** — там зафиксированы: целевой стек (Vue 3 + TS + Vite + Pinia + Vue Router + Tailwind + VeeValidate/Zod, FSD v2.1, pnpm, Vitest, Playwright, ESLint+Prettier), архитектура (FSD-слои `app → pages → widgets → features → entities → shared`, public API через `index.ts`), роли AI-команды (Analyst/Architect/TeamLead/Designer/Developer/Reviewer), workflow modes (Quick/Feature/Full/Review/Architecture), API-контракт, антипаттерны и Definition of Done. Каждый ответ — на русском, код/коммиты/имена — на английском.
+При работе над этим репозиторием следуй **`.claude/docs/AI_TEAM.md`**. Каждый ответ — на русском, код/коммиты/имена — на английском.
 
-**Текущее состояние vs спека:** репозиторий пока — голый Vite-стартер. Из спека ничего не установлено (нет `pinia`, `vue-router`, `tailwindcss`, `axios`, `vee-validate`, `zod`, `vitest`, `playwright`, `eslint`, `prettier`, `pnpm-lock.yaml`), нет каталогов FSD. Перед первой фичей нужно установить зависимости и развернуть FSD-структуру — не реализовывать фичи поверх пустого стартера.
+**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind). Admin-панель реализована: Dashboard + Menu (CRUD продуктов с категориями, тегами, вариантами).
 
 ## Commands
 
-- `npm run dev` — start the Vite dev server with HMR
-- `npm run build` — type-check (`vue-tsc -b`) then produce a production build in `dist/`
-- `npm run preview` — serve the built `dist/` locally to verify the production output
+- `node node_modules/vite/bin/vite.js` — запуск dev-сервера (Node 22 через nvm)
+- `npm run build` — type-check (`vue-tsc -b`) + production build в `dist/`
+- `npm run preview` — превью production-сборки
 
-There is no test runner or linter configured yet. Type errors are surfaced at build time via `vue-tsc`; the project also has the strict-ish flags `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`, and `noFallthroughCasesInSwitch` turned on in `tsconfig.app.json`.
+> Нет test runner и linter. Ошибки типов — через `vue-tsc` при сборке. Флаги: `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`, `noFallthroughCasesInSwitch`.
 
 ## Stack & structure
 
-Vue 3 + TypeScript + Vite scaffold (currently the default starter with a `HelloWorld` component — no feature code yet despite the "food-delivery" name).
+Vue 3 + TypeScript + Vite + Pinia + Vue Router + Tailwind CSS v4.
 
-- Entry: `src/main.ts` mounts `App.vue` onto `#app` in `index.html`. No router or state library is wired in.
-- SFCs use `<script setup lang="ts">` — follow this style for new components.
-- TypeScript is split into project references: `tsconfig.app.json` (browser code under `src/`, extends `@vue/tsconfig/tsconfig.dom.json`) and `tsconfig.node.json` (Vite/build tooling). When changing `tsconfig`, edit the right reference.
-- Static assets imported from `src/assets/` go through Vite's asset pipeline; files under `public/` (e.g. `icons.svg` referenced via `<use href="/icons.svg#...">`) are served as-is at the root.
+```
+src/
+├── app/          # router, layouts, styles
+├── pages/        # роутовые страницы
+├── widgets/      # AdminSidebar, AdminHeader
+├── features/     # dish-form, category-manager, tag-manager
+├── entities/     # dish (Product/MenuItem), category, tag
+└── shared/       # ui-kit (StatsCard)
+```
+
+- SFCs используют `<script setup lang="ts">` — придерживаться этого стиля.
+- Импорты только через `index.ts` каждого slice (public API).
+- TypeScript: `tsconfig.app.json` (src/), `tsconfig.node.json` (vite/tooling).
+- Статика из `src/assets/` — через Vite pipeline; `public/` — as-is.

@@ -2,12 +2,12 @@
 import { ref } from 'vue'
 import { X, Pencil, Trash2, Check } from 'lucide-vue-next'
 import { useCategoryStore } from '../../../entities/category'
-import { useDishStore } from '../../../entities/dish'
+import { useProductStore } from '../../../entities/dish'
 
 const emit = defineEmits<{ close: [] }>()
 
 const categoryStore = useCategoryStore()
-const dishStore = useDishStore()
+const productStore = useProductStore()
 
 const newName = ref('')
 const editingId = ref<string | null>(null)
@@ -30,11 +30,11 @@ function addCategory() {
 }
 
 function remove(id: string) {
-  const count = dishStore.dishes.filter(d => d.categoryId === id).length
+  const count = productStore.products.filter(d => d.categoryId === id).length
   if (count > 0) {
     const ok = confirm(`Категория содержит ${count} блюд. При удалении они станут "Без категории". Продолжить?`)
     if (!ok) return
-    dishStore.dishes.forEach(d => { if (d.categoryId === id) d.categoryId = null })
+    productStore.products.forEach(d => { if (d.categoryId === id) d.categoryId = null })
   }
   categoryStore.removeCategory(id)
 }
@@ -73,7 +73,7 @@ function remove(id: string) {
             <template v-else>
               <span class="flex-1 text-sm text-slate-800">{{ cat.name }}</span>
               <span class="text-xs text-slate-400">
-                {{ dishStore.dishes.filter(d => d.categoryId === cat.id).length }} блюд
+                {{ productStore.products.filter(d => d.categoryId === cat.id).length }} блюд
               </span>
               <button
                 class="p-1 text-slate-300 hover:text-orange-500 transition-colors"

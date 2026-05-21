@@ -23,6 +23,6 @@ const colorMap: Record<string, string> = {
     ]"
   >
     <span v-if="tag.emoji">{{ tag.emoji }}</span>
-    {{ tag.name }}
+    {{ tag.label }}
   </span>
 </template>

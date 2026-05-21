@@ -1,3 +1,4 @@
-export { useDishStore } from './model/store'
-export type { Dish, DishVariant } from './model/types'
+export { useProductStore } from './model/store'
+export type { Product, MenuItem, MenuItemImage, MenuItemSize, SizeType, SizeUnit } from './model/types'
+export { SIZE_UNIT_BY_TYPE, SIZE_TYPE_LABELS, SIZE_UNIT_LABELS } from './model/types'
 export { default as DishCard } from './ui/DishCard.vue'

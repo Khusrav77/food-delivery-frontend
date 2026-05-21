@@ -3,11 +3,11 @@ import { defineStore } from 'pinia'
 import type { Tag } from './types'
 
 const mockTags: Tag[] = [
-  { id: 't1', name: 'Хит', color: 'orange', emoji: '⭐' },
-  { id: 't2', name: 'Новинка', color: 'green', emoji: '🆕' },
-  { id: 't3', name: 'Острый', color: 'red', emoji: '🌶️' },
-  { id: 't4', name: 'Вегетарианский', color: 'emerald', emoji: '🥦' },
-  { id: 't5', name: 'Без глютена', color: 'violet', emoji: '🌾' },
+  { id: 't1', label: 'Хит', color: 'orange', emoji: '⭐' },
+  { id: 't2', label: 'Новинка', color: 'green', emoji: '🆕' },
+  { id: 't3', label: 'Острый', color: 'red', emoji: '🌶️' },
+  { id: 't4', label: 'Вегетарианский', color: 'emerald', emoji: '🥦' },
+  { id: 't5', label: 'Без глютена', color: 'violet', emoji: '🌾' },
 ]
 
 export const useTagStore = defineStore('tag', () => {

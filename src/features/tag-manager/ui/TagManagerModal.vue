@@ -17,14 +17,14 @@ const colorOptions: { value: TagColor; label: string; cls: string }[] = [
   { value: 'yellow', label: 'Жёлтый', cls: 'bg-yellow-500' },
 ]
 
-const newName = ref('')
+const newLabel = ref('')
 const newEmoji = ref('')
 const newColor = ref<TagColor>('orange')
 
 function addTag() {
-  if (!newName.value.trim()) return
-  tagStore.addTag({ name: newName.value.trim(), color: newColor.value, emoji: newEmoji.value || undefined })
-  newName.value = ''
+  if (!newLabel.value.trim()) return
+  tagStore.addTag({ label: newLabel.value.trim(), color: newColor.value, emoji: newEmoji.value || undefined })
+  newLabel.value = ''
   newEmoji.value = ''
   newColor.value = 'orange'
 }
@@ -72,7 +72,7 @@ function addTag() {
               class="w-14 border border-slate-200 rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
             <input
-              v-model="newName"
+              v-model="newLabel"
               type="text"
               placeholder="Название тега"
               class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"

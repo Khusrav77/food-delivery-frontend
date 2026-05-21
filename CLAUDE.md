@@ -7,6 +7,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **`.claude/docs/AI_TEAM.md`** — AI team system prompt: стек, FSD-архитектура, роли (Analyst/Architect/TeamLead/Designer/Developer/Reviewer), workflow modes, антипаттерны, Definition of Done. **Читать перед каждой задачей.**
 - **`.claude/docs/SPEC.md`** — Product specification: схема БД, TypeScript-типы, API эндпоинты, модули MVP, открытые вопросы к бэкенду.
 
+## Git rules
+
+- **Никогда не добавлять** `Co-Authored-By:` подпись в commit message.
+- **Никогда не делать `git push`** после коммита — только коммит, push делает разработчик вручную.
+
 ## Operating contract
 
 При работе над этим репозиторием следуй **`.claude/docs/AI_TEAM.md`**. Каждый ответ — на русском, код/коммиты/имена — на английском.

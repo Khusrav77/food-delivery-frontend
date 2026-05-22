@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Plus, Settings2, Tag as TagIcon, Search } from 'lucide-vue-next'
 import { useProductStore, DishCard } from '../../entities/dish'
 import type { Product } from '../../entities/dish'
@@ -12,6 +12,12 @@ import { TagManagerModal } from '../../features/tag-manager'
 const productStore = useProductStore()
 const tagStore = useTagStore()
 const categoryStore = useCategoryStore()
+
+onMounted(async () => {
+  // Tags must load first — their labels are used to resolve tagIds when mapping products
+  await tagStore.fetchAll()
+  await Promise.all([categoryStore.fetchAll(), productStore.fetchAll()])
+})
 
 const search = ref('')
 const activeCategoryId = ref<string | 'all' | 'none'>('all')

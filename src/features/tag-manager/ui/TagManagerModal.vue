@@ -21,9 +21,9 @@ const newLabel = ref('')
 const newEmoji = ref('')
 const newColor = ref<TagColor>('orange')
 
-function addTag() {
+async function addTag() {
   if (!newLabel.value.trim()) return
-  tagStore.addTag({ label: newLabel.value.trim(), color: newColor.value, emoji: newEmoji.value || undefined })
+  await tagStore.addTag({ label: newLabel.value.trim(), color: newColor.value, emoji: newEmoji.value || undefined })
   newLabel.value = ''
   newEmoji.value = ''
   newColor.value = 'orange'

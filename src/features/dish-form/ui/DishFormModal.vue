@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { X } from 'lucide-vue-next'
+import { X, Loader2 } from 'lucide-vue-next'
 import type { Product } from '../../../entities/dish'
 import { useProductStore } from '../../../entities/dish'
 import { useCategoryStore } from '../../../entities/category'
@@ -19,6 +19,8 @@ const isActive = ref(true)
 const menuItems = ref<MenuItemDraft[]>([])
 
 const errors = ref<Record<string, string>>({})
+const saving = ref(false)
+const saveError = ref<string | null>(null)
 
 function defaultDraft(): MenuItemDraft {
   return { id: `draft-${Date.now()}`, name: '', price: 0, isActive: true, imageUrls: [''], sizes: [], tagIds: [] }
@@ -89,22 +91,30 @@ function draftToMenuItem(draft: MenuItemDraft, idx: number): Product['menuItems'
   }
 }
 
-function save() {
+async function save() {
   if (!validate()) return
-  const data = {
-    categoryId: categoryId.value,
-    name: name.value.trim(),
-    description: description.value.trim(),
-    isActive: isActive.value,
-    position: props.product?.position ?? 0,
-    menuItems: menuItems.value.map(draftToMenuItem),
+  saving.value = true
+  saveError.value = null
+  try {
+    const data = {
+      categoryId: categoryId.value,
+      name: name.value.trim(),
+      description: description.value.trim(),
+      isActive: isActive.value,
+      position: props.product?.position ?? 0,
+      menuItems: menuItems.value.map(draftToMenuItem),
+    }
+    if (props.product) {
+      await productStore.updateProduct(props.product.id, data)
+    } else {
+      await productStore.addProduct(data)
+    }
+    emit('close')
+  } catch (e) {
+    saveError.value = (e as { message: string }).message ?? 'Ошибка сохранения'
+  } finally {
+    saving.value = false
   }
-  if (props.product) {
-    productStore.updateProduct(props.product.id, data)
-  } else {
-    productStore.addProduct(data)
-  }
-  emit('close')
 }
 </script>
 
@@ -198,18 +208,22 @@ function save() {
 
         <!-- Footer -->
         <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200">
+          <p v-if="saveError" class="flex-1 text-sm text-red-500">{{ saveError }}</p>
           <button
             type="button"
             class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+            :disabled="saving"
             @click="emit('close')"
           >
             Отмена
           </button>
           <button
             type="button"
-            class="px-4 py-2 text-sm font-medium bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+            class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white rounded-lg transition-colors"
+            :disabled="saving"
             @click="save"
           >
+            <Loader2 v-if="saving" :size="14" class="animate-spin" />
             {{ product ? 'Сохранить' : 'Создать' }}
           </button>
         </div>

@@ -1,37 +1,49 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Category } from './types'
-
-const NOW = '2024-01-01T00:00:00.000Z'
-
-const mockCategories: Category[] = [
-  { id: 'c1', name: 'Роллы', imageUrl: null, position: 1, createdAt: NOW, updatedAt: NOW },
-  { id: 'c2', name: 'Пицца', imageUrl: null, position: 2, createdAt: NOW, updatedAt: NOW },
-  { id: 'c3', name: 'Суши', imageUrl: null, position: 3, createdAt: NOW, updatedAt: NOW },
-  { id: 'c4', name: 'Напитки', imageUrl: null, position: 4, createdAt: NOW, updatedAt: NOW },
-]
+import {
+  fetchCategories,
+  createCategory,
+  updateCategory as apiUpdateCategory,
+  deleteCategory,
+} from '../api/categoriesApi'
 
 export const useCategoryStore = defineStore('category', () => {
-  const categories = ref<Category[]>([...mockCategories])
+  const categories = ref<Category[]>([])
+  const loading = ref(false)
+  const error = ref<string | null>(null)
 
-  function addCategory(name: string) {
-    const position = categories.value.length + 1
-    const now = new Date().toISOString()
-    categories.value.push({ id: `c${Date.now()}`, name, imageUrl: null, position, createdAt: now, updatedAt: now })
+  async function fetchAll() {
+    loading.value = true
+    error.value = null
+    try {
+      categories.value = await fetchCategories()
+    } catch (e) {
+      error.value = (e as { message: string }).message ?? 'Ошибка загрузки категорий'
+    } finally {
+      loading.value = false
+    }
   }
 
-  function removeCategory(id: string) {
+  async function addCategory(name: string) {
+    const cat = await createCategory({ name })
+    categories.value.push(cat)
+  }
+
+  async function removeCategory(id: string) {
+    await deleteCategory(id)
     categories.value = categories.value.filter(c => c.id !== id)
   }
 
-  function renameCategory(id: string, name: string) {
-    const cat = categories.value.find(c => c.id === id)
-    if (cat) { cat.name = name; cat.updatedAt = new Date().toISOString() }
+  async function renameCategory(id: string, name: string) {
+    const updated = await apiUpdateCategory(id, { name })
+    const idx = categories.value.findIndex(c => c.id === id)
+    if (idx !== -1) categories.value[idx] = updated
   }
 
   function getById(id: string) {
     return categories.value.find(c => c.id === id)
   }
 
-  return { categories, addCategory, removeCategory, renameCategory, getById }
+  return { categories, loading, error, fetchAll, addCategory, removeCategory, renameCategory, getById }
 })

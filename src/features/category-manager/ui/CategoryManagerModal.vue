@@ -18,25 +18,26 @@ function startEdit(id: string, name: string) {
   editingName.value = name
 }
 
-function confirmEdit(id: string) {
-  if (editingName.value.trim()) categoryStore.renameCategory(id, editingName.value.trim())
+async function confirmEdit(id: string) {
+  if (editingName.value.trim()) await categoryStore.renameCategory(id, editingName.value.trim())
   editingId.value = null
 }
 
-function addCategory() {
+async function addCategory() {
   if (!newName.value.trim()) return
-  categoryStore.addCategory(newName.value.trim())
+  await categoryStore.addCategory(newName.value.trim())
   newName.value = ''
 }
 
-function remove(id: string) {
+async function remove(id: string) {
   const count = productStore.products.filter(d => d.categoryId === id).length
   if (count > 0) {
-    const ok = confirm(`Категория содержит ${count} блюд. При удалении они станут "Без категории". Продолжить?`)
+    const ok = confirm(`Категория содержит ${count} блюд. Продолжить удаление?`)
     if (!ok) return
-    productStore.products.forEach(d => { if (d.categoryId === id) d.categoryId = null })
   }
-  categoryStore.removeCategory(id)
+  await categoryStore.removeCategory(id)
+  // Рефетч продуктов — сервер определяет что происходит с блюдами при удалении категории
+  await productStore.fetchAll()
 }
 </script>
 

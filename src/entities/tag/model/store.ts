@@ -1,23 +1,33 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Tag } from './types'
-
-const mockTags: Tag[] = [
-  { id: 't1', label: 'Хит', color: 'orange', emoji: '⭐' },
-  { id: 't2', label: 'Новинка', color: 'green', emoji: '🆕' },
-  { id: 't3', label: 'Острый', color: 'red', emoji: '🌶️' },
-  { id: 't4', label: 'Вегетарианский', color: 'emerald', emoji: '🥦' },
-  { id: 't5', label: 'Без глютена', color: 'violet', emoji: '🌾' },
-]
+import { fetchTags, createTag, deleteTag as apiDeleteTag } from '../api/tagsApi'
 
 export const useTagStore = defineStore('tag', () => {
-  const tags = ref<Tag[]>([...mockTags])
+  const tags = ref<Tag[]>([])
+  const loading = ref(false)
+  const error = ref<string | null>(null)
 
-  function addTag(tag: Omit<Tag, 'id'>) {
-    tags.value.push({ ...tag, id: `t${Date.now()}` })
+  async function fetchAll() {
+    loading.value = true
+    error.value = null
+    try {
+      // color/emoji — UI-only, не хранятся в БД
+      tags.value = await fetchTags()
+    } catch (e) {
+      error.value = (e as { message: string }).message ?? 'Ошибка загрузки тегов'
+    } finally {
+      loading.value = false
+    }
   }
 
-  function removeTag(id: string) {
+  async function addTag(tag: Omit<Tag, 'id'>) {
+    const created = await createTag({ label: tag.label })
+    tags.value.push({ ...created, color: tag.color, emoji: tag.emoji })
+  }
+
+  async function removeTag(id: string) {
+    await apiDeleteTag(id)
     tags.value = tags.value.filter(t => t.id !== id)
   }
 
@@ -25,5 +35,5 @@ export const useTagStore = defineStore('tag', () => {
     return tags.value.find(t => t.id === id)
   }
 
-  return { tags, addTag, removeTag, getById }
+  return { tags, loading, error, fetchAll, addTag, removeTag, getById }
 })

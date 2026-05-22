@@ -1,260 +1,33 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import type { Product, MenuItem } from './types'
-
-const NOW = '2024-01-01T00:00:00.000Z'
-
-const mockProducts: Product[] = [
-  {
-    id: 'd1',
-    categoryId: 'c1',
-    name: 'Ролл Филадельфия',
-    description: 'Нежный лосось, сливочный сыр, огурец, авокадо',
-    isActive: true,
-    position: 1,
-    createdAt: NOW,
-    updatedAt: NOW,
-    menuItems: [
-      {
-        id: 'mi1',
-        productId: 'd1',
-        name: '4 шт',
-        price: 400,
-        isActive: true,
-        position: 1,
-        images: [{ id: 'img1', menuItemId: 'mi1', url: 'https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=400&q=80', position: 1 }],
-        sizes: [{ id: 's1', menuItemId: 'mi1', sizeType: 'weight', sizeValue: 200, sizeUnit: 'gram' }],
-        tagIds: ['t1'],
-      },
-      {
-        id: 'mi2',
-        productId: 'd1',
-        name: '8 шт',
-        price: 700,
-        isActive: true,
-        position: 2,
-        images: [{ id: 'img2', menuItemId: 'mi2', url: 'https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=400&q=80', position: 1 }],
-        sizes: [{ id: 's2', menuItemId: 'mi2', sizeType: 'weight', sizeValue: 400, sizeUnit: 'gram' }],
-        tagIds: ['t1'],
-      },
-    ],
-  },
-  {
-    id: 'd2',
-    categoryId: 'c1',
-    name: 'Ролл Дракон',
-    description: 'Угорь, авокадо, огурец, соус унаги, кунжут',
-    isActive: true,
-    position: 2,
-    createdAt: NOW,
-    updatedAt: NOW,
-    menuItems: [
-      {
-        id: 'mi3',
-        productId: 'd2',
-        name: '8 шт',
-        price: 580,
-        isActive: true,
-        position: 1,
-        images: [{ id: 'img3', menuItemId: 'mi3', url: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?w=400&q=80', position: 1 }],
-        sizes: [{ id: 's3', menuItemId: 'mi3', sizeType: 'weight', sizeValue: 320, sizeUnit: 'gram' }],
-        tagIds: ['t1', 't3'],
-      },
-    ],
-  },
-  {
-    id: 'd3',
-    categoryId: 'c1',
-    name: 'Ролл Калифорния',
-    description: 'Краб, авокадо, огурец, икра тобико',
-    isActive: true,
-    position: 3,
-    createdAt: NOW,
-    updatedAt: NOW,
-    menuItems: [
-      {
-        id: 'mi4',
-        productId: 'd3',
-        name: '8 шт',
-        price: 450,
-        isActive: true,
-        position: 1,
-        images: [{ id: 'img4', menuItemId: 'mi4', url: 'https://images.unsplash.com/photo-1562802378-063ec186a863?w=400&q=80', position: 1 }],
-        sizes: [{ id: 's4', menuItemId: 'mi4', sizeType: 'weight', sizeValue: 280, sizeUnit: 'gram' }],
-        tagIds: ['t2'],
-      },
-    ],
-  },
-  {
-    id: 'd4',
-    categoryId: 'c2',
-    name: 'Пицца Маргарита',
-    description: 'Томатный соус, моцарелла, свежий базилик',
-    isActive: true,
-    position: 1,
-    createdAt: NOW,
-    updatedAt: NOW,
-    menuItems: [
-      {
-        id: 'mi5',
-        productId: 'd4',
-        name: '20 см',
-        price: 550,
-        isActive: true,
-        position: 1,
-        images: [{ id: 'img5', menuItemId: 'mi5', url: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80', position: 1 }],
-        sizes: [
-          { id: 's5', menuItemId: 'mi5', sizeType: 'diameter', sizeValue: 20, sizeUnit: 'cm' },
-          { id: 's6', menuItemId: 'mi5', sizeType: 'weight', sizeValue: 400, sizeUnit: 'gram' },
-        ],
-        tagIds: ['t4'],
-      },
-      {
-        id: 'mi6',
-        productId: 'd4',
-        name: '30 см',
-        price: 850,
-        isActive: true,
-        position: 2,
-        images: [{ id: 'img6', menuItemId: 'mi6', url: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80', position: 1 }],
-        sizes: [
-          { id: 's7', menuItemId: 'mi6', sizeType: 'diameter', sizeValue: 30, sizeUnit: 'cm' },
-          { id: 's8', menuItemId: 'mi6', sizeType: 'weight', sizeValue: 700, sizeUnit: 'gram' },
-        ],
-        tagIds: ['t4'],
-      },
-    ],
-  },
-  {
-    id: 'd5',
-    categoryId: 'c2',
-    name: 'Пицца Пепперони',
-    description: 'Томатный соус, моцарелла, острые колбаски пепперони',
-    isActive: true,
-    position: 2,
-    createdAt: NOW,
-    updatedAt: NOW,
-    menuItems: [
-      {
-        id: 'mi7',
-        productId: 'd5',
-        name: '20 см',
-        price: 620,
-        isActive: true,
-        position: 1,
-        images: [{ id: 'img7', menuItemId: 'mi7', url: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80', position: 1 }],
-        sizes: [
-          { id: 's9', menuItemId: 'mi7', sizeType: 'diameter', sizeValue: 20, sizeUnit: 'cm' },
-          { id: 's10', menuItemId: 'mi7', sizeType: 'weight', sizeValue: 450, sizeUnit: 'gram' },
-        ],
-        tagIds: ['t1', 't3'],
-      },
-      {
-        id: 'mi8',
-        productId: 'd5',
-        name: '30 см',
-        price: 950,
-        isActive: true,
-        position: 2,
-        images: [{ id: 'img8', menuItemId: 'mi8', url: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80', position: 1 }],
-        sizes: [
-          { id: 's11', menuItemId: 'mi8', sizeType: 'diameter', sizeValue: 30, sizeUnit: 'cm' },
-          { id: 's12', menuItemId: 'mi8', sizeType: 'weight', sizeValue: 750, sizeUnit: 'gram' },
-        ],
-        tagIds: ['t1', 't3'],
-      },
-    ],
-  },
-  {
-    id: 'd6',
-    categoryId: 'c3',
-    name: 'Сет Суши Классика',
-    description: '10 кусочков: лосось, тунец, угорь, сёмга, икура',
-    isActive: true,
-    position: 1,
-    createdAt: NOW,
-    updatedAt: NOW,
-    menuItems: [
-      {
-        id: 'mi9',
-        productId: 'd6',
-        name: '10 шт',
-        price: 750,
-        isActive: true,
-        position: 1,
-        images: [{ id: 'img9', menuItemId: 'mi9', url: 'https://images.unsplash.com/photo-1553621042-f6e147245754?w=400&q=80', position: 1 }],
-        sizes: [
-          { id: 's13', menuItemId: 'mi9', sizeType: 'count', sizeValue: 10, sizeUnit: 'piece' },
-          { id: 's14', menuItemId: 'mi9', sizeType: 'weight', sizeValue: 300, sizeUnit: 'gram' },
-        ],
-        tagIds: ['t1', 't2'],
-      },
-    ],
-  },
-  {
-    id: 'd7',
-    categoryId: 'c3',
-    name: 'Суши Лосось',
-    description: 'Свежий лосось на рисовой подушке',
-    isActive: false,
-    position: 2,
-    createdAt: NOW,
-    updatedAt: NOW,
-    menuItems: [
-      {
-        id: 'mi10',
-        productId: 'd7',
-        name: '2 шт',
-        price: 200,
-        isActive: false,
-        position: 1,
-        images: [{ id: 'img10', menuItemId: 'mi10', url: 'https://images.unsplash.com/photo-1559410545-0bdcd187e0a6?w=400&q=80', position: 1 }],
-        sizes: [
-          { id: 's15', menuItemId: 'mi10', sizeType: 'count', sizeValue: 2, sizeUnit: 'piece' },
-          { id: 's16', menuItemId: 'mi10', sizeType: 'weight', sizeValue: 80, sizeUnit: 'gram' },
-        ],
-        tagIds: ['t5'],
-      },
-    ],
-  },
-  {
-    id: 'd8',
-    categoryId: 'c4',
-    name: 'Coca-Cola',
-    description: 'Освежающий газированный напиток',
-    isActive: true,
-    position: 1,
-    createdAt: NOW,
-    updatedAt: NOW,
-    menuItems: [
-      {
-        id: 'mi11',
-        productId: 'd8',
-        name: '0.33 л',
-        price: 120,
-        isActive: true,
-        position: 1,
-        images: [{ id: 'img11', menuItemId: 'mi11', url: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&q=80', position: 1 }],
-        sizes: [{ id: 's17', menuItemId: 'mi11', sizeType: 'volume', sizeValue: 330, sizeUnit: 'ml' }],
-        tagIds: [],
-      },
-      {
-        id: 'mi12',
-        productId: 'd8',
-        name: '0.5 л',
-        price: 160,
-        isActive: true,
-        position: 2,
-        images: [{ id: 'img12', menuItemId: 'mi12', url: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&q=80', position: 1 }],
-        sizes: [{ id: 's18', menuItemId: 'mi12', sizeType: 'volume', sizeValue: 500, sizeUnit: 'ml' }],
-        tagIds: [],
-      },
-    ],
-  },
-]
+import {
+  fetchProducts,
+  fetchMenuItems,
+  fetchMenuItemImages,
+  createProduct,
+  updateProductApi,
+  deleteProduct,
+  createMenuItemApi,
+  updateMenuItemApi,
+  deleteMenuItemApi,
+  attachTag,
+  detachTag,
+  createMenuItemImageApi,
+  deleteMenuItemImageApi,
+  createMenuItemSizeApi,
+  deleteMenuItemSizeApi,
+  mapMenuItem,
+  SIZE_TYPE_TO_LABEL,
+  SIZE_UNIT_TO_UNIT,
+} from '../api/productsApi'
+// FSD exception: tag label → id lookup requires tag data at the entity level
+import { useTagStore } from '@/entities/tag'
 
 export const useProductStore = defineStore('product', () => {
-  const products = ref<Product[]>([...mockProducts])
+  const products = ref<Product[]>([])
+  const loading = ref(false)
+  const error = ref<string | null>(null)
 
   const getByCategory = computed(() => (categoryId: string | null) => {
     if (categoryId === null) return products.value.filter(p => p.categoryId === null)
@@ -265,48 +38,230 @@ export const useProductStore = defineStore('product', () => {
     products.value.filter(p => p.menuItems.some(mi => mi.tagIds.includes(tagId))),
   )
 
-  function addProduct(product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) {
-    const now = new Date().toISOString()
-    products.value.push({ ...product, id: `d${Date.now()}`, createdAt: now, updatedAt: now })
+  function tagResolver(label: string): string | undefined {
+    return useTagStore().tags.find(t => t.label === label)?.id
   }
 
-  function updateProduct(id: string, updates: Partial<Omit<Product, 'id' | 'createdAt'>>) {
-    const idx = products.value.findIndex(p => p.id === id)
-    if (idx !== -1) {
-      products.value[idx] = { ...products.value[idx], ...updates, updatedAt: new Date().toISOString() }
+  // ─── Fetch ──────────────────────────────────────────────────────────────
+
+  async function fetchAll() {
+    loading.value = true
+    error.value = null
+    try {
+      const [rawProducts, rawItems] = await Promise.all([fetchProducts(), fetchMenuItems()])
+
+      const itemsByProduct = new Map<string, typeof rawItems>()
+      for (const item of rawItems) {
+        const list = itemsByProduct.get(item.productId) ?? []
+        list.push(item)
+        itemsByProduct.set(item.productId, list)
+      }
+
+      products.value = rawProducts.map(p => ({
+        ...p,
+        menuItems: (itemsByProduct.get(p.id) ?? []).map(item => mapMenuItem(item, tagResolver)),
+      }))
+    } catch (e) {
+      error.value = (e as { message: string }).message ?? 'Ошибка загрузки продуктов'
+    } finally {
+      loading.value = false
     }
   }
 
-  function removeProduct(id: string) {
+  // ─── Internal helpers ────────────────────────────────────────────────────
+
+  async function syncSizes(menuItemId: string, item: { price: number; sizes: MenuItem['sizes'] }, existingSizeIds: string[]) {
+    await Promise.all(existingSizeIds.map(id => deleteMenuItemSizeApi(id)))
+
+    if (item.sizes.length > 0) {
+      await Promise.all(
+        item.sizes.map(sz =>
+          createMenuItemSizeApi({
+            menuItemId,
+            label: SIZE_TYPE_TO_LABEL[sz.sizeType],
+            sizeValue: sz.sizeValue,
+            sizeUnit: SIZE_UNIT_TO_UNIT[sz.sizeUnit],
+            price: item.price,
+          }),
+        ),
+      )
+    } else if (item.price > 0) {
+      // No sizes configured — store the price on a default "piece" size
+      await createMenuItemSizeApi({
+        menuItemId,
+        label: 'PIECES',
+        sizeValue: 1,
+        sizeUnit: 'PCS',
+        price: item.price,
+      })
+    }
+  }
+
+  async function syncImages(menuItemId: string, imageUrls: string[]) {
+    const existing = await fetchMenuItemImages(menuItemId)
+    await Promise.all(existing.map(img => deleteMenuItemImageApi(img.id)))
+    await Promise.all(imageUrls.map(url => createMenuItemImageApi({ menuItemId, url })))
+  }
+
+  async function syncTags(menuItemId: string, newTagIds: string[], existingTagIds: string[]) {
+    const toAttach = newTagIds.filter(id => !existingTagIds.includes(id))
+    const toDetach = existingTagIds.filter(id => !newTagIds.includes(id))
+    await Promise.all([
+      ...toAttach.map(id => attachTag(menuItemId, id)),
+      ...toDetach.map(id => detachTag(menuItemId, id)),
+    ])
+  }
+
+  async function freshMenuItems(productId: string): Promise<MenuItem[]> {
+    const raw = await fetchMenuItems(productId)
+    return raw.map(item => mapMenuItem(item, tagResolver))
+  }
+
+  async function createFullMenuItem(productId: string, item: Omit<MenuItem, 'id' | 'productId'>) {
+    const created = await createMenuItemApi({
+      productId,
+      name: item.name,
+      active: item.isActive,
+      position: item.position,
+    })
+    await Promise.all([
+      syncSizes(created.id, item, []),
+      syncImages(created.id, item.images.map(img => img.url)),
+      syncTags(created.id, item.tagIds, []),
+    ])
+  }
+
+  // ─── CRUD ────────────────────────────────────────────────────────────────
+
+  async function addProduct(product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) {
+    const { menuItems, ...fields } = product
+    const created = await createProduct({
+      categoryId: fields.categoryId ?? '',
+      name: fields.name,
+      description: fields.description,
+      active: fields.isActive,
+      position: fields.position,
+    })
+
+    for (const item of menuItems) {
+      await createFullMenuItem(created.id, item)
+    }
+
+    const items = await freshMenuItems(created.id)
+    products.value.push({ ...created, menuItems: items })
+  }
+
+  async function updateProduct(id: string, updates: Partial<Omit<Product, 'id' | 'createdAt' | 'updatedAt'>>) {
+    const { menuItems: newMenuItems, ...fields } = updates
+
+    if (Object.keys(fields).length > 0) {
+      await updateProductApi(id, {
+        ...(fields.name !== undefined && { name: fields.name }),
+        ...(fields.description !== undefined && { description: fields.description }),
+        ...(fields.isActive !== undefined && { active: fields.isActive }),
+        ...(fields.categoryId !== undefined && fields.categoryId !== null && { categoryId: fields.categoryId }),
+        ...(fields.position !== undefined && { position: fields.position }),
+      })
+    }
+
+    if (newMenuItems !== undefined) {
+      const existing = products.value.find(p => p.id === id)
+      const existingIds = new Set(existing?.menuItems.map(mi => mi.id) ?? [])
+
+      const toDelete = (existing?.menuItems ?? []).filter(mi => !newMenuItems.find(nmi => nmi.id === mi.id))
+      const toCreate = newMenuItems.filter(mi => !existingIds.has(mi.id))
+      const toUpdate = newMenuItems.filter(mi => existingIds.has(mi.id))
+
+      await Promise.all(toDelete.map(mi => deleteMenuItemApi(mi.id)))
+
+      for (const item of toCreate) {
+        await createFullMenuItem(id, item)
+      }
+
+      for (const item of toUpdate) {
+        await updateMenuItemApi(item.id, { productId: id, name: item.name, active: item.isActive, position: item.position })
+        const existingMi = existing?.menuItems.find(mi => mi.id === item.id)
+        await Promise.all([
+          syncSizes(item.id, item, existingMi?.sizes.map(s => s.id) ?? []),
+          syncImages(item.id, item.images.map(img => img.url)),
+          syncTags(item.id, item.tagIds, existingMi?.tagIds ?? []),
+        ])
+      }
+    }
+
+    const items = await freshMenuItems(id)
+    const idx = products.value.findIndex(p => p.id === id)
+    if (idx !== -1) {
+      const current = products.value[idx]
+      products.value[idx] = {
+        ...current,
+        ...(updates.name !== undefined && { name: updates.name }),
+        ...(updates.description !== undefined && { description: updates.description }),
+        ...(updates.isActive !== undefined && { isActive: updates.isActive }),
+        ...(updates.categoryId !== undefined && { categoryId: updates.categoryId }),
+        ...(updates.position !== undefined && { position: updates.position }),
+        menuItems: items,
+      }
+    }
+  }
+
+  async function removeProduct(id: string) {
+    await deleteProduct(id)
     products.value = products.value.filter(p => p.id !== id)
   }
 
-  function toggleActive(id: string) {
+  async function toggleActive(id: string) {
     const product = products.value.find(p => p.id === id)
-    if (product) product.isActive = !product.isActive
-  }
-
-  function addMenuItem(productId: string, item: Omit<MenuItem, 'id' | 'productId'>) {
-    const product = products.value.find(p => p.id === productId)
-    if (product) product.menuItems.push({ ...item, id: `mi${Date.now()}`, productId })
-  }
-
-  function updateMenuItem(productId: string, itemId: string, updates: Partial<Omit<MenuItem, 'id' | 'productId'>>) {
-    const product = products.value.find(p => p.id === productId)
     if (!product) return
-    const idx = product.menuItems.findIndex(mi => mi.id === itemId)
-    if (idx !== -1) product.menuItems[idx] = { ...product.menuItems[idx], ...updates }
+    const next = !product.isActive
+    product.isActive = next
+    try {
+      await updateProductApi(id, { active: next })
+    } catch (e) {
+      product.isActive = !next
+      throw e
+    }
   }
 
-  function removeMenuItem(productId: string, itemId: string) {
+  async function addMenuItem(productId: string, item: Omit<MenuItem, 'id' | 'productId'>) {
+    await createFullMenuItem(productId, item)
+    const items = await freshMenuItems(productId)
+    const idx = products.value.findIndex(p => p.id === productId)
+    if (idx !== -1) products.value[idx] = { ...products.value[idx], menuItems: items }
+  }
+
+  async function updateMenuItem(
+    productId: string,
+    itemId: string,
+    itemUpdates: Partial<Omit<MenuItem, 'id' | 'productId'>>,
+  ) {
+    const current = products.value.find(p => p.id === productId)?.menuItems.find(mi => mi.id === itemId)
+    if (current) {
+      await updateMenuItemApi(itemId, {
+        productId,
+        name: itemUpdates.name ?? current.name,
+        active: itemUpdates.isActive ?? current.isActive,
+        position: itemUpdates.position ?? current.position,
+      })
+    }
+    const items = await freshMenuItems(productId)
+    const idx = products.value.findIndex(p => p.id === productId)
+    if (idx !== -1) products.value[idx] = { ...products.value[idx], menuItems: items }
+  }
+
+  async function removeMenuItem(productId: string, itemId: string) {
+    await deleteMenuItemApi(itemId)
     const product = products.value.find(p => p.id === productId)
     if (product) product.menuItems = product.menuItems.filter(mi => mi.id !== itemId)
   }
 
   return {
     products,
+    loading,
+    error,
     getByCategory,
     getByTag,
+    fetchAll,
     addProduct,
     updateProduct,
     removeProduct,

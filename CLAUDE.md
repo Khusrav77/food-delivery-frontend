@@ -2,10 +2,59 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project docs (in `.claude/docs/`)
+## .claude/ structure
 
-- **`.claude/docs/AI_TEAM.md`** — AI team system prompt: стек, FSD-архитектура, роли (Analyst/Architect/TeamLead/Designer/Developer/Reviewer), workflow modes, антипаттерны, Definition of Done. **Читать перед каждой задачей.**
-- **`.claude/docs/SPEC.md`** — Product specification: схема БД, TypeScript-типы, API эндпоинты, модули MVP, открытые вопросы к бэкенду.
+```
+.claude/
+├── agents/                   # Sub-agents (активируются автоматически по описанию)
+│   ├── reviewer.md           # Code review: FSD, Vue 3, TS — /review
+│   ├── architect.md          # FSD структура, слои, контракты — /arch
+│   ├── refactorer.md         # Рефакторинг без изменения поведения — /refactor
+│   ├── debugger.md           # Поиск root cause багов — /debug
+│   ├── test-writer.md        # Vitest + Vue Test Utils тесты — /test
+│   ├── doc-writer.md         # JSDoc, SPEC.md, index.ts — /doc
+│   └── security-auditor.md   # XSS, JWT, OWASP аудит — /audit
+├── commands/                 # Slash-команды (/name или /name <аргумент>)
+│   ├── run-app.md            # /run-app — запуск Postgres + Backend + Frontend
+│   ├── review.md             # /review [файл] — code review
+│   ├── arch.md               # /arch <вопрос/модуль> — архитектурное решение
+│   ├── refactor.md           # /refactor [файл] — рефакторинг
+│   ├── debug.md              # /debug <описание> — отладка бага
+│   ├── test.md               # /test [файл/фича] — написать тесты
+│   ├── doc.md                # /doc [файл/"spec"] — документация
+│   ├── audit.md              # /audit [путь/"full"] — security аудит
+│   ├── feature.md            # /feature <название> — Full Feature mode
+│   └── dod.md                # /dod — Definition of Done checklist
+├── rules/                    # Правила проекта (читать при каждой задаче)
+│   ├── fsd.md                # FSD архитектура и import rules
+│   ├── anti-patterns.md      # Запрещённые паттерны
+│   ├── dod.md                # Definition of Done
+│   └── code-style.md         # Code style и принципы
+├── hooks/                    # Скрипты для Claude Code hooks
+└── docs/
+    ├── AI_TEAM.md            # Мастер-документ: роли, workflow modes, стек
+    └── SPEC.md               # Product spec: БД, типы, API endpoints, MVP
+```
+
+**Правила читать перед каждой задачей:** `.claude/rules/fsd.md`, `.claude/rules/anti-patterns.md`
+**Мастер-документ команды:** `.claude/docs/AI_TEAM.md`
+
+## Slash-команды (быстрый старт)
+
+| Команда | Что делает |
+|---|---|
+| `/run-app` | Запускает Postgres → Spring Boot → Vite (проверяет порты, не дублирует) |
+| `/feature <название>` | Полный Feature mode: Analyst → Architect → Designer → Developer → Reviewer |
+| `/review [файл]` | Code review по уровням 🔴/🟡/🟢 + Production Checklist |
+| `/arch <вопрос>` | Архитектурное решение: слой, файловое дерево, зависимости |
+| `/refactor [файл]` | Рефакторинг без изменения поведения |
+| `/debug <описание>` | Поиск root cause + минимальный fix |
+| `/test [файл]` | Vitest + Vue Test Utils тесты |
+| `/doc [файл/"spec"]` | JSDoc или обновление SPEC.md |
+| `/audit [путь/"full"]` | Security аудит: XSS, JWT, OWASP |
+| `/dod` | Definition of Done чеклист |
+
+Команды без аргумента работают с файлом открытым в редакторе.
 
 ## Git rules
 
@@ -14,7 +63,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Operating contract
 
-При работе над этим репозиторием следуй **`.claude/docs/AI_TEAM.md`**. Каждый ответ — на русском, код/коммиты/имена — на английском.
+При работе над этим репозиторием следуй **`.claude/docs/AI_TEAM.md`** и правилам из **`.claude/rules/`**. Каждый ответ — на русском, код/коммиты/имена — на английском.
 
 **Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind). Admin-панель реализована: Dashboard + Menu (CRUD продуктов с категориями, тегами, вариантами). API-слой подключён к реальному бэкенду.
 

@@ -42,13 +42,13 @@ Ask the project owner to add you as a collaborator to both repositories.
 
 ```bash
 # Frontend
-git clone <frontend-repo-url> ~/GitProjects/Vue/food-delivery-vue-app
+git clone git@github.com:Khusrav77/food-delivery-frontend.git ~/GitProjects/Vue/food-delivery-vue-app
 
 # Backend
-git clone <backend-repo-url> ~/GitProjects/Java-Repositories/foo-delivery-backend-app
+git clone git@github.com:Khusrav77/food-delivery-backend.git ~/GitProjects/Java-Repositories/foo-delivery-backend-app
 ```
 
-> Replace `<...-repo-url>` with the actual GitHub URLs from the project owner.
+> SSH clone requires your GitHub SSH key to be configured. Alternatively use HTTPS: replace `git@github.com:Khusrav77/` with `https://github.com/Khusrav77/`.
 
 ### 2. Install frontend dependencies
 

@@ -64,13 +64,43 @@ src/
 ### 3.3 Segments внутри slice
 
 ```
-features/add-to-cart/
-├── ui/          # Vue-компоненты этой фичи
-├── model/       # Pinia store, типы состояния, бизнес-логика
-├── api/         # запросы к backend (если есть)
-├── lib/         # утилиты этой фичи
-├── config/      # константы фичи
-└── index.ts     # public API
+features/product-form/
+├── ui/               # Vue-компоненты — только шаблон и биндинги
+├── model/
+│   ├── types.ts      # локальные типы (MenuItemDraft и т.д.)
+│   ├── domainName.ts # чистые функции: validate, transform, factory (без Vue)
+│   └── useXxx.ts     # composable: state, watch, вызовы store/API
+├── api/              # HTTP-запросы (только через shared/api/http.ts)
+├── lib/              # утилиты фичи
+├── config/           # константы
+└── index.ts          # public API (единственная точка входа)
+```
+
+### 3.4 Три слоя ответственности
+
+| Слой | Где | Правило |
+|---|---|---|
+| **Business rules** | `model/domainName.ts` | Чистые функции. Нет Vue, нет side effects. |
+| **Logic** | `model/useXxx.ts` | Composable: state + actions. Вызывает domain helpers. |
+| **UI** | `ui/Component.vue` | Только шаблон. `<script setup>` ≤ 10 строк. |
+
+### 3.5 Page composable pattern
+
+Страница = тонкая оболочка над одним composable:
+
+```ts
+// pages/admin/model/useMenuPage.ts
+export function useMenuPage() {
+  const filter = useMenuFilter()           // feature composable
+  const showDishForm = ref(false)          // local modal state
+  // ...actions: openCreate, closeDishForm, init
+  return reactive({ ...filter, showDishForm, openCreate, init })
+  //     ^^^^^^^^ reactive() позволяет v-model:prop="page.prop"
+}
+
+// pages/admin/MenuPage.vue — только composition
+const menu = useMenuPage()
+onMounted(menu.init)
 ```
 
 ### 3.4 Naming

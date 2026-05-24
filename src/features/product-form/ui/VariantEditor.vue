@@ -1,19 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Plus, Trash2, ChevronDown, ChevronRight, X, Image } from 'lucide-vue-next'
-import type { MenuItem, MenuItemSize, SizeType, SizeUnit } from '../../../entities/dish'
+import type { SizeType, SizeUnit } from '../../../entities/dish'
 import { SIZE_TYPE_LABELS, SIZE_UNIT_LABELS, SIZE_UNIT_BY_TYPE } from '../../../entities/dish'
 import { useTagStore, TagBadge } from '../../../entities/tag'
-
-export interface MenuItemDraft {
-  id: string
-  name: string
-  price: number
-  isActive: boolean
-  imageUrls: string[]
-  sizes: Omit<MenuItemSize, 'id' | 'menuItemId'>[]
-  tagIds: string[]
-}
+import type { MenuItemDraft } from '../model/types'
 
 const items = defineModel<MenuItemDraft[]>({ required: true })
 
@@ -63,22 +54,6 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
   if (idx === -1) item.tagIds.push(tagId)
   else item.tagIds.splice(idx, 1)
 }
-
-function toMenuItem(draft: MenuItemDraft): Omit<MenuItem, 'id' | 'productId'> {
-  return {
-    name: draft.name,
-    price: draft.price,
-    isActive: draft.isActive,
-    position: 0,
-    images: draft.imageUrls
-      .filter(u => u.trim())
-      .map((url, i) => ({ id: `img-${Date.now()}-${i}`, menuItemId: '', url, position: i + 1 })),
-    sizes: draft.sizes.map((s, i) => ({ ...s, id: `sz-${Date.now()}-${i}`, menuItemId: '' })),
-    tagIds: draft.tagIds,
-  }
-}
-
-defineExpose({ toMenuItem })
 </script>
 
 <template>
@@ -88,7 +63,7 @@ defineExpose({ toMenuItem })
       :key="item.id"
       class="border border-slate-200 rounded-xl overflow-hidden"
     >
-      <!-- Header строка варианта -->
+      <!-- Header строки варианта -->
       <div
         class="flex items-center gap-2 px-3 py-2 bg-slate-50 cursor-pointer select-none"
         @click="toggle(item.id)"

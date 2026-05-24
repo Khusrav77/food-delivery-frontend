@@ -19,3 +19,9 @@
 | Enum вместо дискриминированного union | `type Status = 'idle' \| 'loading' \| 'success' \| 'error'` |
 | Импорт снизу вверх по FSD слоям | Только сверху вниз |
 | Закомментированный код | Удалить; история — в git |
+| Validate / transform логика прямо в composable | Вынести в `model/domainName.ts` как чистые функции |
+| Тип `MenuItemDraft` объявлен в UI-компоненте | Только в `model/types.ts` slice |
+| Page-composable возвращает plain object | Возвращать `reactive({})` для корректного `v-model` на полях |
+| `filteredProducts`, `categoryCount` вычисляются в компоненте страницы | В `features/menu-filter/model/useMenuFilter.ts` |
+| Одинаковый шаблон "в разработке" дублируется на каждой странице-заглушке | Один виджет `UnderConstruction` с `title` prop и slot для иконки |
+| Данные дашборда (stats, orders) захардкожены в теле страницы | Самодостаточные виджеты (`DashboardStats`, `RecentOrdersTable`) держат данные внутри до появления API |

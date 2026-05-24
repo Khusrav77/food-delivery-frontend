@@ -10,9 +10,26 @@
 ## Vue 3 SFC
 
 - Использовать `<script setup lang="ts">` — без исключений.
-- Composables (`useXxx.ts`) возвращают объект: `{ state (readonly), actions }`.
+- Composables (`useXxx.ts`) возвращают объект `{ state, actions }`.
+  - **Feature composable** (useMenuFilter, useDishForm) → plain object.
+  - **Page composable** (useMenuPage) → `reactive({})`, чтобы `v-model:prop="page.prop"` работало корректно через reactive-proxy.
 - Stores: Pinia setup style (`useXxxStore`), полная типизация state.
 - Template: только реактивные данные и обработчики событий. Без логики.
+
+## Разделение на три слоя
+
+Каждая нетривиальная фича делится на три уровня:
+
+```
+model/domainName.ts   ← Business rules: чистые функции (validate, transform, factory).
+                         Без Vue, без store, без side effects. Легко тестировать.
+
+model/useXxx.ts       ← Logic: реактивный state (ref/computed), watch, вызовы store/API.
+                         Импортирует из domainName.ts.
+
+ui/Component.vue      ← UI: шаблон + биндинги. <script setup> ≤ 10 строк.
+                         Импортирует composable, не знает о бизнес-правилах напрямую.
+```
 
 ## TypeScript
 

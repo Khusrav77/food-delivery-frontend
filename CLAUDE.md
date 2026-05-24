@@ -65,7 +65,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 При работе над этим репозиторием следуй **`.claude/docs/AI_TEAM.md`** и правилам из **`.claude/rules/`**. Каждый ответ — на русском, код/коммиты/имена — на английском.
 
-**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind). Admin-панель реализована: Dashboard + Menu (CRUD продуктов с категориями, тегами, вариантами). API-слой подключён к реальному бэкенду.
+**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind). Admin-панель реализована со строгим разделением UI / Logic / Business Rules. API-слой подключён к реальному бэкенду.
 
 ## Commands
 
@@ -114,15 +114,43 @@ Vue 3 + TypeScript + Vite + Pinia + Vue Router + Tailwind CSS v4.
 
 ```
 src/
-├── app/          # router, layouts, styles
-├── pages/        # роутовые страницы
-├── widgets/      # AdminSidebar, AdminHeader
-├── features/     # dish-form, category-manager, tag-manager
-├── entities/     # dish (Product/MenuItem), category, tag
-└── shared/       # ui-kit (StatsCard)
+├── app/              # router, layouts, styles
+├── pages/
+│   └── admin/
+│       ├── model/    # page-composables (useMenuPage и др.)
+│       └── *.vue     # тонкие страницы — только composition
+├── widgets/
+│   ├── admin-sidebar/
+│   ├── admin-header/
+│   ├── menu/         # MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts
+│   └── dashboard/    # DashboardStats, RecentOrdersTable, OrderStatusBreakdown, TopRestaurants
+├── features/
+│   ├── product-form/         # CRUD блюда
+│   │   ├── model/
+│   │   │   ├── types.ts      # MenuItemDraft
+│   │   │   ├── dishDraft.ts  # чистые функции: validate, transform
+│   │   │   └── useDishForm.ts
+│   │   └── ui/
+│   ├── menu-filter/          # фильтрация меню (useMenuFilter)
+│   ├── category-manager/     # CRUD категорий (useCategoryManager)
+│   └── tag-manager/          # CRUD тегов (useTagManager)
+├── entities/
+│   ├── dish/         # Product/MenuItem: types, store, api, ui/DishCard
+│   ├── category/     # types, store, api
+│   └── tag/          # types, store, api, ui/TagBadge
+└── shared/
+    ├── api/          # http.ts (Axios + JWT interceptor)
+    └── ui/
+        ├── StatsCard/
+        └── UnderConstruction/  # виджет-заглушка для страниц "в разработке"
 ```
 
-- SFCs используют `<script setup lang="ts">` — придерживаться этого стиля.
-- Импорты только через `index.ts` каждого slice (public API).
-- TypeScript: `tsconfig.app.json` (src/), `tsconfig.node.json` (vite/tooling).
-- Статика из `src/assets/` — через Vite pipeline; `public/` — as-is.
+### Ключевые архитектурные правила
+
+- **Три слоя:** `model/domainName.ts` (бизнес-правила) → `model/useXxx.ts` (логика) → `ui/*.vue` (только шаблон)
+- **Page composable** возвращает `reactive({})` для поддержки `v-model:prop="page.prop"`
+- **Страница** вызывает один composable + `onMounted` + компонует виджеты
+- SFCs используют `<script setup lang="ts">` — без исключений
+- Импорты только через `index.ts` каждого slice (public API)
+- TypeScript: `tsconfig.app.json` (src/), `tsconfig.node.json` (vite/tooling)
+- Статика из `src/assets/` — через Vite pipeline; `public/` — as-is

@@ -1,33 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { X, Trash2 } from 'lucide-vue-next'
-import { useTagStore, TagBadge } from '../../../entities/tag'
-import type { TagColor } from '../../../entities/tag'
+import { TagBadge } from '../../../entities/tag'
+import { useTagManager } from '../model/useTagManager'
 
 const emit = defineEmits<{ close: [] }>()
-const tagStore = useTagStore()
 
-const colorOptions: { value: TagColor; label: string; cls: string }[] = [
-  { value: 'red', label: 'Красный', cls: 'bg-red-500' },
-  { value: 'orange', label: 'Оранжевый', cls: 'bg-orange-500' },
-  { value: 'green', label: 'Зелёный', cls: 'bg-green-500' },
-  { value: 'emerald', label: 'Изумрудный', cls: 'bg-emerald-500' },
-  { value: 'blue', label: 'Синий', cls: 'bg-blue-500' },
-  { value: 'violet', label: 'Фиолетовый', cls: 'bg-violet-500' },
-  { value: 'yellow', label: 'Жёлтый', cls: 'bg-yellow-500' },
-]
-
-const newLabel = ref('')
-const newEmoji = ref('')
-const newColor = ref<TagColor>('orange')
-
-async function addTag() {
-  if (!newLabel.value.trim()) return
-  await tagStore.addTag({ label: newLabel.value.trim(), color: newColor.value, emoji: newEmoji.value || undefined })
-  newLabel.value = ''
-  newEmoji.value = ''
-  newColor.value = 'orange'
-}
+const { tagStore, newLabel, newEmoji, newColor, colorOptions, addTag } = useTagManager()
 </script>
 
 <template>

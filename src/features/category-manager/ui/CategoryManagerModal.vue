@@ -1,44 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { X, Pencil, Trash2, Check } from 'lucide-vue-next'
-import { useCategoryStore } from '../../../entities/category'
-import { useProductStore } from '../../../entities/dish'
+import { useCategoryManager } from '../model/useCategoryManager'
 
 const emit = defineEmits<{ close: [] }>()
 
-const categoryStore = useCategoryStore()
-const productStore = useProductStore()
-
-const newName = ref('')
-const editingId = ref<string | null>(null)
-const editingName = ref('')
-
-function startEdit(id: string, name: string) {
-  editingId.value = id
-  editingName.value = name
-}
-
-async function confirmEdit(id: string) {
-  if (editingName.value.trim()) await categoryStore.renameCategory(id, editingName.value.trim())
-  editingId.value = null
-}
-
-async function addCategory() {
-  if (!newName.value.trim()) return
-  await categoryStore.addCategory(newName.value.trim())
-  newName.value = ''
-}
-
-async function remove(id: string) {
-  const count = productStore.products.filter(d => d.categoryId === id).length
-  if (count > 0) {
-    const ok = confirm(`Категория содержит ${count} блюд. Продолжить удаление?`)
-    if (!ok) return
-  }
-  await categoryStore.removeCategory(id)
-  // Рефетч продуктов — сервер определяет что происходит с блюдами при удалении категории
-  await productStore.fetchAll()
-}
+const {
+  categoryStore,
+  productStore,
+  newName,
+  editingId,
+  editingName,
+  startEdit,
+  confirmEdit,
+  addCategory,
+  remove,
+} = useCategoryManager()
 </script>
 
 <template>

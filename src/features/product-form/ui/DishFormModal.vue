@@ -1,121 +1,17 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { toRef } from 'vue'
 import { X, Loader2 } from 'lucide-vue-next'
-import type { Product } from '../../../entities/dish'
-import { useProductStore } from '../../../entities/dish'
 import { useCategoryStore } from '../../../entities/category'
-import VariantEditor, { type MenuItemDraft } from './VariantEditor.vue'
+import type { Product } from '../../../entities/dish'
+import { useDishForm } from '../model/useDishForm'
+import VariantEditor from './VariantEditor.vue'
 
 const props = defineProps<{ product?: Product | null }>()
 const emit = defineEmits<{ close: [] }>()
 
-const productStore = useProductStore()
 const categoryStore = useCategoryStore()
-
-const name = ref('')
-const description = ref('')
-const categoryId = ref<string | null>(null)
-const isActive = ref(true)
-const menuItems = ref<MenuItemDraft[]>([])
-
-const errors = ref<Record<string, string>>({})
-const saving = ref(false)
-const saveError = ref<string | null>(null)
-
-function defaultDraft(): MenuItemDraft {
-  return { id: `draft-${Date.now()}`, name: '', price: 0, isActive: true, imageUrls: [''], sizes: [], tagIds: [] }
-}
-
-function productToDraft(mi: Product['menuItems'][number]): MenuItemDraft {
-  return {
-    id: mi.id,
-    name: mi.name,
-    price: mi.price,
-    isActive: mi.isActive,
-    imageUrls: mi.images.length ? mi.images.map(img => img.url) : [''],
-    sizes: mi.sizes.map(s => ({ sizeType: s.sizeType, sizeValue: s.sizeValue, sizeUnit: s.sizeUnit })),
-    tagIds: [...mi.tagIds],
-  }
-}
-
-watch(
-  () => props.product,
-  (product) => {
-    if (product) {
-      name.value = product.name
-      description.value = product.description
-      categoryId.value = product.categoryId
-      isActive.value = product.isActive
-      menuItems.value = product.menuItems.map(productToDraft)
-    } else {
-      name.value = ''
-      description.value = ''
-      categoryId.value = null
-      isActive.value = true
-      menuItems.value = [defaultDraft()]
-    }
-    errors.value = {}
-  },
-  { immediate: true },
-)
-
-function validate(): boolean {
-  errors.value = {}
-  if (!name.value.trim()) errors.value.name = 'Введите название'
-  if (menuItems.value.length === 0) {
-    errors.value.items = 'Добавьте хотя бы один вариант'
-  } else {
-    for (const mi of menuItems.value) {
-      if (!mi.name.trim()) { errors.value.items = 'Заполните название варианта'; break }
-      if (!mi.price || mi.price <= 0) { errors.value.items = 'Укажите цену варианта'; break }
-    }
-  }
-  return Object.keys(errors.value).length === 0
-}
-
-function draftToMenuItem(draft: MenuItemDraft, idx: number): Product['menuItems'][number] {
-  return {
-    id: draft.id.startsWith('draft-') ? `mi${Date.now()}${idx}` : draft.id,
-    productId: props.product?.id ?? '',
-    name: draft.name.trim(),
-    price: draft.price,
-    isActive: draft.isActive,
-    position: idx + 1,
-    images: draft.imageUrls
-      .filter(u => u.trim())
-      .map((url, i) => ({ id: `img${Date.now()}${i}`, menuItemId: '', url, position: i + 1 })),
-    sizes: draft.sizes
-      .filter(s => s.sizeValue > 0)
-      .map((s, i) => ({ ...s, id: `sz${Date.now()}${i}`, menuItemId: '' })),
-    tagIds: draft.tagIds,
-  }
-}
-
-async function save() {
-  if (!validate()) return
-  saving.value = true
-  saveError.value = null
-  try {
-    const data = {
-      categoryId: categoryId.value,
-      name: name.value.trim(),
-      description: description.value.trim(),
-      isActive: isActive.value,
-      position: props.product?.position ?? 0,
-      menuItems: menuItems.value.map(draftToMenuItem),
-    }
-    if (props.product) {
-      await productStore.updateProduct(props.product.id, data)
-    } else {
-      await productStore.addProduct(data)
-    }
-    emit('close')
-  } catch (e) {
-    saveError.value = (e as { message: string }).message ?? 'Ошибка сохранения'
-  } finally {
-    saving.value = false
-  }
-}
+const { name, description, categoryId, isActive, menuItems, errors, saving, saveError, save } =
+  useDishForm(toRef(props, 'product'), () => emit('close'))
 </script>
 
 <template>

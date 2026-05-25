@@ -1,3 +1,7 @@
+---
+model: haiku
+---
+
 Start the full stack: PostgreSQL → Spring Boot backend → Vite frontend.
 
 $ARGUMENTS

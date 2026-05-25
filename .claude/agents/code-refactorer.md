@@ -1,5 +1,6 @@
 ---
 name: code-refactorer
+model: sonnet
 description: Use for refactoring tasks — improving code structure without changing behaviour. Activate when user says "отрефактори", "упрости", "вынеси в composable", "улучши структуру", or when a component/file is too long or violates FSD. Does NOT add features.
 tools: Read, Edit, Bash, Glob, Grep
 ---

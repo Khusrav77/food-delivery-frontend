@@ -1,5 +1,6 @@
 ---
 name: code-reviewer
+model: opus
 description: Use for code review tasks — when asked to review code, check for bugs, assess production-readiness, or audit Vue/TypeScript/FSD compliance. Activate with /review or when the user says "посмотри код", "сделай ревью", "что не так".
 tools: Read, Bash, Glob, Grep
 ---

@@ -1,3 +1,7 @@
+---
+model: inherit
+---
+
 Use the `code-architect` subagent to answer an architecture question or design a new module.
 
 Question or feature to design: $ARGUMENTS

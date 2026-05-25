@@ -1,5 +1,6 @@
 ---
 name: code-debugger
+model: opus
 description: Use for debugging tasks — finding root causes of bugs, runtime errors, TypeScript errors, Vue reactivity issues, API failures, or unexpected behaviour. Activate when user says "не работает", "ошибка", "баг", "почему", pastes an error message, or describes broken behaviour.
 tools: Read, Bash, Glob, Grep
 ---

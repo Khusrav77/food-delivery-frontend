@@ -1,5 +1,6 @@
 ---
 name: code-security-auditor
+model: opus
 description: Use for security audits — reviewing code for XSS, CSRF, JWT handling, sensitive data exposure, unsafe dependencies, or OWASP Top 10 vulnerabilities in the frontend. Activate when user says "проверь безопасность", "security review", "аудит", or before a production release.
 tools: Read, Bash, Glob, Grep
 ---

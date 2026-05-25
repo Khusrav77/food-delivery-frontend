@@ -1,3 +1,7 @@
+---
+model: inherit
+---
+
 Use the `code-reviewer` subagent to perform a code review.
 
 Target (file path, feature, or empty for current diff): $ARGUMENTS

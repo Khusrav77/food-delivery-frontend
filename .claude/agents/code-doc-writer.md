@@ -1,5 +1,6 @@
 ---
 name: code-doc-writer
+model: haiku
 description: Use for documentation tasks — updating SPEC.md with new endpoints or DB tables, writing JSDoc for public API functions, documenting composable return types, or keeping index.ts public APIs described. Activate when user says "задокументируй", "обнови спецификацию", "добавь JSDoc", or after a new feature is implemented.
 tools: Read, Edit, Bash, Glob, Grep
 ---

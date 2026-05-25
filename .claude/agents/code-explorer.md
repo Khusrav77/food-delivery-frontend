@@ -1,5 +1,6 @@
 ---
 name: code-explorer
+model: sonnet
 description: Deeply analyzes existing codebase features by tracing execution paths, mapping FSD architecture layers, understanding patterns and abstractions, and documenting slice dependencies. Use when asked "как это работает", "покажи flow", "что делает X", "где живёт логика Y", or before modifying an unfamiliar feature.
 tools: Read, Bash, Glob, Grep
 ---

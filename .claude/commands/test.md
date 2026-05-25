@@ -1,3 +1,7 @@
+---
+model: inherit
+---
+
 Use the `code-test-writer` subagent to write tests for the specified file or feature.
 
 Target (file path, composable name, or feature): $ARGUMENTS

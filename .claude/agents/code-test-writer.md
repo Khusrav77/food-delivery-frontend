@@ -1,5 +1,6 @@
 ---
 name: code-test-writer
+model: sonnet
 description: Use for writing tests — unit tests for composables/stores/utils, component tests for Vue SFCs, or smoke tests for critical flows. Activate when user says "напиши тест", "покрой тестами", "добавь unit тест", or when a new feature needs smoke coverage per DoD.
 tools: Read, Bash, Glob, Grep
 ---

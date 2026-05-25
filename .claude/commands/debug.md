@@ -1,3 +1,7 @@
+---
+model: inherit
+---
+
 Use the `code-debugger` subagent to find and fix the described bug or error.
 
 Bug description or error message: $ARGUMENTS

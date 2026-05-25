@@ -1,5 +1,6 @@
 ---
 name: code-frontend-design
+model: opus
 description: Create distinctive, production-grade Vue 3 frontend interfaces with high design quality. Use when the user asks to build components, pages, or UI sections. Generates creative, polished Vue SFCs that avoid generic AI aesthetics. Activate when user says "сделай UI", "нарисуй компонент", "построй страницу", "сделай красиво", or describes a visual interface to build.
 tools: Read, Edit, Bash, Glob, Grep
 ---

@@ -1,3 +1,7 @@
+---
+model: inherit
+---
+
 Use the `code-refactorer` subagent to refactor the specified file or feature.
 
 Target (file path or feature name): $ARGUMENTS

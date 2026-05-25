@@ -1,3 +1,7 @@
+---
+model: inherit
+---
+
 Use the `code-doc-writer` subagent to write or update documentation.
 
 Target (file, feature, or "spec" to update SPEC.md): $ARGUMENTS

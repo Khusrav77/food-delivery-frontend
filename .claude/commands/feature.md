@@ -1,6 +1,7 @@
 ---
 description: Full Feature mode — системная разработка от discovery до ревью с параллельными агентами и гейтами подтверждения
 argument-hint: Название или описание фичи
+model: opus
 ---
 
 # Feature Mode

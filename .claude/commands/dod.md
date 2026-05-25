@@ -1,3 +1,7 @@
+---
+model: haiku
+---
+
 Show the Definition of Done checklist for this project.
 
 Print the full DoD checklist. Items marked 🤖 can be verified automatically.

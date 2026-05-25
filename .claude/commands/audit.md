@@ -1,3 +1,7 @@
+---
+model: inherit
+---
+
 Use the `code-security-auditor` subagent to perform a security audit.
 
 Scope (file path, feature, or "full" for entire src/): $ARGUMENTS

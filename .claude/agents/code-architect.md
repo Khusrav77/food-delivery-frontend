@@ -1,6 +1,6 @@
 ---
-
 name: code-architect
+model: opus
 description: Use for architecture questions — where to put a new feature, how to structure a module, FSD layer decisions, data flow design, contracts between slices. Activate when user asks "как лучше структурировать", "куда положить", "как организовать", or starts a new module/feature.
 tools: Read, Bash, Glob, Grep
 ---

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ShoppingCart } from 'lucide-vue-next'
+import { ShoppingCart, UtensilsCrossed } from 'lucide-vue-next'
 import type { Product } from '../model/types'
 import { getFirstImage, getMinPrice, hasMultiplePrices, formatPrice, getActiveItems } from '../model/dishDisplay'
 
@@ -10,7 +10,7 @@ const emit = defineEmits<{ select: [product: Product] }>()
 <template>
   <article
     class="group cursor-pointer bg-surface rounded-2xl border border-line overflow-hidden flex flex-col
-           hover:border-line-strong hover:shadow-[0_12px_32px_-12px_rgba(24,24,27,0.18)] transition-all duration-300 hover:-translate-y-0.5"
+           hover:border-accent/30 hover:shadow-[0_16px_40px_-12px_rgba(251,146,60,0.25)] transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02]"
     @click="emit('select', props.product)"
   >
 
@@ -23,7 +23,7 @@ const emit = defineEmits<{ select: [product: Product] }>()
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
       />
       <div v-else class="w-full h-full flex items-center justify-center">
-        <span class="text-6xl select-none opacity-30">🍽️</span>
+        <UtensilsCrossed :size="52" class="text-faint opacity-30" />
       </div>
 
       <!-- Variant count badge -->

@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import type { Component } from 'vue'
+import { ChevronLeft, ChevronRight, Bike, Gift, Truck, ChefHat, Star } from 'lucide-vue-next'
 import { usePromoCarousel } from '../model/usePromoCarousel'
 
 const { containerRef, slides, cardWidth, translateX, offset, maxOffset, prev, next } = usePromoCarousel()
+
+const iconMap: Record<string, Component> = { Bike, Gift, Truck, ChefHat, Star }
 </script>
 
 <template>
@@ -16,16 +19,20 @@ const { containerRef, slides, cardWidth, translateX, offset, maxOffset, prev, ne
         <div
           v-for="slide in slides"
           :key="slide.id"
-          class="flex-none h-60 md:h-72 rounded-2xl flex flex-col justify-between p-5 md:p-6 relative overflow-hidden"
+          class="flex-none h-60 md:h-72 rounded-2xl flex flex-col justify-between p-5 md:p-6 relative overflow-hidden cursor-pointer"
           :class="slide.bgClass"
           :style="{ width: `${cardWidth}px` }"
         >
-          <!-- Top row: emoji + badge -->
+          <!-- Top row: icon + badge -->
           <div class="flex items-start justify-between">
-            <span class="text-4xl select-none leading-none">{{ slide.emoji }}</span>
+            <component
+              :is="iconMap[slide.icon]"
+              :size="36"
+              class="text-white/90"
+            />
             <span
               v-if="slide.badge"
-              class="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1 rounded-full"
+              class="bg-white/25 backdrop-blur-sm text-white text-xs font-extrabold px-3 py-1 rounded-full"
             >
               {{ slide.badge }}
             </span>
@@ -33,12 +40,12 @@ const { containerRef, slides, cardWidth, translateX, offset, maxOffset, prev, ne
 
           <!-- Bottom: text + cta -->
           <div>
-            <h3 class="font-sans text-xl md:text-2xl font-extrabold text-white leading-snug mb-1">
+            <h3 class="font-sans text-xl md:text-2xl font-extrabold text-white leading-snug mb-1.5">
               {{ slide.title }}
             </h3>
-            <p class="text-white/65 text-xs md:text-sm mb-4">{{ slide.subtitle }}</p>
+            <p class="text-white/70 text-xs md:text-sm mb-4">{{ slide.subtitle }}</p>
             <button
-              class="bg-white/15 hover:bg-white/25 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors"
+              class="bg-white text-ink text-xs font-bold px-5 py-2.5 rounded-lg hover:bg-white/90 transition-colors shadow-sm"
             >
               {{ slide.ctaLabel }}
             </button>

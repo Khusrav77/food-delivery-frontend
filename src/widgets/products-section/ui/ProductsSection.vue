@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UtensilsCrossed } from 'lucide-vue-next'
 import { type Product, DishCardPublic } from '@/entities/dish'
 
 defineProps<{
@@ -30,7 +31,7 @@ const emit = defineEmits<{ select: [product: Product] }>()
 
     <!-- Empty state -->
     <div v-else-if="products.length === 0" class="py-16 text-center bg-surface rounded-2xl border border-line">
-      <div class="text-5xl mb-3 select-none opacity-40">🍽️</div>
+      <UtensilsCrossed :size="48" class="text-faint opacity-40 mx-auto mb-3" />
       <p class="text-muted text-base">Нет блюд в этой категории</p>
     </div>
 

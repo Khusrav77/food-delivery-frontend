@@ -4,7 +4,7 @@ export interface IPromoSlide {
   subtitle: string
   ctaLabel: string
   bgClass: string
-  emoji: string
+  icon: string
   badge?: string
 }
 
@@ -15,7 +15,7 @@ export const PROMO_SLIDES: IPromoSlide[] = [
     subtitle: 'Горячая еда прямо к вашей двери',
     ctaLabel: 'Заказать',
     bgClass: 'bg-gradient-to-br from-sky-500 to-blue-700',
-    emoji: '🛵',
+    icon: 'Bike',
   },
   {
     id: '2',
@@ -23,7 +23,7 @@ export const PROMO_SLIDES: IPromoSlide[] = [
     subtitle: 'На первый заказ при регистрации',
     ctaLabel: 'Получить скидку',
     bgClass: 'bg-gradient-to-br from-orange-400 to-orange-600',
-    emoji: '🎁',
+    icon: 'Gift',
     badge: '−20%',
   },
   {
@@ -32,15 +32,15 @@ export const PROMO_SLIDES: IPromoSlide[] = [
     subtitle: 'При заказе от 1 000 ₽',
     ctaLabel: 'Выбрать блюда',
     bgClass: 'bg-gradient-to-br from-emerald-500 to-emerald-700',
-    emoji: '🚀',
+    icon: 'Truck',
   },
   {
     id: '4',
-    title: 'Пицца дня',
-    subtitle: 'Маргарита с хрустящей корочкой — 590 ₽',
+    title: 'Блюдо дня',
+    subtitle: 'Специальное предложение от шефа',
     ctaLabel: 'Попробовать',
     bgClass: 'bg-gradient-to-br from-red-500 to-rose-700',
-    emoji: '🍕',
+    icon: 'ChefHat',
     badge: 'ХИТ',
   },
   {
@@ -49,7 +49,7 @@ export const PROMO_SLIDES: IPromoSlide[] = [
     subtitle: 'Кешбэк 5% с каждого заказа на счёт',
     ctaLabel: 'Оформить',
     bgClass: 'bg-gradient-to-br from-violet-500 to-indigo-700',
-    emoji: '⭐',
+    icon: 'Star',
     badge: 'НОВОЕ',
   },
 ]

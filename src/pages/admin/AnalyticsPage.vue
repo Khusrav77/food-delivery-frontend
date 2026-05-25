@@ -5,6 +5,6 @@ import { UnderConstruction } from '@/shared/ui/UnderConstruction'
 
 <template>
   <UnderConstruction title="Аналитика">
-    <BarChart3 :size="28" class="text-orange-400" />
+    <BarChart3 :size="28" class="text-accent" />
   </UnderConstruction>
 </template>

@@ -2,67 +2,69 @@
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { usePromoCarousel } from '../model/usePromoCarousel'
 
-const { activeIndex, slides, goTo, next, prev, pause, resume } = usePromoCarousel()
+const { containerRef, slides, cardWidth, translateX, offset, maxOffset, prev, next } = usePromoCarousel()
 </script>
 
 <template>
-  <div
-    class="relative overflow-hidden rounded-2xl shadow-md"
-    @mouseenter="pause"
-    @mouseleave="resume"
-  >
-    <!-- Slides track -->
-    <div
-      class="flex transition-transform duration-500 ease-in-out"
-      :style="{ transform: `translateX(-${activeIndex * 100}%)` }"
-    >
+  <div class="relative">
+    <!-- Track container -->
+    <div ref="containerRef" class="overflow-hidden">
       <div
-        v-for="slide in slides"
-        :key="slide.id"
-        class="min-w-full min-h-60 md:min-h-80 flex flex-col justify-center items-start px-8 md:px-14 py-10"
-        :class="slide.bgClass"
+        class="flex gap-4 transition-transform duration-300 ease-in-out"
+        :style="{ transform: `translateX(-${translateX}px)` }"
       >
-        <div class="text-5xl mb-4 select-none">{{ slide.emoji }}</div>
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-2 leading-tight">
-          {{ slide.title }}
-        </h2>
-        <p class="text-white/80 text-base md:text-lg mb-6">
-          {{ slide.subtitle }}
-        </p>
-        <button class="bg-white text-slate-800 font-semibold px-6 py-3 rounded-xl hover:bg-slate-50 transition-colors text-sm">
-          {{ slide.ctaLabel }}
-        </button>
+        <div
+          v-for="slide in slides"
+          :key="slide.id"
+          class="flex-none h-60 md:h-72 rounded-2xl flex flex-col justify-between p-5 md:p-6 relative overflow-hidden"
+          :class="slide.bgClass"
+          :style="{ width: `${cardWidth}px` }"
+        >
+          <!-- Top row: emoji + badge -->
+          <div class="flex items-start justify-between">
+            <span class="text-4xl select-none leading-none">{{ slide.emoji }}</span>
+            <span
+              v-if="slide.badge"
+              class="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-2.5 py-1 rounded-full"
+            >
+              {{ slide.badge }}
+            </span>
+          </div>
+
+          <!-- Bottom: text + cta -->
+          <div>
+            <h3 class="font-sans text-xl md:text-2xl font-extrabold text-white leading-snug mb-1">
+              {{ slide.title }}
+            </h3>
+            <p class="text-white/65 text-xs md:text-sm mb-4">{{ slide.subtitle }}</p>
+            <button
+              class="bg-white/15 hover:bg-white/25 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors"
+            >
+              {{ slide.ctaLabel }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Left arrow -->
     <button
-      class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 backdrop-blur-sm text-white rounded-full p-2 transition-colors"
-      aria-label="Предыдущий слайд"
+      v-if="offset > 0"
+      class="absolute left-2 top-1/2 -translate-y-1/2 bg-surface/90 shadow-md hover:bg-surface border border-line text-ink rounded-full p-2.5 transition-all z-10"
+      aria-label="Назад"
       @click="prev"
     >
-      <ChevronLeft :size="20" />
+      <ChevronLeft :size="18" />
     </button>
 
     <!-- Right arrow -->
     <button
-      class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/20 hover:bg-black/40 backdrop-blur-sm text-white rounded-full p-2 transition-colors"
-      aria-label="Следующий слайд"
+      v-if="offset < maxOffset"
+      class="absolute right-2 top-1/2 -translate-y-1/2 bg-surface/90 shadow-md hover:bg-surface border border-line text-ink rounded-full p-2.5 transition-all z-10"
+      aria-label="Вперёд"
       @click="next"
     >
-      <ChevronRight :size="20" />
+      <ChevronRight :size="18" />
     </button>
-
-    <!-- Dot indicators -->
-    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-      <button
-        v-for="(slide, i) in slides"
-        :key="slide.id"
-        class="h-2 rounded-full transition-all duration-300"
-        :class="i === activeIndex ? 'bg-white w-6' : 'bg-white/50 w-2'"
-        :aria-label="`Перейти к слайду ${i + 1}`"
-        @click="goTo(i)"
-      />
-    </div>
   </div>
 </template>

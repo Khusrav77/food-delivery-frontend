@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Nunito", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Surfaces */
+  --color-canvas: #f7f6f3;
+  --color-surface: #ffffff;
+  --color-surface-soft: #faf9f6;
+
+  /* Ink / text */
+  --color-ink: #18181b;
+  --color-muted: #6e6e76;
+  --color-faint: #9c9ca4;
+
+  /* Hairlines */
+  --color-line: #ecebe6;
+  --color-line-strong: #dddbd3;
+
+  /* Soft orange accent */
+  --color-accent: #fb923c;
+  --color-accent-hover: #f97316;
+  --color-accent-soft: #fff7ed;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}

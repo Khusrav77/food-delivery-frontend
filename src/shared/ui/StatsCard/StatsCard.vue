@@ -18,7 +18,7 @@ const trendPositive = props.trend !== undefined ? props.trend >= 0 : undefined
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+  <div class="bg-surface rounded-2xl p-5 border border-line hover:border-line-strong hover:shadow-[0_8px_24px_-14px_rgba(24,24,27,0.18)] transition-all">
     <div class="flex items-start justify-between mb-4">
       <div
         class="w-11 h-11 rounded-xl flex items-center justify-center"
@@ -38,8 +38,8 @@ const trendPositive = props.trend !== undefined ? props.trend >= 0 : undefined
         {{ Math.abs(trend!) }}%
       </div>
     </div>
-    <p class="text-2xl font-bold text-slate-800 mb-0.5">{{ value }}</p>
-    <p class="text-sm text-slate-500">{{ label }}</p>
-    <p v-if="sub" class="text-xs text-slate-400 mt-1">{{ sub }}</p>
+    <p class="font-display text-3xl font-semibold text-ink mb-0.5 tracking-tight">{{ value }}</p>
+    <p class="text-sm text-muted">{{ label }}</p>
+    <p v-if="sub" class="text-xs text-faint mt-1">{{ sub }}</p>
   </div>
 </template>

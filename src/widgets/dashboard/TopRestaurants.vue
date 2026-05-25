@@ -15,10 +15,10 @@ const items: Restaurant[] = [
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+  <div class="bg-surface rounded-2xl border border-line p-5">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-sm font-semibold text-slate-800">Топ рестораны</h2>
-      <span class="text-xs text-slate-400">сегодня</span>
+      <h2 class="text-sm font-semibold text-ink">Топ рестораны</h2>
+      <span class="text-xs text-faint">сегодня</span>
     </div>
     <div class="space-y-3">
       <div
@@ -28,15 +28,15 @@ const items: Restaurant[] = [
       >
         <span
           class="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
-          :class="i === 0 ? 'bg-orange-50 text-orange-500' : 'bg-slate-50 text-slate-400'"
+          :class="i === 0 ? 'bg-accent-soft text-accent' : 'bg-surface-soft text-faint'"
         >
           {{ i + 1 }}
         </span>
         <div class="flex-1 min-w-0">
-          <p class="text-xs font-medium text-slate-700 truncate">{{ r.name }}</p>
-          <p class="text-xs text-slate-400">{{ r.orders }} зак. · {{ r.revenue }}</p>
+          <p class="text-xs font-medium text-ink truncate">{{ r.name }}</p>
+          <p class="text-xs text-faint">{{ r.orders }} зак. · {{ r.revenue }}</p>
         </div>
-        <div class="text-xs font-semibold text-slate-600 shrink-0">★ {{ r.rating }}</div>
+        <div class="text-xs font-semibold text-muted shrink-0">★ {{ r.rating }}</div>
       </div>
     </div>
   </div>

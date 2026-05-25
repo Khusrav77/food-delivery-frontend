@@ -17,15 +17,15 @@ const { name, description, categoryId, isActive, menuItems, errors, saving, save
 <template>
   <Teleport to="body">
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div class="absolute inset-0 bg-slate-900/50" @click="emit('close')" />
+      <div class="absolute inset-0 bg-ink/50" @click="emit('close')" />
 
-      <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div class="relative bg-surface rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-          <h2 class="text-lg font-semibold text-slate-900">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-line-strong">
+          <h2 class="text-lg font-semibold text-ink">
             {{ product ? 'Редактировать блюдо' : 'Новое блюдо' }}
           </h2>
-          <button class="p-1 text-slate-400 hover:text-slate-600" @click="emit('close')">
+          <button class="p-1 text-faint hover:text-muted" @click="emit('close')">
             <X :size="20" />
           </button>
         </div>
@@ -35,23 +35,23 @@ const { name, description, categoryId, isActive, menuItems, errors, saving, save
           <!-- Название и описание -->
           <div class="space-y-3">
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Название *</label>
+              <label class="block text-sm font-medium text-ink mb-1">Название *</label>
               <input
                 v-model="name"
                 type="text"
                 placeholder="Ролл Филадельфия"
-                class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-                :class="errors.name ? 'border-red-400' : 'border-slate-200'"
+                class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                :class="errors.name ? 'border-red-400' : 'border-line-strong'"
               />
               <p v-if="errors.name" class="text-red-500 text-xs mt-1">{{ errors.name }}</p>
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Описание</label>
+              <label class="block text-sm font-medium text-ink mb-1">Описание</label>
               <textarea
                 v-model="description"
                 rows="2"
                 placeholder="Краткое описание блюда..."
-                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400"
+                class="w-full border border-line-strong rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
           </div>
@@ -59,10 +59,10 @@ const { name, description, categoryId, isActive, menuItems, errors, saving, save
           <!-- Категория + Наличие -->
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Категория</label>
+              <label class="block text-sm font-medium text-ink mb-1">Категория</label>
               <select
                 v-model="categoryId"
-                class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 bg-white"
+                class="w-full border border-line-strong rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent bg-surface"
               >
                 <option :value="null">Без категории</option>
                 <option v-for="cat in categoryStore.categories" :key="cat.id" :value="cat.id">
@@ -71,18 +71,18 @@ const { name, description, categoryId, isActive, menuItems, errors, saving, save
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Наличие</label>
+              <label class="block text-sm font-medium text-ink mb-1">Наличие</label>
               <label class="flex items-center gap-2 cursor-pointer mt-2">
                 <div class="relative">
                   <input v-model="isActive" type="checkbox" class="sr-only peer" />
                   <div
-                    class="w-10 h-5 bg-slate-200 peer-checked:bg-orange-500 rounded-full
+                    class="w-10 h-5 bg-line-strong peer-checked:bg-accent rounded-full
                            after:content-[''] after:absolute after:top-0.5 after:left-0.5
-                           after:bg-white after:rounded-full after:w-4 after:h-4
+                           after:bg-surface after:rounded-full after:w-4 after:h-4
                            after:transition-all peer-checked:after:translate-x-5"
                   ></div>
                 </div>
-                <span class="text-sm text-slate-700">{{ isActive ? 'Доступно' : 'Скрыто' }}</span>
+                <span class="text-sm text-ink">{{ isActive ? 'Доступно' : 'Скрыто' }}</span>
               </label>
             </div>
           </div>
@@ -90,10 +90,10 @@ const { name, description, categoryId, isActive, menuItems, errors, saving, save
           <!-- Варианты (menu_items) -->
           <div>
             <div class="flex items-center justify-between mb-2">
-              <label class="text-sm font-medium text-slate-700">
+              <label class="text-sm font-medium text-ink">
                 Варианты / порции *
               </label>
-              <span class="text-xs text-slate-400">
+              <span class="text-xs text-faint">
                 Фото, размеры и теги — на каждом варианте
               </span>
             </div>
@@ -103,11 +103,11 @@ const { name, description, categoryId, isActive, menuItems, errors, saving, save
         </div>
 
         <!-- Footer -->
-        <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200">
+        <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-line-strong">
           <p v-if="saveError" class="flex-1 text-sm text-red-500">{{ saveError }}</p>
           <button
             type="button"
-            class="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+            class="px-4 py-2 text-sm font-medium text-ink hover:bg-surface-soft rounded-lg transition-colors"
             :disabled="saving"
             @click="emit('close')"
           >
@@ -115,7 +115,7 @@ const { name, description, categoryId, isActive, menuItems, errors, saving, save
           </button>
           <button
             type="button"
-            class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white rounded-lg transition-colors"
+            class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent hover:bg-accent-hover disabled:opacity-60 text-white rounded-lg transition-colors"
             :disabled="saving"
             @click="save"
           >

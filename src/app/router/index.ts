@@ -12,7 +12,6 @@ export const router = createRouter({
         { path: '', component: () => import('@/pages/home/HomePage.vue') },
       ],
     },
-    { path: '/preview', component: () => import('@/pages/preview/PreviewPage.vue') },
     {
       path: '/admin',
       component: AdminLayout,

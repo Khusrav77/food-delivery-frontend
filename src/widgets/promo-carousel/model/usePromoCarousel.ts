@@ -1,30 +1,45 @@
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { PROMO_SLIDES } from '../config/promoSlides'
 
+const GAP = 16
+
 export function usePromoCarousel() {
-  const activeIndex = ref(0)
-  const isPaused = ref(false)
-  const count = PROMO_SLIDES.length
-  let timer: ReturnType<typeof setInterval> | null = null
+  const containerRef = ref<HTMLElement | null>(null)
+  const containerWidth = ref(0)
+  const offset = ref(0)
 
-  function goTo(index: number) {
-    activeIndex.value = ((index % count) + count) % count
-  }
+  const visible = computed(() => {
+    if (containerWidth.value < 640) return 1
+    if (containerWidth.value < 1024) return 2
+    return 3
+  })
 
-  function next() { goTo(activeIndex.value + 1) }
-  function prev() { goTo(activeIndex.value - 1) }
-  function pause() { isPaused.value = true }
-  function resume() { isPaused.value = false }
+  const maxOffset = computed(() => Math.max(0, PROMO_SLIDES.length - visible.value))
+
+  const cardWidth = computed(() =>
+    containerWidth.value > 0
+      ? (containerWidth.value - (visible.value - 1) * GAP) / visible.value
+      : 0,
+  )
+
+  const translateX = computed(() => offset.value * (cardWidth.value + GAP))
+
+  let ro: ResizeObserver | null = null
 
   onMounted(() => {
-    timer = setInterval(() => {
-      if (!isPaused.value) next()
-    }, 4500)
+    if (!containerRef.value) return
+    containerWidth.value = containerRef.value.clientWidth
+    ro = new ResizeObserver(([entry]) => {
+      containerWidth.value = entry.contentRect.width
+      offset.value = Math.min(offset.value, maxOffset.value)
+    })
+    ro.observe(containerRef.value)
   })
 
-  onUnmounted(() => {
-    if (timer !== null) clearInterval(timer)
-  })
+  onUnmounted(() => ro?.disconnect())
 
-  return { activeIndex, slides: PROMO_SLIDES, goTo, next, prev, pause, resume }
+  function prev() { offset.value = Math.max(0, offset.value - 1) }
+  function next() { offset.value = Math.min(maxOffset.value, offset.value + 1) }
+
+  return { containerRef, slides: PROMO_SLIDES, cardWidth, translateX, offset, maxOffset, prev, next }
 }

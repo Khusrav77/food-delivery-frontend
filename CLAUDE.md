@@ -32,6 +32,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── anti-patterns.md      # Запрещённые паттерны
 │   ├── dod.md                # Definition of Done
 │   └── code-style.md         # Code style и принципы
+├── skills/                   # Внешние скилы с базами знаний
+│   └── ui-ux-pro-max/        # 67 стилей, 96 палитр, 57 шрифт-пар, UX-правила — /ui-ux-pro-max
 ├── hooks/                    # Скрипты для Claude Code hooks
 └── docs/
     ├── AI_TEAM.md            # Мастер-документ: роли, workflow modes, стек
@@ -59,6 +61,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `/dod` | Definition of Done чеклист |
 
 Команды без аргумента работают с файлом открытым в редакторе.
+
+## Documentation Sync Rule
+
+**При любом изменении или добавлении следующих файлов — автоматически обновить всю связанную документацию:**
+
+| Изменение | Что обновить |
+|---|---|
+| Добавлен/изменён `.claude/skills/*` | CLAUDE.md (раздел `.claude/ structure`), `AI_TEAM.md` |
+| Добавлен/изменён `.claude/agents/*.md` | CLAUDE.md (раздел `.claude/ structure` + таблица команд) |
+| Добавлен/изменён `.claude/commands/*.md` | CLAUDE.md (таблица Slash-команд), `AI_TEAM.md` |
+| Добавлен/изменён MCP-сервер (`.mcp.json`, `settings.json`) | CLAUDE.md, `AI_TEAM.md`, `FRONTEND_DESIGN.md` если UI-инструмент |
+| Изменён стек/зависимости (`package.json`) | CLAUDE.md (раздел Stack & structure), `SPEC.md` |
+| Добавлена новая entity/feature/widget | `SPEC.md`, `index.ts` slice (public API) |
+
+**Правило:** не закрывать задачу без проверки, что документация актуальна. Если добавлен скилл — он должен быть в CLAUDE.md. Если добавлен агент — он должен быть в таблице. Синхронизация документации — часть DoD.
 
 ## Git rules
 

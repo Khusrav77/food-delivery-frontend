@@ -14,24 +14,24 @@ const emit = defineEmits<{ select: [product: Product] }>()
 
     <!-- Loading skeleton -->
     <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div v-for="n in 6" :key="n" class="bg-white rounded-2xl border border-slate-100 overflow-hidden animate-pulse">
-        <div class="aspect-[4/3] bg-slate-100" />
+      <div v-for="n in 6" :key="n" class="bg-surface rounded-2xl border border-line overflow-hidden animate-pulse">
+        <div class="aspect-[4/3] bg-surface-soft" />
         <div class="p-4 space-y-3">
-          <div class="h-4 bg-slate-100 rounded-lg w-3/4" />
-          <div class="h-3 bg-slate-100 rounded-lg w-full" />
-          <div class="h-3 bg-slate-100 rounded-lg w-2/3" />
+          <div class="h-4 bg-line rounded-lg w-3/4" />
+          <div class="h-3 bg-line rounded-lg w-full" />
+          <div class="h-3 bg-line rounded-lg w-2/3" />
           <div class="flex justify-between mt-4">
-            <div class="h-6 bg-slate-100 rounded-lg w-20" />
-            <div class="h-8 bg-slate-100 rounded-lg w-24" />
+            <div class="h-6 bg-line rounded-lg w-20" />
+            <div class="h-9 bg-line-strong rounded-xl w-28" />
           </div>
         </div>
       </div>
     </div>
 
     <!-- Empty state -->
-    <div v-else-if="products.length === 0" class="py-16 text-center bg-white rounded-2xl border border-slate-100">
-      <div class="text-5xl mb-3 select-none">🍽️</div>
-      <p class="text-slate-500 text-base">Нет блюд в этой категории</p>
+    <div v-else-if="products.length === 0" class="py-16 text-center bg-surface rounded-2xl border border-line">
+      <div class="text-5xl mb-3 select-none opacity-40">🍽️</div>
+      <p class="text-muted text-base">Нет блюд в этой категории</p>
     </div>
 
     <!-- Products grid -->

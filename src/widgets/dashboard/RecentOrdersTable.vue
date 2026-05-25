@@ -33,52 +33,52 @@ const orders: Order[] = [
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+  <div class="bg-surface rounded-2xl border border-line overflow-hidden">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-line">
       <div>
-        <h2 class="text-sm font-semibold text-slate-800">Последние заказы</h2>
-        <p class="text-xs text-slate-400 mt-0.5">Обновлено только что</p>
+        <h2 class="text-sm font-semibold text-ink">Последние заказы</h2>
+        <p class="text-xs text-faint mt-0.5">Обновлено только что</p>
       </div>
-      <button class="flex items-center gap-1.5 text-xs text-orange-500 font-medium hover:text-orange-600 transition-colors">
+      <button class="flex items-center gap-1.5 text-xs text-accent font-medium hover:text-accent-hover transition-colors">
         Все заказы <ArrowRight :size="13" />
       </button>
     </div>
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead>
-          <tr class="bg-slate-50 text-left">
-            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Заказ</th>
-            <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Клиент</th>
-            <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide hidden md:table-cell">Ресторан</th>
-            <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide hidden lg:table-cell">Район</th>
-            <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Сумма</th>
-            <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">Статус</th>
-            <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide hidden sm:table-cell">Время</th>
+          <tr class="bg-surface-soft text-left">
+            <th class="px-5 py-3 text-xs font-semibold text-faint uppercase tracking-wide">Заказ</th>
+            <th class="px-4 py-3 text-xs font-semibold text-faint uppercase tracking-wide">Клиент</th>
+            <th class="px-4 py-3 text-xs font-semibold text-faint uppercase tracking-wide hidden md:table-cell">Ресторан</th>
+            <th class="px-4 py-3 text-xs font-semibold text-faint uppercase tracking-wide hidden lg:table-cell">Район</th>
+            <th class="px-4 py-3 text-xs font-semibold text-faint uppercase tracking-wide">Сумма</th>
+            <th class="px-4 py-3 text-xs font-semibold text-faint uppercase tracking-wide">Статус</th>
+            <th class="px-4 py-3 text-xs font-semibold text-faint uppercase tracking-wide hidden sm:table-cell">Время</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-50">
+        <tbody class="divide-y divide-line">
           <tr
             v-for="order in orders"
             :key="order.id"
-            class="hover:bg-slate-50/50 transition-colors cursor-pointer"
+            class="hover:bg-surface-soft transition-colors cursor-pointer"
           >
             <td class="px-5 py-3.5">
-              <span class="font-mono text-xs font-semibold text-slate-700">{{ order.id }}</span>
+              <span class="font-mono text-xs font-semibold text-ink">{{ order.id }}</span>
             </td>
             <td class="px-4 py-3.5">
-              <span class="text-slate-700 font-medium text-xs">{{ order.customer }}</span>
+              <span class="text-ink font-medium text-xs">{{ order.customer }}</span>
             </td>
             <td class="px-4 py-3.5 hidden md:table-cell">
-              <span class="text-slate-500 text-xs">{{ order.restaurant }}</span>
+              <span class="text-muted text-xs">{{ order.restaurant }}</span>
             </td>
             <td class="px-4 py-3.5 hidden lg:table-cell">
-              <div class="flex items-center gap-1 text-slate-400 text-xs">
+              <div class="flex items-center gap-1 text-faint text-xs">
                 <MapPin :size="11" />
                 {{ order.district }}
               </div>
             </td>
             <td class="px-4 py-3.5">
-              <span class="font-semibold text-slate-800 text-xs">{{ order.total }}</span>
+              <span class="font-semibold text-ink text-xs">{{ order.total }}</span>
             </td>
             <td class="px-4 py-3.5">
               <span
@@ -90,7 +90,7 @@ const orders: Order[] = [
               </span>
             </td>
             <td class="px-4 py-3.5 hidden sm:table-cell">
-              <div class="flex items-center gap-1 text-slate-400 text-xs">
+              <div class="flex items-center gap-1 text-faint text-xs">
                 <Clock :size="11" />
                 {{ order.time }}
               </div>

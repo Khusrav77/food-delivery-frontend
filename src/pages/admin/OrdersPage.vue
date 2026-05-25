@@ -5,6 +5,6 @@ import { UnderConstruction } from '@/shared/ui/UnderConstruction'
 
 <template>
   <UnderConstruction title="Заказы">
-    <ShoppingBag :size="28" class="text-orange-400" />
+    <ShoppingBag :size="28" class="text-accent" />
   </UnderConstruction>
 </template>

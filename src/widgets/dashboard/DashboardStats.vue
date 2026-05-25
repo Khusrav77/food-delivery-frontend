@@ -20,8 +20,8 @@ const stats: StatItem[] = [
     trend: 12,
     sub: 'vs 221 вчера',
     icon: ShoppingBag,
-    iconBg: 'bg-orange-50',
-    iconColor: 'text-orange-500',
+    iconBg: 'bg-accent-soft',
+    iconColor: 'text-accent',
   },
   {
     label: 'Выручка сегодня',

@@ -13,11 +13,11 @@ function selectCategory(id: string) {
 
 <template>
   <section v-if="!error && (loading || categories.length > 0)" class="space-y-5">
-    <div class="flex items-center gap-4">
-      <h2 class="text-xl md:text-2xl font-bold text-slate-900 uppercase tracking-wide shrink-0">
+    <div class="flex items-center gap-5">
+      <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink tracking-tight shrink-0">
         Доставка еды
       </h2>
-      <div class="flex-1 h-px bg-slate-100" />
+      <div class="flex-1 h-px bg-line" />
     </div>
 
     <!-- Loading skeleton -->
@@ -25,7 +25,7 @@ function selectCategory(id: string) {
       <div
         v-for="n in 7"
         :key="n"
-        class="shrink-0 h-10 rounded-full bg-slate-100 animate-pulse"
+        class="shrink-0 h-10 rounded-full bg-surface-soft border border-line animate-pulse"
         :style="{ width: `${70 + n * 12}px` }"
       />
     </div>
@@ -37,8 +37,8 @@ function selectCategory(id: string) {
         :key="cat.id"
         class="shrink-0 px-5 py-2 rounded-full text-sm font-medium border transition-all"
         :class="modelValue === cat.id
-          ? 'bg-orange-500 text-white border-orange-500 shadow-sm'
-          : 'bg-white text-slate-700 border-slate-200 hover:border-orange-400 hover:text-orange-500'"
+          ? 'bg-accent text-white border-accent'
+          : 'bg-surface text-muted border-line-strong hover:border-accent hover:text-accent'"
         @click="selectCategory(cat.id)"
       >
         {{ cat.name }}

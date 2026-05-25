@@ -34,56 +34,62 @@ onUnmounted(() => {
     <Transition name="fade">
       <div
         v-if="show && product"
-        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-ink/40 backdrop-blur-sm"
         @click="onBackdropClick"
       >
         <Transition name="modal">
           <div
             v-if="show && product"
-            class="bg-white w-full sm:max-w-lg sm:mx-4 rounded-t-3xl sm:rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col"
+            class="bg-surface w-full sm:max-w-2xl sm:mx-4 rounded-t-3xl sm:rounded-2xl overflow-hidden
+                   shadow-2xl shadow-black/15 max-h-[92vh] sm:max-h-[82vh]
+                   flex flex-col sm:flex-row"
           >
-            <!-- Image -->
-            <div class="relative aspect-[4/3] bg-slate-100 shrink-0">
+
+            <!-- Image: top on mobile, left on desktop -->
+            <div class="relative aspect-[4/3] sm:aspect-auto sm:w-[44%] shrink-0 bg-surface-soft">
               <img
                 v-if="displayImage"
                 :src="displayImage"
                 :alt="product.name"
                 class="w-full h-full object-cover"
               />
-              <div v-else class="w-full h-full bg-gradient-to-br from-orange-50 to-amber-100 flex items-center justify-center">
-                <span class="text-8xl select-none">🍽️</span>
+              <div v-else class="w-full h-full flex items-center justify-center">
+                <span class="text-8xl select-none opacity-25">🍽️</span>
               </div>
+
+              <!-- Close -->
               <button
-                class="absolute top-4 right-4 w-9 h-9 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-sm transition-colors"
+                class="absolute top-4 right-4 w-9 h-9 bg-surface/85 hover:bg-surface backdrop-blur-sm
+                       rounded-full flex items-center justify-center shadow-sm transition-colors"
                 aria-label="Закрыть"
                 @click="emit('close')"
               >
-                <X :size="18" class="text-slate-600" />
+                <X :size="18" class="text-ink" />
               </button>
             </div>
 
-            <!-- Scrollable content -->
-            <div class="flex flex-col overflow-y-auto p-5 gap-4">
+            <!-- Content: scrollable -->
+            <div class="flex flex-col overflow-y-auto flex-1 p-5 sm:p-6 gap-4">
 
               <!-- Name + description -->
-              <div>
-                <h2 class="text-xl font-bold text-slate-900 leading-snug">{{ product.name }}</h2>
-                <p v-if="product.description" class="mt-2 text-slate-500 text-sm leading-relaxed">
+              <div class="flex-1">
+                <h2 class="font-display text-2xl font-semibold text-ink leading-tight tracking-tight">{{ product.name }}</h2>
+                <p v-if="product.description" class="mt-3 text-muted text-sm leading-relaxed">
                   {{ product.description }}
                 </p>
               </div>
 
-              <!-- Variants (only if multiple) -->
+              <!-- Variants -->
               <div v-if="activeItems.length > 1" class="space-y-2.5">
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide">Выберите вариант</p>
+                <p class="text-xs font-semibold text-faint uppercase tracking-[0.15em]">Выберите вариант</p>
                 <div class="flex flex-wrap gap-2">
                   <button
                     v-for="item in activeItems"
                     :key="item.id"
-                    class="px-4 py-2 rounded-xl text-sm font-medium border transition-all"
+                    class="px-4 py-2 rounded-lg text-sm font-medium border transition-all"
                     :class="selectedItem?.id === item.id
-                      ? 'bg-orange-500 text-white border-orange-500 shadow-sm'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-orange-400 hover:text-orange-500'"
+                      ? 'bg-accent text-white border-accent'
+                      : 'bg-surface-soft text-muted border-line hover:border-accent hover:text-accent'"
                     @click="selectItem(item)"
                   >
                     {{ formatItemLabel(item) }}
@@ -92,10 +98,12 @@ onUnmounted(() => {
               </div>
 
               <!-- Price + CTA -->
-              <div class="flex items-center gap-3 pt-3 border-t border-slate-100">
-                <span class="text-2xl font-bold text-slate-900 flex-1">{{ displayPrice }}</span>
+              <div class="flex items-center gap-3 pt-4 border-t border-line mt-auto">
+                <span class="font-display text-2xl font-semibold text-ink flex-1">{{ displayPrice }}</span>
                 <button
-                  class="flex items-center gap-2 px-5 py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-semibold rounded-xl transition-colors shadow-sm"
+                  class="flex items-center gap-2 px-5 py-3
+                         bg-accent hover:bg-accent-hover active:bg-orange-600
+                         text-white font-medium rounded-lg transition-colors"
                 >
                   <ShoppingCart :size="18" />
                   В корзину

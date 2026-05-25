@@ -61,31 +61,31 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
     <div
       v-for="item in items"
       :key="item.id"
-      class="border border-slate-200 rounded-xl overflow-hidden"
+      class="border border-line-strong rounded-xl overflow-hidden"
     >
       <!-- Header строки варианта -->
       <div
-        class="flex items-center gap-2 px-3 py-2 bg-slate-50 cursor-pointer select-none"
+        class="flex items-center gap-2 px-3 py-2 bg-surface-soft cursor-pointer select-none"
         @click="toggle(item.id)"
       >
-        <component :is="expanded.has(item.id) ? ChevronDown : ChevronRight" :size="14" class="text-slate-400 flex-shrink-0" />
+        <component :is="expanded.has(item.id) ? ChevronDown : ChevronRight" :size="14" class="text-faint flex-shrink-0" />
 
         <input
           v-model="item.name"
           type="text"
           placeholder="4 шт / 20 см"
-          class="flex-1 bg-transparent text-sm font-medium text-slate-800 focus:outline-none min-w-0"
+          class="flex-1 bg-transparent text-sm font-medium text-ink focus:outline-none min-w-0"
           @click.stop
         />
 
         <div class="flex items-center gap-1 flex-shrink-0">
-          <span class="text-xs text-slate-400">₽</span>
+          <span class="text-xs text-faint">₽</span>
           <input
             v-model.number="item.price"
             type="number"
             min="0"
             placeholder="0"
-            class="w-20 bg-white border border-slate-200 rounded px-2 py-1 text-sm text-right focus:outline-none focus:ring-1 focus:ring-orange-400"
+            class="w-20 bg-surface border border-line-strong rounded px-2 py-1 text-sm text-right focus:outline-none focus:ring-1 focus:ring-accent"
             @click.stop
           />
         </div>
@@ -93,9 +93,9 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
         <label class="relative inline-flex items-center cursor-pointer flex-shrink-0" @click.stop>
           <input v-model="item.isActive" type="checkbox" class="sr-only peer" />
           <div
-            class="w-7 h-3.5 bg-slate-200 peer-checked:bg-orange-500 rounded-full
+            class="w-7 h-3.5 bg-line-strong peer-checked:bg-accent rounded-full
                    after:content-[''] after:absolute after:top-[1px] after:left-[1px]
-                   after:bg-white after:rounded-full after:w-3 after:h-3
+                   after:bg-surface after:rounded-full after:w-3 after:h-3
                    after:transition-all peer-checked:after:translate-x-3.5"
           ></div>
         </label>
@@ -103,7 +103,7 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
         <button
           type="button"
           :disabled="items.length <= 1"
-          class="p-1 text-slate-300 hover:text-red-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+          class="p-1 text-faint hover:text-red-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex-shrink-0"
           @click.stop="removeItem(item.id)"
         >
           <Trash2 :size="13" />
@@ -111,11 +111,11 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
       </div>
 
       <!-- Раскрытая секция: изображения, размеры, теги -->
-      <div v-if="expanded.has(item.id)" class="px-4 py-3 space-y-4 border-t border-slate-100">
+      <div v-if="expanded.has(item.id)" class="px-4 py-3 space-y-4 border-t border-line">
 
         <!-- Фото -->
         <div>
-          <p class="text-xs font-medium text-slate-600 mb-1.5 flex items-center gap-1">
+          <p class="text-xs font-medium text-muted mb-1.5 flex items-center gap-1">
             <Image :size="12" /> Фото
           </p>
           <div class="space-y-1.5">
@@ -124,9 +124,9 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
                 v-model="item.imageUrls[idx]"
                 type="url"
                 placeholder="https://example.com/image.jpg"
-                class="flex-1 border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-orange-400"
+                class="flex-1 border border-line-strong rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
               />
-              <div class="w-10 h-8 rounded overflow-hidden bg-slate-100 flex-shrink-0">
+              <div class="w-10 h-8 rounded overflow-hidden bg-surface-soft flex-shrink-0">
                 <img
                   v-if="url"
                   :src="url"
@@ -137,7 +137,7 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
               <button
                 v-if="item.imageUrls.length > 1"
                 type="button"
-                class="p-1 text-slate-300 hover:text-red-500 transition-colors"
+                class="p-1 text-faint hover:text-red-500 transition-colors"
                 @click="removeImageUrl(item, idx)"
               >
                 <X :size="12" />
@@ -146,7 +146,7 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
           </div>
           <button
             type="button"
-            class="flex items-center gap-1 text-orange-500 hover:text-orange-600 text-xs font-medium mt-1.5"
+            class="flex items-center gap-1 text-accent hover:text-accent-hover text-xs font-medium mt-1.5"
             @click="addImageUrl(item)"
           >
             <Plus :size="11" /> Добавить фото
@@ -155,12 +155,12 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
 
         <!-- Размеры -->
         <div>
-          <p class="text-xs font-medium text-slate-600 mb-1.5">Размеры</p>
+          <p class="text-xs font-medium text-muted mb-1.5">Размеры</p>
           <div v-if="item.sizes.length" class="space-y-1.5 mb-1.5">
             <div v-for="(size, idx) in item.sizes" :key="idx" class="flex items-center gap-2">
               <select
                 :value="size.sizeType"
-                class="border border-slate-200 rounded-lg px-2 py-1.5 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-orange-400"
+                class="border border-line-strong rounded-lg px-2 py-1.5 text-xs bg-surface focus:outline-none focus:ring-2 focus:ring-accent"
                 @change="onSizeTypeChange(size, ($event.target as HTMLSelectElement).value as SizeType)"
               >
                 <option v-for="(label, type) in SIZE_TYPE_LABELS" :key="type" :value="type">
@@ -172,11 +172,11 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
                 type="number"
                 min="0"
                 placeholder="0"
-                class="w-20 border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-orange-400"
+                class="w-20 border border-line-strong rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent"
               />
               <select
                 v-model="size.sizeUnit"
-                class="border border-slate-200 rounded-lg px-2 py-1.5 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-orange-400"
+                class="border border-line-strong rounded-lg px-2 py-1.5 text-xs bg-surface focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 <option
                   v-for="unit in SIZE_UNIT_BY_TYPE[size.sizeType as SizeType]"
@@ -188,7 +188,7 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
               </select>
               <button
                 type="button"
-                class="p-1 text-slate-300 hover:text-red-500 transition-colors"
+                class="p-1 text-faint hover:text-red-500 transition-colors"
                 @click="removeSize(item, idx)"
               >
                 <X :size="12" />
@@ -197,7 +197,7 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
           </div>
           <button
             type="button"
-            class="flex items-center gap-1 text-orange-500 hover:text-orange-600 text-xs font-medium"
+            class="flex items-center gap-1 text-accent hover:text-accent-hover text-xs font-medium"
             @click="addSize(item)"
           >
             <Plus :size="11" /> Добавить размер
@@ -206,14 +206,14 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
 
         <!-- Теги -->
         <div>
-          <p class="text-xs font-medium text-slate-600 mb-1.5">Теги варианта</p>
+          <p class="text-xs font-medium text-muted mb-1.5">Теги варианта</p>
           <div class="flex flex-wrap gap-1.5">
             <button
               v-for="tag in tagStore.tags"
               :key="tag.id"
               type="button"
               class="transition-all"
-              :class="item.tagIds.includes(tag.id) ? 'ring-2 ring-orange-400 ring-offset-1 rounded-full' : 'opacity-50 hover:opacity-100'"
+              :class="item.tagIds.includes(tag.id) ? 'ring-2 ring-accent ring-offset-1 rounded-full' : 'opacity-50 hover:opacity-100'"
               @click="toggleTag(item, tag.id)"
             >
               <TagBadge :tag="tag" small />
@@ -226,7 +226,7 @@ function toggleTag(item: MenuItemDraft, tagId: string) {
 
     <button
       type="button"
-      class="flex items-center gap-1.5 text-orange-500 hover:text-orange-600 text-sm font-medium"
+      class="flex items-center gap-1.5 text-accent hover:text-accent-hover text-sm font-medium"
       @click="addItem"
     >
       <Plus :size="14" /> Добавить вариант

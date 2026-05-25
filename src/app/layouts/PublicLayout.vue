@@ -4,7 +4,7 @@ import { PublicHeader } from '@/widgets/public-header'
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50">
+  <div class="min-h-screen bg-canvas">
     <PublicHeader />
     <RouterView />
   </div>

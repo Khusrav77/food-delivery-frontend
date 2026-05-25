@@ -5,6 +5,6 @@ import { UnderConstruction } from '@/shared/ui/UnderConstruction'
 
 <template>
   <UnderConstruction title="Настройки">
-    <Settings :size="28" class="text-orange-400" />
+    <Settings :size="28" class="text-accent" />
   </UnderConstruction>
 </template>

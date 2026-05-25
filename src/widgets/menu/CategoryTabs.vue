@@ -24,7 +24,7 @@ const categoryCount = computed(() => {
     <button
       :class="[
         'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-        modelValue === 'all' ? 'bg-orange-500 text-white' : 'text-slate-600 hover:bg-slate-100',
+        modelValue === 'all' ? 'bg-accent text-white' : 'text-muted hover:bg-surface-soft hover:text-ink',
       ]"
       @click="emit('update:modelValue', 'all')"
     >
@@ -35,7 +35,7 @@ const categoryCount = computed(() => {
       :key="cat.id"
       :class="[
         'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-        modelValue === cat.id ? 'bg-orange-500 text-white' : 'text-slate-600 hover:bg-slate-100',
+        modelValue === cat.id ? 'bg-accent text-white' : 'text-muted hover:bg-surface-soft hover:text-ink',
       ]"
       @click="emit('update:modelValue', cat.id)"
     >
@@ -45,7 +45,7 @@ const categoryCount = computed(() => {
     <button
       :class="[
         'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-        modelValue === 'none' ? 'bg-orange-500 text-white' : 'text-slate-600 hover:bg-slate-100',
+        modelValue === 'none' ? 'bg-accent text-white' : 'text-muted hover:bg-surface-soft hover:text-ink',
       ]"
       @click="emit('update:modelValue', 'none')"
     >

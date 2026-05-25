@@ -14,7 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── code-debugger.md      # Поиск root cause багов — /debug
 │   ├── code-test-writer.md   # Vitest + Vue Test Utils тесты — /test
 │   ├── code-doc-writer.md    # JSDoc, SPEC.md, index.ts — /doc
-│   └── code-security-auditor.md  # XSS, JWT, OWASP аудит — /audit
+│   ├── code-security-auditor.md  # XSS, JWT, OWASP аудит — /audit
+│   └── code-frontend-design.md  # Дизайн UI: компоненты, страницы, анимации
 ├── commands/                 # Slash-команды (/name или /name <аргумент>)
 │   ├── run-app.md            # /run-app — запуск Postgres + Backend + Frontend
 │   ├── review.md             # /review [файл] — code review
@@ -35,7 +36,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 └── docs/
     ├── AI_TEAM.md            # Мастер-документ: роли, workflow modes, стек
     ├── SPEC.md               # Product spec: БД, типы, API endpoints, MVP
-    └── FEATURE_DEV.md        # Гайд по Feature workflow: фазы, агенты, советы
+    ├── FEATURE_DEV.md        # Гайд по Feature workflow: фазы, агенты, советы
+    └── FRONTEND_DESIGN.md    # Гайд по Frontend Design: направления, FSD размещение
 ```
 
 **Правила читать перед каждой задачей:** `.claude/rules/fsd.md`, `.claude/rules/anti-patterns.md`

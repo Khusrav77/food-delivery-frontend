@@ -3,11 +3,15 @@ import { ShoppingCart } from 'lucide-vue-next'
 import type { Product } from '../model/types'
 import { getFirstImage, getMinPrice, hasMultiplePrices, formatPrice } from '../model/dishDisplay'
 
-defineProps<{ product: Product }>()
+const props = defineProps<{ product: Product }>()
+const emit = defineEmits<{ select: [product: Product] }>()
 </script>
 
 <template>
-  <article class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col group">
+  <article
+    class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col group cursor-pointer"
+    @click="emit('select', props.product)"
+  >
 
     <!-- Image -->
     <div class="aspect-[4/3] bg-slate-100 overflow-hidden shrink-0">
@@ -42,6 +46,7 @@ defineProps<{ product: Product }>()
         <button
           class="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-orange-500 border border-orange-300 rounded-lg hover:bg-orange-50 hover:border-orange-400 transition-colors"
           aria-label="Добавить в корзину"
+          @click.stop
         >
           <ShoppingCart :size="14" />
           В корзину

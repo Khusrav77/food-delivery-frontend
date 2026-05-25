@@ -1,4 +1,4 @@
-import type { Product, MenuItem } from './types'
+import { type Product, type MenuItem, SIZE_UNIT_LABELS } from './types'
 
 export function getActiveItems(product: Product): MenuItem[] {
   return product.menuItems.filter(m => m.isActive)
@@ -24,4 +24,10 @@ export function hasMultiplePrices(product: Product): boolean {
 
 export function formatPrice(price: number): string {
   return `${price.toLocaleString('ru-RU')} ₽`
+}
+
+export function formatItemLabel(item: MenuItem): string {
+  if (item.sizes.length === 0) return item.name
+  const sizes = item.sizes.map(s => `${s.sizeValue} ${SIZE_UNIT_LABELS[s.sizeUnit]}`).join(', ')
+  return `${item.name} · ${sizes}`
 }

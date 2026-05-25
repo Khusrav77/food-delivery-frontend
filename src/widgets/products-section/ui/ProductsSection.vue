@@ -5,6 +5,8 @@ defineProps<{
   products: Product[]
   loading: boolean
 }>()
+
+const emit = defineEmits<{ select: [product: Product] }>()
 </script>
 
 <template>
@@ -38,6 +40,7 @@ defineProps<{
         v-for="product in products"
         :key="product.id"
         :product="product"
+        @select="emit('select', $event)"
       />
     </div>
 

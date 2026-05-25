@@ -1,11 +1,12 @@
 import { reactive, computed, ref } from 'vue'
 import { useCategoryStore } from '@/entities/category'
-import { useProductStore } from '@/entities/dish'
+import { useProductStore, type Product } from '@/entities/dish'
 
 export function useHomePage() {
   const categoryStore = useCategoryStore()
   const productStore = useProductStore()
   const activeCategoryId = ref<string | null>(null)
+  const selectedProduct = ref<Product | null>(null)
 
   const filteredProducts = computed(() => {
     const visible = productStore.products.filter(
@@ -22,10 +23,21 @@ export function useHomePage() {
     ])
   }
 
+  function openPreview(product: Product): void {
+    selectedProduct.value = product
+  }
+
+  function closePreview(): void {
+    selectedProduct.value = null
+  }
+
   return reactive({
     activeCategoryId,
     filteredProducts,
     loading: computed(() => productStore.loading),
+    selectedProduct,
     init,
+    openPreview,
+    closePreview,
   })
 }

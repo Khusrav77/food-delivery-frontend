@@ -1,10 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AdminLayout from '@/app/layouts/AdminLayout.vue'
+import PublicLayout from '@/app/layouts/PublicLayout.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', redirect: '/admin/dashboard' },
+    {
+      path: '/',
+      component: PublicLayout,
+      children: [
+        { path: '', component: () => import('@/pages/home/HomePage.vue') },
+      ],
+    },
+    { path: '/preview', component: () => import('@/pages/preview/PreviewPage.vue') },
     {
       path: '/admin',
       component: AdminLayout,

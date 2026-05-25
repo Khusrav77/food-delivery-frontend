@@ -7,13 +7,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 .claude/
 ├── agents/                   # Sub-agents (активируются автоматически по описанию)
-│   ├── reviewer.md           # Code review: FSD, Vue 3, TS — /review
-│   ├── architect.md          # FSD структура, слои, контракты — /arch
-│   ├── refactorer.md         # Рефакторинг без изменения поведения — /refactor
-│   ├── debugger.md           # Поиск root cause багов — /debug
-│   ├── test-writer.md        # Vitest + Vue Test Utils тесты — /test
-│   ├── doc-writer.md         # JSDoc, SPEC.md, index.ts — /doc
-│   └── security-auditor.md   # XSS, JWT, OWASP аудит — /audit
+│   ├── code-reviewer.md      # Code review: FSD, Vue 3, TS — /review
+│   ├── code-architect.md     # FSD структура, слои, контракты — /arch
+│   ├── code-explorer.md      # Трассировка фичи: flow, слои, зависимости
+│   ├── code-refactorer.md    # Рефакторинг без изменения поведения — /refactor
+│   ├── code-debugger.md      # Поиск root cause багов — /debug
+│   ├── code-test-writer.md   # Vitest + Vue Test Utils тесты — /test
+│   ├── code-doc-writer.md    # JSDoc, SPEC.md, index.ts — /doc
+│   └── code-security-auditor.md  # XSS, JWT, OWASP аудит — /audit
 ├── commands/                 # Slash-команды (/name или /name <аргумент>)
 │   ├── run-app.md            # /run-app — запуск Postgres + Backend + Frontend
 │   ├── review.md             # /review [файл] — code review
@@ -33,7 +34,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ├── hooks/                    # Скрипты для Claude Code hooks
 └── docs/
     ├── AI_TEAM.md            # Мастер-документ: роли, workflow modes, стек
-    └── SPEC.md               # Product spec: БД, типы, API endpoints, MVP
+    ├── SPEC.md               # Product spec: БД, типы, API endpoints, MVP
+    └── FEATURE_DEV.md        # Гайд по Feature workflow: фазы, агенты, советы
 ```
 
 **Правила читать перед каждой задачей:** `.claude/rules/fsd.md`, `.claude/rules/anti-patterns.md`

@@ -5,7 +5,7 @@ import { AdminHeader } from '@/widgets/admin-header'
 </script>
 
 <template>
-  <div class="flex h-screen bg-canvas overflow-hidden">
+  <div class="flex h-screen bg-[#f1f1f1] overflow-hidden">
     <AdminSidebar />
     <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
       <AdminHeader />

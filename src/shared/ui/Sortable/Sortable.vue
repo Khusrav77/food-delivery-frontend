@@ -21,7 +21,11 @@ defineSlots<{ item(props: { element: T }): unknown }>()
     :disabled="disabled"
     :handle="handle"
     :animation="180"
+    :delay="150"
+    :delay-on-touch-only="false"
+    :force-fallback="true"
     ghost-class="opacity-40"
+    fallback-class="opacity-60 shadow-lg"
     @end="emit('end')"
   >
     <template #item="{ element }">

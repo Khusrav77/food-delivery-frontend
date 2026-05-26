@@ -51,11 +51,28 @@ export function useCategoryManager() {
     await productStore.fetchAll()
   }
 
+  function moveCategoryUp(id: string) {
+    const idx = orderedCategories.value.findIndex(c => c.id === id)
+    if (idx <= 0) return
+    const copy = [...orderedCategories.value]
+    ;[copy[idx - 1], copy[idx]] = [copy[idx], copy[idx - 1]]
+    orderedCategories.value = copy
+    persistOrder()
+  }
+
+  function moveCategoryDown(id: string) {
+    const idx = orderedCategories.value.findIndex(c => c.id === id)
+    if (idx < 0 || idx >= orderedCategories.value.length - 1) return
+    const copy = [...orderedCategories.value]
+    ;[copy[idx], copy[idx + 1]] = [copy[idx + 1], copy[idx]]
+    orderedCategories.value = copy
+    persistOrder()
+  }
+
   return {
     categoryStore,
     productStore,
     orderedCategories,
-    persistOrder,
     newName,
     editingId,
     editingName,
@@ -63,5 +80,7 @@ export function useCategoryManager() {
     confirmEdit,
     addCategory,
     remove,
+    moveCategoryUp,
+    moveCategoryDown,
   }
 }

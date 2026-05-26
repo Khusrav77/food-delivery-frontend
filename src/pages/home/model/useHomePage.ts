@@ -2,26 +2,34 @@ import { reactive, computed, ref } from 'vue'
 import { useCategoryStore } from '@/entities/category'
 import { useProductStore, type Product } from '@/entities/dish'
 import { useTagStore } from '@/entities/tag'
+import { useScrollSpy } from '@/shared/lib/useScrollSpy'
+import { groupIntoSections } from './menuSections'
+
+// header(64) + sticky strip(~56); sections snap just below the strip when scrolled to
+const STICKY_OFFSET = 120
 
 export function useHomePage() {
   const categoryStore = useCategoryStore()
   const productStore = useProductStore()
   const tagStore = useTagStore()
-  const activeCategoryId = ref<string | null>(null)
+
   const selectedProduct = ref<Product | null>(null)
 
-  const filteredProducts = computed(() => {
-    const visible = productStore.products.filter(
-      p => p.isActive && p.menuItems.some(m => m.isActive),
-    )
-    if (!activeCategoryId.value) return visible
-    return visible.filter(p => p.categoryId === activeCategoryId.value)
-  })
+  const sections = computed(() =>
+    groupIntoSections(productStore.products, categoryStore.categories),
+  )
+
+  const sectionIds = computed(() => sections.value.map(s => s.id))
+
+  const { activeId: activeCategoryId, scrollToId } = useScrollSpy(sectionIds, STICKY_OFFSET)
 
   async function init(): Promise<void> {
-    // Tags must load before products: product mapping resolves tag labels → ids via the tag store.
     await Promise.all([categoryStore.fetchAll(), tagStore.fetchAll()])
     await productStore.fetchAll()
+  }
+
+  function scrollToCategory(id: string) {
+    scrollToId(id)
   }
 
   function openPreview(product: Product): void {
@@ -33,11 +41,12 @@ export function useHomePage() {
   }
 
   return reactive({
+    sections,
     activeCategoryId,
-    filteredProducts,
     loading: computed(() => productStore.loading),
     selectedProduct,
     init,
+    scrollToCategory,
     openPreview,
     closePreview,
   })

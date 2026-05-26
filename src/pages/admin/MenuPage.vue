@@ -35,9 +35,17 @@ onMounted(menu.init)
 
     <CategoryTabs v-model="menu.activeCategoryId" />
 
+    <p
+      v-if="menu.filteredProducts.length && !menu.canSort"
+      class="text-xs text-faint"
+    >
+      Выберите конкретную категорию (без поиска и фильтра по тегам), чтобы менять порядок блюд перетаскиванием.
+    </p>
+
     <ProductGrid
       v-if="menu.filteredProducts.length"
       :products="menu.filteredProducts"
+      :sortable="menu.canSort"
       @edit="menu.openEdit"
     />
 

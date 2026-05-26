@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { X, Pencil, Trash2, Check } from 'lucide-vue-next'
+import { X, Pencil, Trash2, Check, GripVertical } from 'lucide-vue-next'
+import { Sortable } from '@/shared/ui/Sortable'
 import { useCategoryManager } from '../model/useCategoryManager'
 
 const emit = defineEmits<{ close: [] }>()
 
 const {
-  categoryStore,
   productStore,
+  orderedCategories,
+  persistOrder,
   newName,
   editingId,
   editingName,
@@ -30,44 +32,56 @@ const {
           </button>
         </div>
 
-        <div class="p-5 space-y-2 max-h-80 overflow-y-auto">
-          <div
-            v-for="cat in categoryStore.categories"
-            :key="cat.id"
-            class="flex items-center gap-2 group"
+        <div class="p-5 max-h-80 overflow-y-auto">
+          <Sortable
+            v-model="orderedCategories"
+            handle=".cat-drag-handle"
+            class="space-y-2"
+            @end="persistOrder"
           >
-            <template v-if="editingId === cat.id">
-              <input
-                v-model="editingName"
-                class="flex-1 border border-accent rounded-lg px-2 py-1 text-sm focus:outline-none"
-                @keyup.enter="confirmEdit(cat.id)"
-                @keyup.escape="editingId = null"
-              />
-              <button class="p-1 text-accent hover:text-accent-hover" @click="confirmEdit(cat.id)">
-                <Check :size="16" />
-              </button>
-            </template>
-            <template v-else>
-              <span class="flex-1 text-sm text-ink">{{ cat.name }}</span>
-              <span class="text-xs text-faint">
-                {{ productStore.products.filter(d => d.categoryId === cat.id).length }} блюд
-              </span>
-              <button
-                class="p-1 text-faint hover:text-accent transition-colors"
-                @click="startEdit(cat.id, cat.name)"
-              >
-                <Pencil :size="14" />
-              </button>
-              <button
-                class="p-1 text-faint hover:text-red-500 transition-colors"
-                @click="remove(cat.id)"
-              >
-                <Trash2 :size="14" />
-              </button>
-            </template>
-          </div>
+            <template #item="{ element: cat }">
+              <div class="flex items-center gap-2 group">
+                <button
+                  class="cat-drag-handle p-1 text-faint hover:text-accent cursor-grab active:cursor-grabbing transition-colors"
+                  aria-label="Перетащить категорию"
+                >
+                  <GripVertical :size="16" />
+                </button>
 
-          <p v-if="!categoryStore.categories.length" class="text-faint text-sm text-center py-4">
+                <template v-if="editingId === cat.id">
+                  <input
+                    v-model="editingName"
+                    class="flex-1 border border-accent rounded-lg px-2 py-1 text-sm focus:outline-none"
+                    @keyup.enter="confirmEdit(cat.id)"
+                    @keyup.escape="editingId = null"
+                  />
+                  <button class="p-1 text-accent hover:text-accent-hover" @click="confirmEdit(cat.id)">
+                    <Check :size="16" />
+                  </button>
+                </template>
+                <template v-else>
+                  <span class="flex-1 text-sm text-ink">{{ cat.name }}</span>
+                  <span class="text-xs text-faint">
+                    {{ productStore.products.filter(d => d.categoryId === cat.id).length }} блюд
+                  </span>
+                  <button
+                    class="p-1 text-faint hover:text-accent transition-colors"
+                    @click="startEdit(cat.id, cat.name)"
+                  >
+                    <Pencil :size="14" />
+                  </button>
+                  <button
+                    class="p-1 text-faint hover:text-red-500 transition-colors"
+                    @click="remove(cat.id)"
+                  >
+                    <Trash2 :size="14" />
+                  </button>
+                </template>
+              </div>
+            </template>
+          </Sortable>
+
+          <p v-if="!orderedCategories.length" class="text-faint text-sm text-center py-4">
             Нет категорий
           </p>
         </div>

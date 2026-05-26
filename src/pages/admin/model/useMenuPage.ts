@@ -15,6 +15,15 @@ export function useMenuPage() {
   const showCategoryManager = ref(false)
   const showTagManager = ref(false)
 
+  // Reordering is only meaningful for a single real category with no extra filters.
+  // 'none' (uncategorized) is excluded: the backend rejects a product PUT without categoryId.
+  const canSort = computed(() =>
+    filter.activeCategoryId.value !== 'all' &&
+    filter.activeCategoryId.value !== 'none' &&
+    !filter.search.value.trim() &&
+    filter.activeTagIds.value.length === 0,
+  )
+
   async function init() {
     // Tags must load first — their labels are used to resolve tagIds when mapping products
     await tagStore.fetchAll()
@@ -47,6 +56,7 @@ export function useMenuPage() {
     activeCategoryId: filter.activeCategoryId,
     activeTagIds: filter.activeTagIds,
     filteredProducts: filter.filteredProducts,
+    canSort,
     showDishForm,
     editingProduct,
     showCategoryManager,

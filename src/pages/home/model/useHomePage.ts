@@ -1,10 +1,12 @@
 import { reactive, computed, ref } from 'vue'
 import { useCategoryStore } from '@/entities/category'
 import { useProductStore, type Product } from '@/entities/dish'
+import { useTagStore } from '@/entities/tag'
 
 export function useHomePage() {
   const categoryStore = useCategoryStore()
   const productStore = useProductStore()
+  const tagStore = useTagStore()
   const activeCategoryId = ref<string | null>(null)
   const selectedProduct = ref<Product | null>(null)
 
@@ -17,10 +19,9 @@ export function useHomePage() {
   })
 
   async function init(): Promise<void> {
-    await Promise.all([
-      categoryStore.fetchAll(),
-      productStore.fetchAll(),
-    ])
+    // Tags must load before products: product mapping resolves tag labels → ids via the tag store.
+    await Promise.all([categoryStore.fetchAll(), tagStore.fetchAll()])
+    await productStore.fetchAll()
   }
 
   function openPreview(product: Product): void {

@@ -33,11 +33,6 @@ const previewImage = computed(() => {
   return item?.images[0]?.url ?? ''
 })
 
-const minPrice = computed(() =>
-  props.product.menuItems.length
-    ? Math.min(...props.product.menuItems.map(mi => mi.price))
-    : 0,
-)
 const hasMultiple = computed(() => props.product.menuItems.length > 1)
 
 const fallback = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80'

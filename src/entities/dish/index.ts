@@ -3,5 +3,5 @@ export type { Product, MenuItem, MenuItemImage, MenuItemSize, SizeType, SizeUnit
 export { SIZE_UNIT_BY_TYPE, SIZE_TYPE_LABELS, SIZE_UNIT_LABELS } from './model/types'
 export { default as DishCard } from './ui/DishCard.vue'
 export { default as DishCardPublic } from './ui/DishCardPublic.vue'
-export { getActiveItems, getFirstImage, getMinPrice, hasMultiplePrices, formatPrice, formatItemLabel } from './model/dishDisplay'
+export { getActiveItems, getPrimaryItem, getFirstImage, getGalleryImages, getSizeParts, getProductTagIds, getMinPrice, hasMultiplePrices, formatPrice, formatItemLabel } from './model/dishDisplay'
 export * from './api/productsApi'

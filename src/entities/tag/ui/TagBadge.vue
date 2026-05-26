@@ -19,7 +19,7 @@ const colorMap: Record<string, string> = {
     :class="[
       'inline-flex items-center gap-0.5 rounded-full font-medium',
       small ? 'px-1.5 py-0.5 text-xs' : 'px-2 py-0.5 text-xs',
-      colorMap[props.tag.color] ?? 'bg-slate-100 text-slate-700',
+      colorMap[props.tag.color ?? ''] ?? 'bg-slate-100 text-slate-700',
     ]"
   >
     <span v-if="tag.emoji">{{ tag.emoji }}</span>

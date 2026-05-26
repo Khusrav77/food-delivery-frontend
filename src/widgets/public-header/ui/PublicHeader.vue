@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router'
 import {
   MapPin, ChevronDown, Search, ShoppingCart,
-  Heart, User, Star, UtensilsCrossed,
+  Heart, User, Star, UtensilsCrossed, LayoutDashboard,
 } from 'lucide-vue-next'
 import { usePublicHeader } from '../model/usePublicHeader'
 
@@ -81,6 +81,16 @@ const {
 
       <!-- Authed: избранное + аватар + бонус-баланс -->
       <template v-else>
+        <!-- Admin panel link -->
+        <a
+          href="/admin/dashboard"
+          target="_blank"
+          rel="noopener"
+          class="hidden sm:flex w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          title="Открыть панель управления"
+        >
+          <LayoutDashboard :size="15" />
+        </a>
         <button
           class="relative hidden sm:flex w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           aria-label="Избранное"

@@ -153,7 +153,8 @@ src/
 │   │   │   └── useDishForm.ts
 │   │   └── ui/
 │   ├── menu-filter/          # фильтрация меню (useMenuFilter)
-│   ├── category-manager/     # CRUD категорий (useCategoryManager)
+│   ├── category-manager/     # CRUD + drag-and-drop сортировка категорий (useCategoryManager)
+│   ├── reorder-products/     # drag-and-drop сортировка блюд в категории (useReorderProducts)
 │   └── tag-manager/          # CRUD тегов (useTagManager)
 ├── entities/
 │   ├── dish/         # Product/MenuItem: types, store, api, ui/DishCard
@@ -161,10 +162,14 @@ src/
 │   └── tag/          # types, store, api, ui/TagBadge
 └── shared/
     ├── api/          # http.ts (Axios + JWT interceptor)
+    ├── lib/          # position.ts (sortByPosition, diffChanged — чистая логика порядка)
     └── ui/
+        ├── Sortable/         # типизированная обёртка над vuedraggable (drag-and-drop списки)
         ├── StatsCard/
         └── UnderConstruction/  # виджет-заглушка для страниц "в разработке"
 ```
+
+> Порядок категорий и блюд хранится в поле `position`; админка меняет его перетаскиванием (`vuedraggable`), стор пересортировывает после fetch — клиент и админка выводят в одном порядке.
 
 ### Ключевые архитектурные правила
 

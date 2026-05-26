@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { sortByPosition, diffChanged } from '@/shared/lib/position'
 import type { Product, MenuItem } from './types'
 import {
   fetchProducts,
@@ -57,10 +58,12 @@ export const useProductStore = defineStore('product', () => {
         itemsByProduct.set(item.productId, list)
       }
 
-      products.value = rawProducts.map(p => ({
-        ...p,
-        menuItems: (itemsByProduct.get(p.id) ?? []).map(item => mapMenuItem(item, tagResolver)),
-      }))
+      products.value = sortByPosition(
+        rawProducts.map(p => ({
+          ...p,
+          menuItems: (itemsByProduct.get(p.id) ?? []).map(item => mapMenuItem(item, tagResolver)),
+        })),
+      )
     } catch (e) {
       error.value = (e as { message: string }).message ?? 'Ошибка загрузки продуктов'
     } finally {
@@ -210,6 +213,45 @@ export const useProductStore = defineStore('product', () => {
     products.value = products.value.filter(p => p.id !== id)
   }
 
+  /**
+   * Persists a new order of products (passed as the visual order of one category's products).
+   * Positions are reassigned 0..n-1; a PUT is sent only for products whose position changed.
+   */
+  async function reorderProducts(orderedIds: string[]) {
+    const byId = new Map(products.value.map(p => [p.id, p]))
+    const ordered = orderedIds
+      .map(id => byId.get(id))
+      .filter((p): p is Product => p !== undefined)
+
+    const changes = diffChanged(ordered)
+    if (changes.length === 0) return
+
+    // Clone for rollback: optimistic update mutates positions in place below.
+    const snapshot = products.value.map(p => ({ ...p }))
+    for (const { id, position } of changes) {
+      const p = byId.get(id)
+      if (p) p.position = position
+    }
+    products.value = sortByPosition(products.value)
+
+    try {
+      // Backend requires categoryId + name on every product PUT, not just position.
+      await Promise.all(
+        changes.map(({ id, position }) => {
+          const p = byId.get(id)!
+          return updateProductApi(id, {
+            name: p.name,
+            position,
+            ...(p.categoryId !== null && { categoryId: p.categoryId }),
+          })
+        }),
+      )
+    } catch (e) {
+      products.value = snapshot
+      throw e
+    }
+  }
+
   async function toggleActive(id: string) {
     const product = products.value.find(p => p.id === id)
     if (!product) return
@@ -265,6 +307,7 @@ export const useProductStore = defineStore('product', () => {
     addProduct,
     updateProduct,
     removeProduct,
+    reorderProducts,
     toggleActive,
     addMenuItem,
     updateMenuItem,

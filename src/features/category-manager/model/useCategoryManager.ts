@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { useCategoryStore } from '@/entities/category'
+import { ref, watch } from 'vue'
+import { useCategoryStore, type Category } from '@/entities/category'
 import { useProductStore } from '@/entities/dish'
 
 export function useCategoryManager() {
@@ -9,6 +9,20 @@ export function useCategoryManager() {
   const newName = ref('')
   const editingId = ref<string | null>(null)
   const editingName = ref('')
+
+  // Local drag-mutable copy; resyncs whenever the store list changes (add/rename/remove/reorder).
+  const orderedCategories = ref<Category[]>([...categoryStore.categories])
+  watch(() => categoryStore.categories, next => {
+    orderedCategories.value = [...next]
+  })
+
+  async function persistOrder() {
+    try {
+      await categoryStore.reorder(orderedCategories.value.map(c => c.id))
+    } catch {
+      // Store rolled back on failure; the watch above resyncs the local list.
+    }
+  }
 
   function startEdit(id: string, name: string) {
     editingId.value = id
@@ -40,6 +54,8 @@ export function useCategoryManager() {
   return {
     categoryStore,
     productStore,
+    orderedCategories,
+    persistOrder,
     newName,
     editingId,
     editingName,

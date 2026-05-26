@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Pencil, Trash2, UtensilsCrossed } from 'lucide-vue-next'
+import { Pencil, Trash2, UtensilsCrossed, GripVertical } from 'lucide-vue-next'
 import { type Product } from '@/entities/dish'
 import { useDishCard } from '../model/useDishCard'
 import CardTagList from './CardTagList.vue'
 
-const props = defineProps<{ product: Product }>()
+const props = defineProps<{ product: Product; draggableHandle?: boolean }>()
 const emit = defineEmits<{
   edit: [product: Product]
   remove: [id: string]
@@ -42,6 +42,20 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
         <div v-if="tags.length" class="absolute top-2.5 left-2.5 max-w-[72%]">
           <CardTagList :tags="tags" variant="overlay" />
         </div>
+
+        <!-- Drag handle (sort mode only) -->
+        <button
+          v-if="draggableHandle"
+          type="button"
+          class="dish-drag-handle absolute top-2.5 right-2.5 z-10 grid place-items-center w-8 h-8 rounded-lg
+                 bg-white/85 backdrop-blur-sm text-muted shadow-sm transition-colors
+                 cursor-grab active:cursor-grabbing hover:text-accent
+                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          aria-label="Перетащить блюдо"
+          @click.stop
+        >
+          <GripVertical :size="16" />
+        </button>
 
         <!-- Inactive overlay -->
         <div

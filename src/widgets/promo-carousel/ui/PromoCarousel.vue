@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { Component } from 'vue'
+import { useTemplateRef, type Component } from 'vue'
 import { ChevronLeft, ChevronRight, Bike, Gift, Truck, ChefHat, Star } from 'lucide-vue-next'
 import { usePromoCarousel } from '../model/usePromoCarousel'
 
-const { containerRef, slides, cardWidth, translateX, offset, maxOffset, prev, next } = usePromoCarousel()
+const containerRef = useTemplateRef<HTMLElement>('containerRef')
+const { slides, cardWidth, translateX, offset, maxOffset, prev, next } = usePromoCarousel(containerRef)
 
 const iconMap: Record<string, Component> = { Bike, Gift, Truck, ChefHat, Star }
 </script>

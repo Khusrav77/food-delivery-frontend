@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import { Pencil, Trash2, UtensilsCrossed, GripVertical } from 'lucide-vue-next'
+import { ChevronUp, ChevronDown, Pencil, Trash2, UtensilsCrossed } from 'lucide-vue-next'
 import { type Product } from '@/entities/dish'
 import { useDishCard } from '../model/useDishCard'
 import CardTagList from './CardTagList.vue'
 
-const props = defineProps<{ product: Product; draggableHandle?: boolean }>()
+const props = defineProps<{
+  product: Product
+  sortable?: boolean
+  canMoveUp?: boolean
+  canMoveDown?: boolean
+}>()
 const emit = defineEmits<{
   edit: [product: Product]
   remove: [id: string]
   toggleActive: [id: string]
+  moveUp: []
+  moveDown: []
 }>()
 
 const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } = useDishCard(props.product)
@@ -43,19 +50,31 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
           <CardTagList :tags="tags" variant="overlay" />
         </div>
 
-        <!-- Drag handle (sort mode only) -->
-        <button
-          v-if="draggableHandle"
-          type="button"
-          class="dish-drag-handle absolute top-2.5 right-2.5 z-10 grid place-items-center w-8 h-8 rounded-lg
-                 bg-white/85 backdrop-blur-sm text-muted shadow-sm transition-colors
-                 cursor-grab active:cursor-grabbing hover:text-accent
-                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-          aria-label="Перетащить блюдо"
-          @click.stop
-        >
-          <GripVertical :size="16" />
-        </button>
+        <!-- Sort controls (sort mode only) -->
+        <div v-if="sortable" class="absolute top-2 right-2 z-10 flex flex-col gap-1">
+          <button
+            type="button"
+            class="grid place-items-center w-7 h-7 rounded-lg bg-white/90 backdrop-blur-sm shadow-sm transition-colors
+                   text-muted hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+            :disabled="!canMoveUp"
+            aria-label="Переместить выше"
+            @click.stop="emit('moveUp')"
+          >
+            <ChevronUp :size="14" />
+          </button>
+          <button
+            type="button"
+            class="grid place-items-center w-7 h-7 rounded-lg bg-white/90 backdrop-blur-sm shadow-sm transition-colors
+                   text-muted hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+            :disabled="!canMoveDown"
+            aria-label="Переместить ниже"
+            @click.stop="emit('moveDown')"
+          >
+            <ChevronDown :size="14" />
+          </button>
+        </div>
 
         <!-- Inactive overlay -->
         <div

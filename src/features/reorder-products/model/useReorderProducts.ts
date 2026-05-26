@@ -1,11 +1,6 @@
 import { ref, watch, type Ref } from 'vue'
 import { useProductStore, type Product } from '@/entities/dish'
 
-/**
- * Keeps a local, drag-mutable copy of one category's products and persists the
- * new order on drop. `source` is the reactive list to mirror (e.g. filtered by
- * category); when the store re-sorts after a save, the copy resyncs automatically.
- */
 export function useReorderProducts(source: Ref<Product[]>) {
   const productStore = useProductStore()
   const items = ref<Product[]>([...source.value])
@@ -22,5 +17,23 @@ export function useReorderProducts(source: Ref<Product[]>) {
     }
   }
 
-  return { items, persist }
+  function moveUp(id: string) {
+    const idx = items.value.findIndex(p => p.id === id)
+    if (idx <= 0) return
+    const copy = [...items.value]
+    ;[copy[idx - 1], copy[idx]] = [copy[idx], copy[idx - 1]]
+    items.value = copy
+    persist()
+  }
+
+  function moveDown(id: string) {
+    const idx = items.value.findIndex(p => p.id === id)
+    if (idx < 0 || idx >= items.value.length - 1) return
+    const copy = [...items.value]
+    ;[copy[idx], copy[idx + 1]] = [copy[idx + 1], copy[idx]]
+    items.value = copy
+    persist()
+  }
+
+  return { items, moveUp, moveDown }
 }

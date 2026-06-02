@@ -14,6 +14,7 @@ export function defaultDraft(): CheckoutDraft {
     addressComment: '',
     orderComment: '',
     paymentMethod: 'cash',
+    savedCardId: null,
     promoInput: '',
     bonusToUse: 0,
     tipMode: 'none',

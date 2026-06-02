@@ -1,0 +1,6 @@
+export { usePromoStore } from './model/store'
+export type { IPromoCode, PromoDiscountType } from './model/types'
+export { computeDiscount } from './lib/discount'
+export { fetchPromoCodes, applyPromoCode } from './api/promoApi'
+export type { PromoApplyResult } from './api/promoApi'
+export { default as PromoCard } from './ui/PromoCard.vue'

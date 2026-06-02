@@ -28,6 +28,8 @@ export const router = createRouter({
             { path: 'addresses', component: () => import('@/pages/account/AddressesPage.vue') },
             { path: 'orders', component: () => import('@/pages/account/OrdersPage.vue') },
             { path: 'bonuses', component: () => import('@/pages/account/BonusesPage.vue') },
+            { path: 'promo', component: () => import('@/pages/account/PromoCodesPage.vue') },
+            { path: 'cards', component: () => import('@/pages/account/CardsPage.vue') },
           ],
         },
       ],

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRouter, useRoute } from 'vue-router'
-import { User, MapPin, ShoppingBag, Star, LogOut, ChevronRight } from 'lucide-vue-next'
+import { User, MapPin, ShoppingBag, Star, Ticket, CreditCard, LogOut, ChevronRight } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/entities/user'
 import { useAuth } from '@/features/auth'
@@ -11,10 +11,12 @@ const router = useRouter()
 const route = useRoute()
 
 const NAV = [
-  { to: '/account/profile',   label: 'Профиль',   icon: User },
-  { to: '/account/addresses', label: 'Адреса',    icon: MapPin },
-  { to: '/account/orders',    label: 'Заказы',    icon: ShoppingBag },
-  { to: '/account/bonuses',   label: 'Бонусы',    icon: Star },
+  { to: '/account/profile',   label: 'Профиль',    icon: User },
+  { to: '/account/addresses', label: 'Адреса',     icon: MapPin },
+  { to: '/account/orders',    label: 'Заказы',     icon: ShoppingBag },
+  { to: '/account/bonuses',   label: 'Бонусы',     icon: Star },
+  { to: '/account/promo',     label: 'Промокоды',  icon: Ticket },
+  { to: '/account/cards',     label: 'Мои карты',  icon: CreditCard },
 ]
 
 function isActive(to: string): boolean {

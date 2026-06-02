@@ -24,6 +24,7 @@ const {
   bonusBalance, maxBonusValue,
   totals, tip, etaMinutes, placing, canSubmit,
   savedAddresses, addressesLoading,
+  savedCards,
   init, selectSavedAddress, useNewAddress,
   submitPromo, removePromo, setTipPercent, setTipNone, setTipCustom, submit,
 } = useCheckout()
@@ -67,7 +68,7 @@ async function onSubmit(): Promise<void> {
           @use-new="useNewAddress"
         />
 
-        <PaymentSection :draft="draft" />
+        <PaymentSection :draft="draft" :saved-cards="savedCards" />
 
         <PromoBonusSection
           :draft="draft"

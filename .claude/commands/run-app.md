@@ -39,7 +39,7 @@ lsof -ti:5173
 ```
 If port is free, start Vite in the background:
 ```bash
-cd ~/GitProjects/Vue/food-delivery-vue-app && node node_modules/vite/bin/vite.js
+[ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh" && nvm use 22 && node node_modules/vite/bin/vite.js
 ```
 
 ## Step 4 — Report status

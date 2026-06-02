@@ -6,6 +6,7 @@ import type {
   IAuthResponse,
   IResetRequestPayload,
   IResetConfirmPayload,
+  IUpdateProfilePayload,
 } from '../model/types'
 
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -50,7 +51,7 @@ export async function getMe(): Promise<IUser> {
     return Promise.reject({ code: 'AUTH_EXPIRED', message: 'Сессия истекла' })
   }
   await delay(200)
-  return { id: 'u-1', name: 'Алексей Смирнов', bonusBalance: 120 }
+  return { id: 'u-1', name: 'Алексей Смирнов', bonusBalance: 120, email: 'alex@example.com', phone: '+7 (999) 123-45-67' }
 }
 
 export async function requestPasswordReset(payload: IResetRequestPayload): Promise<void> {
@@ -71,4 +72,16 @@ export async function confirmPasswordReset(payload: IResetConfirmPayload): Promi
 export async function logoutUser(): Promise<void> {
   await delay(200)
   // MOCK: POST /auth/logout — заменить на: await http.post('/auth/logout')
+}
+
+// MOCK: заменить на: const res = await http.put<IUser>('/users/me', payload); return res.data
+export async function updateProfile(payload: IUpdateProfilePayload): Promise<IUser> {
+  await delay(700)
+  return {
+    id: 'u-1',
+    name: `${payload.firstName} ${payload.lastName}`.trim(),
+    bonusBalance: 120,
+    email: payload.email || undefined,
+    phone: payload.phone || undefined,
+  }
 }

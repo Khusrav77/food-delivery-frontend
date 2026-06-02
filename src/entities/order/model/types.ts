@@ -2,12 +2,28 @@ export type PaymentMethod = 'cash' | 'card' | 'sbp'
 
 export type OrderStatus = 'accepted' | 'cooking' | 'on_the_way' | 'delivered'
 
-// один товар в составе заказа (снимок из корзины на момент оформления)
+export const STATUS_META: Record<OrderStatus, { label: string; badgeClass: string; step: number }> = {
+  accepted:   { label: 'Принят',           badgeClass: 'text-blue-600 bg-blue-50 border-blue-200',     step: 1 },
+  cooking:    { label: 'Готовится',        badgeClass: 'text-orange-600 bg-orange-50 border-orange-200', step: 2 },
+  on_the_way: { label: 'Передан курьеру',  badgeClass: 'text-purple-600 bg-purple-50 border-purple-200', step: 3 },
+  delivered:  { label: 'Доставлен',        badgeClass: 'text-emerald-600 bg-emerald-50 border-emerald-200', step: 4 },
+}
+
+export const PAYMENT_LABEL: Record<PaymentMethod, string> = {
+  cash: 'Наличными курьеру',
+  card: 'Банковская карта',
+  sbp:  'СБП',
+}
+
+// снимок позиции из корзины на момент оформления
 export interface OrderItem {
+  menuItemId: string
+  productId: string
   productName: string
   variantName: string
   price: number
   quantity: number
+  image: string | null
 }
 
 // тело запроса на создание заказа
@@ -26,7 +42,7 @@ export interface PlaceOrderPayload {
   etaMinutes: number
 }
 
-// созданный заказ, который вернул бэкенд
+// созданный заказ
 export interface PlacedOrder {
   id: string
   number: string

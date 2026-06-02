@@ -33,3 +33,10 @@ export interface IResetConfirmPayload {
   code: string
   newPassword: string
 }
+
+export interface IUpdateProfilePayload {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+}

@@ -40,10 +40,13 @@ export function useCheckout() {
 
   const items = computed<OrderItem[]>(() =>
     cart.items.map((i) => ({
+      menuItemId: i.menuItemId,
+      productId: i.productId,
       productName: i.productName,
       variantName: i.variantName,
       price: i.price,
       quantity: i.quantity,
+      image: i.image,
     })),
   )
 

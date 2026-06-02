@@ -1,8 +1,8 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { AUTH_TOKEN_KEY } from '@/shared/api'
-import type { IUser } from './types'
-import { getMe } from '../api/authApi'
+import type { IUser, IUpdateProfilePayload } from './types'
+import { getMe, updateProfile } from '../api/authApi'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<IUser | null>(null)
@@ -46,5 +46,21 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  return { user, isAuthenticated, initials, setUser, clear, setToken, clearToken, init }
+  const updating = ref(false)
+  const updateError = ref<string | null>(null)
+
+  async function update(payload: IUpdateProfilePayload): Promise<void> {
+    updating.value = true
+    updateError.value = null
+    try {
+      user.value = await updateProfile(payload)
+    } catch (e) {
+      updateError.value = (e as { message?: string }).message ?? 'Не удалось сохранить'
+      throw e
+    } finally {
+      updating.value = false
+    }
+  }
+
+  return { user, isAuthenticated, initials, setUser, clear, setToken, clearToken, init, update, updating, updateError }
 })

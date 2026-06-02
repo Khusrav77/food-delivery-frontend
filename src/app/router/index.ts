@@ -13,6 +13,18 @@ export const router = createRouter({
         { path: '', component: () => import('@/pages/home/HomePage.vue') },
         { path: 'checkout', component: () => import('@/pages/checkout/CheckoutPage.vue') },
         { path: 'checkout/success', component: () => import('@/pages/checkout/CheckoutSuccessPage.vue') },
+        {
+          path: 'account',
+          component: () => import('@/pages/account/AccountLayout.vue'),
+          meta: { requiresAuth: true },
+          children: [
+            { path: '', redirect: '/account/profile' },
+            { path: 'profile', component: () => import('@/pages/account/ProfilePage.vue') },
+            { path: 'addresses', component: () => import('@/pages/account/AddressesPage.vue') },
+            { path: 'orders', component: () => import('@/pages/account/OrdersPage.vue') },
+            { path: 'bonuses', component: () => import('@/pages/account/BonusesPage.vue') },
+          ],
+        },
       ],
     },
     // Auth pages — вне PublicLayout (нет хедера/корзины)
@@ -54,8 +66,16 @@ export const router = createRouter({
   ],
 })
 
-// Если пользователь уже авторизован — не пускать на /login, /register и т.д.
-// useUserStore() вызывается внутри guard (не на уровне модуля) — Pinia уже активна.
-router.beforeEach((to) => {
-  if (to.meta.guestOnly && useUserStore().isAuthenticated) return '/'
+// Guards: вызываются внутри beforeEach — Pinia гарантированно активна к этому моменту.
+// При прямой навигации (full page load) guard запускается раньше App.vue onMounted,
+// поэтому сами восстанавливаем сессию если store ещё пуст.
+router.beforeEach(async (to) => {
+  const store = useUserStore()
+  if (!store.isAuthenticated) {
+    await store.init()
+  }
+  if (to.meta.guestOnly && store.isAuthenticated) return '/'
+  if (to.meta.requiresAuth && !store.isAuthenticated) {
+    return `/login?redirect=${encodeURIComponent(to.fullPath)}`
+  }
 })

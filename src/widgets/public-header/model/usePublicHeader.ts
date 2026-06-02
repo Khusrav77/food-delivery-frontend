@@ -19,9 +19,12 @@ export function usePublicHeader() {
     router.push(redirect ? `/login?redirect=${encodeURIComponent(redirect)}` : '/login')
   }
 
-  async function logout(): Promise<void> {
-    await auth.logout()
-    router.push('/')
+  function goToAccount(): void {
+    router.push('/account')
+  }
+
+  function goToBonuses(): void {
+    router.push('/account/bonuses')
   }
 
   return {
@@ -33,6 +36,7 @@ export function usePublicHeader() {
     favoritesCount,
     openCart: cartStore.open,
     goToLogin,
-    logout,
+    goToAccount,
+    goToBonuses,
   }
 }

@@ -11,6 +11,7 @@ export const router = createRouter({
       component: PublicLayout,
       children: [
         { path: '', component: () => import('@/pages/home/HomePage.vue') },
+        { path: 'favorites', component: () => import('@/pages/favorites/FavoritesPage.vue') },
         { path: 'checkout', component: () => import('@/pages/checkout/CheckoutPage.vue') },
         { path: 'checkout/success', component: () => import('@/pages/checkout/CheckoutSuccessPage.vue') },
         {

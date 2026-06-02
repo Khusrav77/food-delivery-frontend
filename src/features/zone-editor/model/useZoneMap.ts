@@ -39,7 +39,7 @@ export function useZoneMap(
   function initMap(): void {
     if (!containerRef.value || map) return
 
-    map = L.map(containerRef.value, { center: [55.751244, 37.618423], zoom: 10 })
+    map = L.map(containerRef.value, { center: [59.9343, 30.3351], zoom: 11 })
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',

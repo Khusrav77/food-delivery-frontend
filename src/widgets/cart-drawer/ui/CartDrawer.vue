@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { X, ShoppingCart, Plus, Minus, Trash2, UtensilsCrossed, ArrowRight } from 'lucide-vue-next'
 import { useCartStore } from '@/entities/cart'
 import { formatPrice } from '@/shared/lib/money'
 
 const cart = useCartStore()
+const router = useRouter()
+
+function goToCheckout(): void {
+  cart.close()
+  router.push('/checkout')
+}
 </script>
 
 <template>
@@ -144,6 +151,7 @@ const cart = useCartStore()
                    bg-accent hover:bg-accent-hover active:bg-orange-600
                    text-white font-semibold text-sm rounded-xl transition-colors
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-1"
+            @click="goToCheckout"
           >
             Оформить заказ
             <ArrowRight :size="16" />

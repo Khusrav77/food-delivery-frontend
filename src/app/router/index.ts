@@ -10,6 +10,8 @@ export const router = createRouter({
       component: PublicLayout,
       children: [
         { path: '', component: () => import('@/pages/home/HomePage.vue') },
+        { path: 'checkout', component: () => import('@/pages/checkout/CheckoutPage.vue') },
+        { path: 'checkout/success', component: () => import('@/pages/checkout/CheckoutSuccessPage.vue') },
       ],
     },
     {

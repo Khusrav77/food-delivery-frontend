@@ -13,7 +13,7 @@
 
 | Роль | Доступ | Описание |
 |---|---|---|
-| **Customer** | Мобильное приложение | Просматривает меню, делает заказы, отслеживает доставку |
+| **Customer** | Клиентский сайт | Просматривает меню, делает заказы, отслеживает доставку |
 | **Admin** | Веб-панель `/admin` | Управляет меню, заказами, ресторанами, курьерами, промоакциями |
 | **Courier** | Мобильное приложение | Принимает и доставляет заказы |
 | **Restaurant** | Веб или мобильное | Управляет своим меню и статусами заказов |
@@ -99,6 +99,61 @@ categories
 | tag_id | UUID FK → tags | |
 | UNIQUE(menu_item_id, tag_id) | | |
 
+#### `users`
+| Поле | Тип | Описание |
+|---|---|---|
+| id | UUID PK | |
+| name | VARCHAR(100) | отображаемое имя |
+| bonus_balance | INT DEFAULT 0 | текущий бонусный баланс |
+| created_at / updated_at | TIMESTAMP | |
+
+> Расширенный профиль (email, phone, password_hash, role) — на стороне бэкенда.
+
+#### `addresses`
+| Поле | Тип | Описание |
+|---|---|---|
+| id | UUID PK | |
+| user_id | UUID FK → users | ON DELETE CASCADE |
+| label | VARCHAR(10) | "home" / "work" / "other" |
+| street | VARCHAR(200) | |
+| house | VARCHAR(20) | |
+| apartment | VARCHAR(20) | nullable |
+| entrance | VARCHAR(10) | nullable |
+| floor | VARCHAR(10) | nullable |
+| comment | TEXT | комментарий курьеру |
+| is_primary | BOOLEAN DEFAULT false | |
+| created_at / updated_at | TIMESTAMP | |
+
+#### `orders`
+| Поле | Тип | Описание |
+|---|---|---|
+| id | UUID PK | |
+| number | VARCHAR(20) UNIQUE | читаемый номер "A-1234" |
+| user_id | UUID FK → users | |
+| address | TEXT | строка адреса (снимок на момент заказа) |
+| comment | TEXT | комментарий к заказу |
+| payment_method | VARCHAR(10) | "cash" / "card" / "sbp" |
+| status | VARCHAR(20) | "accepted" / "cooking" / "on_the_way" / "delivered" |
+| subtotal | NUMERIC(10,2) | сумма товаров |
+| delivery_cost | NUMERIC(10,2) | стоимость доставки |
+| promo_discount | NUMERIC(10,2) DEFAULT 0 | скидка промокода |
+| bonus_used | INT DEFAULT 0 | списанные бонусы |
+| tip | NUMERIC(10,2) DEFAULT 0 | чаевые |
+| total | NUMERIC(10,2) | итоговая сумма |
+| promo_code | VARCHAR(50) | nullable |
+| eta_minutes | INT | примерное время доставки |
+| created_at / updated_at | TIMESTAMP | |
+
+#### `order_items`
+| Поле | Тип | Описание |
+|---|---|---|
+| id | UUID PK | |
+| order_id | UUID FK → orders | ON DELETE CASCADE |
+| product_name | VARCHAR(100) | снимок имени продукта |
+| variant_name | VARCHAR(100) | снимок имени варианта |
+| price | NUMERIC(10,2) | цена на момент заказа |
+| quantity | INT | |
+
 ---
 
 ## 4. TypeScript-типы (frontend → DB mapping)
@@ -107,66 +162,86 @@ categories
 // entities/tag        → tags
 // entities/category   → categories
 // entities/dish       → products + menu_items + menu_item_images + menu_item_sizes + menu_item_tags
+// entities/user       → users
+// entities/address    → addresses
+// entities/order      → orders + order_items
 
-interface Tag {
+interface IUser {
   id: string
-  label: string         // tags.label
-  color?: TagColor      // UI-only
-  emoji?: string        // UI-only
+  name: string
+  bonusBalance: number
 }
+
+interface IAddress {
+  id: string
+  label: 'home' | 'work' | 'other'
+  street: string
+  house: string
+  apartment: string
+  entrance: string
+  floor: string
+  comment: string
+  isPrimary: boolean
+}
+
+type PaymentMethod = 'cash' | 'card' | 'sbp'
+type OrderStatus   = 'accepted' | 'cooking' | 'on_the_way' | 'delivered'
+
+interface OrderItem {
+  productName: string
+  variantName: string
+  price: number
+  quantity: number
+}
+
+interface PlaceOrderPayload {
+  items: OrderItem[]
+  address: string
+  comment: string
+  paymentMethod: PaymentMethod
+  promoCode: string | null
+  bonusUsed: number
+  tip: number
+  subtotal: number
+  deliveryCost: number
+  promoDiscount: number
+  total: number
+  etaMinutes: number
+}
+
+interface PlacedOrder {
+  id: string
+  number: string
+  status: OrderStatus
+  total: number
+  etaMinutes: number
+  createdAt: string
+  payload: PlaceOrderPayload
+}
+
+interface Tag { id: string; label: string; color?: TagColor; emoji?: string }
 
 interface Category {
-  id: string
-  name: string
-  imageUrl: string | null
-  position: number
-  createdAt: string
-  updatedAt: string
+  id: string; name: string; imageUrl: string | null
+  position: number; createdAt: string; updatedAt: string
 }
 
-interface MenuItemSize {
-  id: string
-  menuItemId: string
-  sizeType: 'weight' | 'volume' | 'diameter' | 'count'
-  sizeValue: number
-  sizeUnit: 'gram' | 'kg' | 'ml' | 'l' | 'cm' | 'piece'
+interface MenuItem {
+  id: string; productId: string; name: string; price: number
+  isActive: boolean; position: number
+  images: MenuItemImage[]; sizes: MenuItemSize[]; tagIds: string[]
 }
 
-interface MenuItemImage {
-  id: string
-  menuItemId: string
-  url: string
-  position: number
-}
-
-interface MenuItem {          // = menu_items + relations
-  id: string
-  productId: string
-  name: string
-  price: number
-  isActive: boolean
-  position: number
-  images: MenuItemImage[]
-  sizes: MenuItemSize[]
-  tagIds: string[]
-}
-
-interface Product {           // = products + joined menu_items
-  id: string
-  categoryId: string | null
-  name: string
-  description: string
-  isActive: boolean
-  position: number
-  createdAt: string
-  updatedAt: string
+interface Product {
+  id: string; categoryId: string | null; name: string; description: string
+  isActive: boolean; position: number; createdAt: string; updatedAt: string
   menuItems: MenuItem[]
 }
 ```
 
 ---
 
-## 5. API эндпоинты (предполагаемые, уточнить у бэкенда)
+## 5. API эндпоинты
 
 ### Auth
 ```
@@ -174,13 +249,30 @@ POST   /auth/login              → { token, refreshToken, user }
 POST   /auth/register           → { token, user }
 POST   /auth/refresh            → { token }
 POST   /auth/logout
+POST   /auth/password-reset     → { message }      (запрос сброса)
+POST   /auth/password-reset/confirm  → { message } (подтверждение нового пароля)
+```
+
+### Users / Profile
+```
+GET    /users/me                → UserFull
+PATCH  /users/me                → UserFull
+```
+
+### Addresses
+```
+GET    /users/me/addresses      → IAddress[]
+POST   /users/me/addresses      → IAddress
+PATCH  /users/me/addresses/:id  → IAddress
+DELETE /users/me/addresses/:id
+PATCH  /users/me/addresses/:id/set-primary
 ```
 
 ### Categories
 ```
 GET    /categories              → Category[]
 POST   /categories              → Category
-PATCH  /categories/:id          → Category
+PUT    /categories/:id          → Category
 DELETE /categories/:id
 ```
 
@@ -214,28 +306,35 @@ DELETE /tags/:id
 PUT    /menu-items/:id/tags     → string[]   (заменяет все теги)
 ```
 
-### Orders (из iOS-модели)
+### Orders
 ```
-GET    /orders                  → MyOrder[]  ?status= &userId=
-GET    /orders/:id              → MyOrder
-POST   /orders                  → MyOrder
+POST   /orders                  → PlacedOrder         (создать заказ — checkout)
+GET    /orders                  → PlacedOrder[]       ?status= &userId=
+GET    /orders/:id              → PlacedOrder
 PATCH  /orders/:id/status       → { status: OrderStatus }
+POST   /orders/:id/cancel       → PlacedOrder         (активно до on_the_way)
 ```
 
-### Users / Auth profile
+### Delivery Zones  *(MOCK на фронте — эндпоинт будет после §2.4)*
 ```
-GET    /users/me                → UserFull
-PATCH  /users/me                → UserFull
-GET    /users/me/addresses      → Address[]
-POST   /users/me/addresses      → Address
-PATCH  /users/me/addresses/:id  → Address
-DELETE /users/me/addresses/:id
+GET    /delivery-zones/detect   → ZoneInfo   ?street= &house=
+GET    /delivery-zones          → DeliveryZone[]       (admin)
+POST   /delivery-zones          → DeliveryZone         (admin)
+PATCH  /delivery-zones/:id      → DeliveryZone         (admin)
+DELETE /delivery-zones/:id                             (admin)
 ```
 
-### Promo Codes
+### Promo Codes  *(MOCK на фронте — эндпоинт будет после §2.7)*
 ```
-GET    /promo-codes             → PromoCode[]
-POST   /promo-codes/validate    → { valid: boolean, discount: number }
+POST   /promo/apply             → PromoResult   { code, discount }
+GET    /promo-codes             → PromoCode[]          (admin)
+POST   /promo-codes             → PromoCode            (admin)
+PATCH  /promo-codes/:id         → PromoCode            (admin)
+```
+
+### Bonuses
+```
+GET    /users/me/bonuses        → { balance: number, history: BonusEntry[] }
 ```
 
 ---
@@ -256,41 +355,63 @@ POST   /promo-codes/validate    → { valid: boolean, discount: number }
 | Промоакции | `/admin/promotions` | ⬜ Заглушка | Промокоды, баннеры |
 | Настройки | `/admin/settings` | ⬜ Заглушка | Конфигурация |
 
-### 6.2 Customer App (будущее)
+### 6.2 Customer Site (ветка `feat/client`)
 
-| Модуль | Описание |
-|---|---|
-| Auth | Login (phone/email/Google/Apple), register, OTP |
-| Catalog | Список ресторанов с фильтрами (кухня, рейтинг, время, цена) |
-| Restaurant Page | Меню категории → продукт → варианты, info, reviews |
-| Cart | Добавление, количество, промокод, расчёт total |
-| Checkout | Адрес, время, способ оплаты (cash/card/online) |
-| Orders | История, текущий заказ, статус-трекинг |
-| Favorites | Избранные рестораны / блюда |
-| Profile | Данные, адреса, способы оплаты, уведомления |
-
----
-
-## 7. Недостающие таблицы для полного MVP
-
-В текущей схеме БД реализована только часть меню. Для полного MVP нужно добавить таблицы:
-
-| Таблица | Назначение |
-|---|---|
-| `users` | Покупатели, администраторы, курьеры |
-| `restaurants` | Рестораны (если мультиресторанность) |
-| `orders` | Заказы с типом доставки, оплаты, статусом |
-| `order_items` | Позиции в заказе (menu_item + количество) |
-| `cart` / `cart_items` | Корзина пользователя |
-| `addresses` | Адреса доставки пользователя |
-| `payment_methods` | Сохранённые карты/способы оплаты |
-| `promo_codes` | Промокоды с датами, лимитами, скидками |
-| `promotions` | Баннеры и акционные периоды |
-| `nutrition` | Пищевая ценность (калории, белки, жиры, углеводы) |
+| Модуль | Путь | Статус | Описание |
+|---|---|---|---|
+| Главная / меню | `/` | ✅ Готово | Промокарусель, scroll-spy категории, карточки блюд, модал-превью, back-to-top |
+| Корзина | drawer | ✅ Готово | Список товаров, qty, итог, переход на checkout |
+| Оформление заказа | `/checkout` | ✅ Готово | Адрес (saved + new), зона доставки, оплата, промокод, бонусы, чаевые, сводка |
+| Успешный заказ | `/checkout/success` | ✅ Готово | Номер заказа, итог, ETA, кнопка в меню |
+| Auth (вход/регистрация) | `/login`, `/register` | ⬜ Запланировано | Формы, валидация, JWT (§1.1) |
+| Личный кабинет | `/profile` | ⬜ Запланировано | Профиль, адреса, история, бонусы (§1.2–1.3) |
+| Отслеживание заказа | `/orders/:id` | ⬜ Запланировано | Статус-шкала, polling (§1.7) |
+| Оценка заказа | модал | ⬜ Запланировано | Звёзды, комментарий (§1.8) |
+| Toast-уведомления | shared | ⬜ Запланировано | Добавлено в корзину, заказ принят (§1.9) |
 
 ---
 
-## 8. Definition of Done (для каждого модуля)
+## 7. Checkout — детали реализации
+
+### Зоны доставки (mock-правило, до §2.4)
+| Условие адреса | Зона | Стоимость | Мин. заказ | ETA |
+|---|---|---|---|---|
+| улица содержит «далеко»/«far» | `none` | — | — | — |
+| номер дома > 100 | `paid` | 199 ₽ | 800 ₽ | 60 мин |
+| иначе | `free` | 0 ₽ | 600 ₽ | 45 мин |
+
+### Промокоды (mock, до §2.7)
+| Код | Тип | Размер |
+|---|---|---|
+| `WELCOME` | % | −10% от суммы товаров |
+| `FIX200` | fixed | −200 ₽ |
+
+### Бонусы
+- Максимум к списанию: `min(balance, floor(subtotal × 0.5))`
+- Процент (50%) настраивается в `features/checkout/config/checkout.ts → MAX_BONUS_PCT`
+
+### Чаевые
+- Пресеты: 5%, 10% от суммы товаров, своя сумма, без
+- Конфигурация: `TIP_PERCENTS` в том же файле
+
+---
+
+## 8. Недостающие таблицы для полного MVP
+
+| Таблица | Статус | Назначение |
+|---|---|---|
+| `users` | ⬜ | Покупатели, администраторы, курьеры |
+| `addresses` | ⬜ | Адреса доставки (на фронте mock) |
+| `orders` | ⬜ | Заказы (на фронте mock POST) |
+| `order_items` | ⬜ | Позиции заказа |
+| `delivery_zones` | ⬜ | Полигоны зон доставки (§2.4) |
+| `promo_codes` | ⬜ | Промокоды (§2.7) |
+| `promotions` | ⬜ | Баннеры и акционные периоды |
+| `nutrition` | ⬜ | Пищевая ценность |
+
+---
+
+## 9. Definition of Done (для каждого модуля)
 
 - [ ] TypeScript типы aligned с DB-схемой
 - [ ] Pinia store с методами: fetch (loading/error/success), CRUD
@@ -298,18 +419,18 @@ POST   /promo-codes/validate    → { valid: boolean, discount: number }
 - [ ] Responsive: 375px / 768px / 1280px
 - [ ] Hover / focus-visible / disabled состояния на интерактивных элементах
 - [ ] API-вызовы только через `*/api/*.ts`, не напрямую в компоненте
-- [ ] Данные валидируются через Zod на границе API (response parsing)
 - [ ] Нет `console.log` в финальном коде
 - [ ] Public API через `index.ts` у каждого slice
 
 ---
 
-## 9. Открытые вопросы для бэкенда
+## 10. Открытые вопросы для бэкенда
 
-1. **Недостающие таблицы** — нужны схемы для: `users`, `orders`, `cart`, `addresses`, `promo_codes`
+1. **Схемы новых таблиц** — нужны контракты: `users`, `orders`, `addresses`, `delivery_zones`, `promo_codes`
 2. **Promotions** — iOS-модель `Promotion` есть, но в DB schema не видно таблицы
 3. **Nutrition** — iOS-модель `Nutrition` (калории, белки, жиры) — будет ли в DB?
 4. **Response format** — подтвердить: `{ data: T }` для одиночного, `{ data: T[], meta: { total, page } }` для коллекции?
 5. **Auth** — JWT в `Authorization: Bearer`? Refresh через `/auth/refresh`?
 6. **Картинки** — загрузка через отдельный endpoint (`POST /upload`) или внешний CDN (URL напрямую)?
 7. **Мультиресторанность** — один ресторан или несколько? В текущей схеме нет таблицы `restaurants`
+8. **Delivery zones endpoint** — формат ответа `/delivery-zones/detect`? Полигоны (GeoJSON) или простой маппинг?

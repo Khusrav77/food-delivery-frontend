@@ -66,6 +66,7 @@ export const router = createRouter({
         { path: 'couriers/:id', component: () => import('@/pages/admin/CourierDetailPage.vue') },
         { path: 'customers', component: () => import('@/pages/admin/CustomersPage.vue') },
         { path: 'customers/:id', component: () => import('@/pages/admin/CustomerDetailPage.vue') },
+        { path: 'delivery-zones', component: () => import('@/pages/admin/DeliveryZonesPage.vue') },
         { path: 'analytics', component: () => import('@/pages/admin/AnalyticsPage.vue') },
         { path: 'promotions', component: () => import('@/pages/admin/PromotionsPage.vue') },
         { path: 'settings', component: () => import('@/pages/admin/SettingsPage.vue') },

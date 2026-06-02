@@ -6,6 +6,7 @@ import {
   CategoryScale, LinearScale, BarElement, LineElement,
   PointElement, ArcElement, Title, Tooltip, Legend, Filler,
 } from 'chart.js'
+import type { TooltipItem } from 'chart.js'
 import { Bar, Line, Doughnut } from 'vue-chartjs'
 import { TrendingUp, TrendingDown, ShoppingBag, BadgePercent, Star, Tag } from 'lucide-vue-next'
 import { useAnalyticsStore, type AnalyticsPeriod } from '@/entities/analytics'
@@ -58,7 +59,7 @@ const ordersBarOptions = computed(() => ({
       bodyColor: '#d4d4d8',
       cornerRadius: 8,
       padding: 10,
-      callbacks: { label: (ctx: { parsed: { y: number } }) => ` ${ctx.parsed.y} заказ(ов)` },
+      callbacks: { label: (ctx: TooltipItem<'bar'>) => ` ${ctx.parsed.y ?? 0} заказ(ов)` },
     },
   },
   scales: {
@@ -99,14 +100,14 @@ const revenueLineOptions = computed(() => ({
       bodyColor: '#d4d4d8',
       cornerRadius: 8,
       padding: 10,
-      callbacks: { label: (ctx: { parsed: { y: number } }) => ` ${ctx.parsed.y.toLocaleString('ru')} ₽` },
+      callbacks: { label: (ctx: TooltipItem<'line'>) => ` ${(ctx.parsed.y ?? 0).toLocaleString('ru')} ₽` },
     },
   },
   scales: {
     x: { grid: { display: false }, ticks: { color: FAINT, font: { size: 11 } } },
     y: {
       grid: { color: GRID },
-      ticks: { color: FAINT, font: { size: 11 }, callback: (v: number) => `${(v / 1000).toFixed(0)}к` },
+      ticks: { color: FAINT, font: { size: 11 }, callback: (v: string | number) => `${(Number(v) / 1000).toFixed(0)}к` },
       beginAtZero: true,
     },
   },
@@ -138,7 +139,7 @@ const donutOptions = {
       bodyColor: '#d4d4d8',
       cornerRadius: 8,
       padding: 10,
-      callbacks: { label: (ctx: { label: string; raw: number }) => ` ${ctx.label}: ${ctx.raw.toLocaleString('ru')} ₽` },
+      callbacks: { label: (ctx: TooltipItem<'doughnut'>) => ` ${ctx.label}: ${Number(ctx.raw).toLocaleString('ru')} ₽` },
     },
   },
 }
@@ -170,7 +171,7 @@ const topDishesOptions = computed(() => ({
       bodyColor: '#d4d4d8',
       cornerRadius: 8,
       padding: 10,
-      callbacks: { label: (ctx: { parsed: { x: number } }) => ` ${ctx.parsed.x} заказ(ов)` },
+      callbacks: { label: (ctx: TooltipItem<'bar'>) => ` ${ctx.parsed.x ?? 0} заказ(ов)` },
     },
   },
   scales: {

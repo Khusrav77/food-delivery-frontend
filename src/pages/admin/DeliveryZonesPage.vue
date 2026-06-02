@@ -23,7 +23,7 @@ onMounted(page.fetchZones)
     </div>
 
     <!-- Map + panel layout -->
-    <div class="flex gap-4 items-stretch">
+    <div class="flex flex-col lg:flex-row gap-4 items-stretch">
       <div class="flex-1 min-w-0">
         <ZoneMap
           ref="zoneMapRef"
@@ -34,7 +34,7 @@ onMounted(page.fetchZones)
           @geometry-save="page.handleGeometrySave"
         />
       </div>
-      <div class="w-72 shrink-0">
+      <div class="w-full lg:w-72 shrink-0">
         <ZoneListPanel
           :zones="page.zones"
           :loading="page.loadingList"

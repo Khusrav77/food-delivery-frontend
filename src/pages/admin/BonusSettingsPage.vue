@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { reactive, computed, watch, onMounted } from 'vue'
 import { Gift, Save, Percent, CreditCard, ToggleLeft, ToggleRight } from 'lucide-vue-next'
-import { useBonusProgramStore, validate, type IBonusProgramSettings } from '@/entities/bonus-program'
+import { useBonusProgramStore, validate, defaultSettings, type IBonusProgramSettings } from '@/entities/bonus-program'
 import { useToastStore } from '@/shared/lib/toast'
 
 const store = useBonusProgramStore()
 const toast = useToastStore()
 
-const draft = reactive<IBonusProgramSettings>({ enabled: true, earnRatePct: 5, maxRedeemPct: 50 })
+const draft = reactive<IBonusProgramSettings>(defaultSettings())
 const errors = computed(() => validate(draft))
 const canSave = computed(() => Object.keys(errors.value).length === 0 && !store.saving)
 

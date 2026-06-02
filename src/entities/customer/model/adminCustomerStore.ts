@@ -31,6 +31,7 @@ export const useAdminCustomerStore = defineStore('adminCustomer', () => {
   }
 
   async function fetchOne(id: string): Promise<void> {
+    current.value = null
     loadingCurrent.value = true
     currentError.value = null
     try {

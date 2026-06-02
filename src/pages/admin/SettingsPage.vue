@@ -49,6 +49,13 @@ onMounted(store.fetch)
       <div v-for="i in 3" :key="i" class="h-40 bg-surface rounded-2xl border border-line animate-pulse" />
     </template>
 
+    <div v-else-if="store.error" class="bg-red-50 border border-red-200 rounded-2xl p-5 text-sm text-red-600">
+      {{ store.error }}
+      <button class="ml-3 underline text-red-700 hover:text-red-900 focus-visible:outline-none" @click="store.fetch">
+        Повторить
+      </button>
+    </div>
+
     <template v-else>
       <!-- Контактные данные -->
       <section class="bg-surface rounded-2xl border border-line p-5 space-y-4">

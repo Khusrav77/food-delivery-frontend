@@ -21,7 +21,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="flex flex-col bg-surface border border-line rounded-2xl overflow-hidden shadow-sm" style="min-height: 540px;">
+  <div class="flex flex-col bg-surface border border-line rounded-2xl overflow-hidden shadow-sm min-h-[540px]">
     <!-- Panel header -->
     <div class="px-4 py-3.5 border-b border-line shrink-0">
       <h2 class="font-semibold text-sm text-ink">Зоны доставки</h2>

@@ -62,7 +62,7 @@ export async function fetchBranches(): Promise<IBranch[]> {
 // MOCK: заменить на http.post<IBranch>('/admin/branches', draft)
 export async function createBranch(draft: IBranchDraft): Promise<IBranch> {
   await delay(500)
-  const branch: IBranch = { id: crypto.randomUUID(), isActive: true, ...JSON.parse(JSON.stringify(draft)) }
+  const branch: IBranch = { ...JSON.parse(JSON.stringify(draft)), id: crypto.randomUUID(), isActive: true }
   MOCK.push(branch)
   return JSON.parse(JSON.stringify(branch))
 }

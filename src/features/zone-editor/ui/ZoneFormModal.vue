@@ -9,6 +9,7 @@ const props = defineProps<{
   visible: boolean
   zone: IDeliveryZone | null       // null = create mode
   pendingPolygon: unknown | null   // truthy check only — just signals create mode
+  saving?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -17,10 +18,9 @@ const emit = defineEmits<{
 }>()
 
 const draft = reactive<IZoneDraft>(defaultDraft())
-const saving = defineModel<boolean>('saving', { default: false })
 
 const errors  = computed(() => validateZoneDraft(draft))
-const canSave = computed(() => Object.keys(errors.value).length === 0 && !saving.value)
+const canSave = computed(() => Object.keys(errors.value).length === 0 && !props.saving)
 const isEdit  = computed(() => props.zone !== null)
 
 const ZONE_TYPES: ZoneType[] = ['free', 'paid', 'none']
@@ -188,7 +188,7 @@ function submit(): void {
                        disabled:opacity-50 disabled:cursor-not-allowed"
                 @click="submit"
               >
-                {{ saving ? 'Сохраняем…' : (isEdit ? 'Сохранить' : 'Создать зону') }}
+                {{ props.saving ? 'Сохраняем…' : (isEdit ? 'Сохранить' : 'Создать зону') }}
               </button>
             </div>
           </div>

@@ -32,20 +32,20 @@ const groups: NavGroup[] = [
       { label: 'Курьеры', to: '/admin/couriers', icon: Bike },
       { label: 'Клиенты', to: '/admin/customers', icon: Users },
       { label: 'Зоны доставки', to: '/admin/delivery-zones', icon: MapPin },
+      { label: 'Промоакции', to: '/admin/promotions', icon: Tag },
+      { label: 'Бонусы', to: '/admin/bonus-settings', icon: Gift },
     ],
   },
   {
     title: 'Аналитика',
     items: [
       { label: 'Аналитика', to: '/admin/analytics', icon: BarChart3 },
-      { label: 'Промоакции', to: '/admin/promotions', icon: Tag },
     ],
   },
   {
     title: 'Система',
     items: [
       { label: 'Настройки', to: '/admin/settings', icon: Settings },
-      { label: 'Бонусы', to: '/admin/bonus-settings', icon: Gift },
     ],
   },
 ]

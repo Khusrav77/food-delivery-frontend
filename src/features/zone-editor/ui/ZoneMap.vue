@@ -43,9 +43,9 @@ defineExpose({
 </script>
 
 <template>
-  <div class="relative rounded-2xl overflow-hidden border border-line shadow-sm bg-surface-soft" style="min-height: 540px;">
+  <div class="relative rounded-2xl overflow-hidden border border-line shadow-sm bg-surface-soft min-h-[540px]">
     <!-- Map container -->
-    <div ref="mapContainer" class="w-full h-full" style="min-height: 540px;" />
+    <div ref="mapContainer" class="w-full h-full min-h-[540px]" />
 
     <!-- Toolbar overlay -->
     <div class="absolute top-3 left-3 z-[1000] flex flex-col gap-1.5">

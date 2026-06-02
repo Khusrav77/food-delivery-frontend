@@ -97,6 +97,17 @@ onMounted(store.fetchAll)
     <!-- Error -->
     <div v-else-if="listError" class="py-12 text-center text-sm text-red-500">{{ listError }}</div>
 
+    <!-- Empty -->
+    <div v-else-if="list.length === 0" class="py-20 flex flex-col items-center gap-3 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-canvas border border-line flex items-center justify-center">
+        <Bike :size="22" class="text-faint" />
+      </div>
+      <p class="text-muted text-sm">Курьеров пока нет</p>
+      <button class="text-sm text-accent hover:underline focus-visible:outline-none" @click="openCreate">
+        Добавить первого курьера
+      </button>
+    </div>
+
     <!-- Table -->
     <div v-else class="bg-surface rounded-2xl border border-line overflow-hidden">
       <div class="overflow-x-auto">

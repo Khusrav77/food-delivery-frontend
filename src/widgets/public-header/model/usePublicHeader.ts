@@ -5,7 +5,8 @@ import { useFavoriteStore } from '@/features/favorite-toggle'
 
 export function usePublicHeader() {
   const auth = useAuth()
-  const { count: cartCount, formattedTotal: cartTotal } = storeToRefs(useCartStore())
+  const cartStore = useCartStore()
+  const { count: cartCount, formattedTotal: cartTotal } = storeToRefs(cartStore)
   const { count: favoritesCount } = storeToRefs(useFavoriteStore())
 
   return {
@@ -15,6 +16,7 @@ export function usePublicHeader() {
     cartCount,
     cartTotal,
     favoritesCount,
+    openCart: cartStore.open,
     login: auth.login,
     logout: auth.logout,
   }

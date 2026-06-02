@@ -9,7 +9,7 @@ import { usePublicHeader } from '../model/usePublicHeader'
 const {
   isAuthenticated, user, initials,
   cartCount, cartTotal, favoritesCount,
-  login, logout,
+  openCart, login, logout,
 } = usePublicHeader()
 </script>
 
@@ -122,7 +122,8 @@ const {
       <!-- Cart -->
       <button
         class="flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-1 shrink-0"
-        aria-label="Корзина"
+        aria-label="Открыть корзину"
+        @click="openCart()"
       >
         <ShoppingCart :size="15" />
         <template v-if="!isAuthenticated">

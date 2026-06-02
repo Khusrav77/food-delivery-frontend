@@ -313,7 +313,10 @@ GET    /orders                  → PlacedOrder[]       ?status= &userId=
 GET    /orders/:id              → PlacedOrder
 PATCH  /orders/:id/status       → { status: OrderStatus }
 POST   /orders/:id/cancel       → PlacedOrder         (активно до on_the_way)
+POST   /orders/:id/rating       → PlacedOrder         (OrderRating: stars 1..5 + comment — §1.8)
 ```
+
+> **§1.7 трекинг:** статус двигает бэкенд; фронт опрашивает `GET /orders/:id` (polling/WS). В mock-режиме прогресс имитируется таймером `features/order-tracking` (см. `advanceOrderStatus`).
 
 ### Delivery Zones  *(MOCK на фронте — эндпоинт будет после §2.4)*
 ```
@@ -363,11 +366,11 @@ GET    /users/me/bonuses        → { balance: number, history: BonusEntry[] }
 | Корзина | drawer | ✅ Готово | Список товаров, qty, итог, переход на checkout |
 | Оформление заказа | `/checkout` | ✅ Готово | Адрес (saved + new), зона доставки, оплата, промокод, бонусы, чаевые, сводка |
 | Успешный заказ | `/checkout/success` | ✅ Готово | Номер заказа, итог, ETA, кнопка в меню |
-| Auth (вход/регистрация) | `/login`, `/register` | ⬜ Запланировано | Формы, валидация, JWT (§1.1) |
-| Личный кабинет | `/profile` | ⬜ Запланировано | Профиль, адреса, история, бонусы (§1.2–1.3) |
-| Отслеживание заказа | `/orders/:id` | ⬜ Запланировано | Статус-шкала, polling (§1.7) |
-| Оценка заказа | модал | ⬜ Запланировано | Звёзды, комментарий (§1.8) |
-| Toast-уведомления | shared | ⬜ Запланировано | Добавлено в корзину, заказ принят (§1.9) |
+| Auth (вход/регистрация) | `/login`, `/register` | ✅ Готово | Формы, валидация, JWT, восстановление пароля (§1.1) |
+| Личный кабинет | `/account/*` | ✅ Готово | Профиль, адреса, история заказов, бонусы (§1.2–1.3) |
+| Отслеживание заказа | `/orders/:id/track` | ✅ Готово | Статус-шкала, ETA, отмена (до on_the_way), авто-прогресс (§1.7) |
+| Оценка заказа | модал | ✅ Готово | Звёзды 1–5, комментарий, авто-открытие после доставки (§1.8) |
+| Toast-уведомления | shared | ✅ Готово | success/error/info/warning (§1.9) |
 
 ---
 

@@ -4,7 +4,9 @@ export type {
   PlaceOrderPayload,
   OrderItem,
   OrderStatus,
+  OrderRating,
   PaymentMethod,
 } from './model/types'
-export { STATUS_META, PAYMENT_LABEL } from './model/types'
+export { STATUS_META, PAYMENT_LABEL, ORDER_STEPS } from './model/types'
+export { default as OrderStatusTimeline } from './ui/OrderStatusTimeline.vue'
 export * from './api/orderApi'

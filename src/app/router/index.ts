@@ -14,6 +14,11 @@ export const router = createRouter({
         { path: 'checkout', component: () => import('@/pages/checkout/CheckoutPage.vue') },
         { path: 'checkout/success', component: () => import('@/pages/checkout/CheckoutSuccessPage.vue') },
         {
+          path: 'orders/:id/track',
+          component: () => import('@/pages/orders/TrackOrderPage.vue'),
+          meta: { requiresAuth: true },
+        },
+        {
           path: 'account',
           component: () => import('@/pages/account/AccountLayout.vue'),
           meta: { requiresAuth: true },

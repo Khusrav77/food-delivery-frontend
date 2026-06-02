@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import { ChevronRight, RefreshCw } from 'lucide-vue-next'
+import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
+import { ChevronRight, RefreshCw, Truck } from 'lucide-vue-next'
 import type { PlacedOrder } from '@/entities/order'
 import { STATUS_META } from '@/entities/order'
 import { formatDateTime } from '@/shared/lib/date'
 import { formatPrice } from '@/shared/lib/money'
 import { useReorder } from '../model/useReorder'
 
-defineProps<{ order: PlacedOrder }>()
+const props = defineProps<{ order: PlacedOrder }>()
 const emit = defineEmits<{ detail: [id: string] }>()
 
 const { loading: reordering, reorder } = useReorder()
+
+// Активный заказ ещё в процессе доставки — показываем ссылку на трекинг (§1.7).
+const isActive = computed(
+  () => props.order.status !== 'delivered' && props.order.status !== 'cancelled',
+)
 </script>
 
 <template>
@@ -46,7 +53,19 @@ const { loading: reordering, reorder } = useReorder()
     <div class="flex items-center justify-between pt-3 border-t border-line gap-2">
       <span class="font-semibold text-ink">{{ formatPrice(order.total) }}</span>
       <div class="flex items-center gap-2">
+        <RouterLink
+          v-if="isActive"
+          :to="`/orders/${order.id}/track`"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-accent text-sm font-medium text-accent
+                 hover:bg-accent-soft transition-colors
+                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          @click.stop
+        >
+          <Truck :size="13" />
+          Отследить
+        </RouterLink>
         <button
+          v-else
           class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-sm font-medium text-muted
                  hover:text-ink hover:border-ink/20 transition-colors disabled:opacity-50
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"

@@ -50,14 +50,24 @@ if (!orderStore.lastOrder) router.replace('/')
         </div>
       </div>
 
-      <RouterLink
-        to="/"
-        class="inline-flex w-full items-center justify-center py-3.5 rounded-xl
-               bg-accent hover:bg-accent-hover active:bg-orange-600 text-white font-semibold text-sm
-               transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-      >
-        Вернуться в меню
-      </RouterLink>
+      <div class="space-y-2.5">
+        <RouterLink
+          :to="`/orders/${order.id}/track`"
+          class="inline-flex w-full items-center justify-center py-3.5 rounded-xl
+                 bg-accent hover:bg-accent-hover active:bg-orange-600 text-white font-semibold text-sm
+                 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+        >
+          Отследить заказ
+        </RouterLink>
+        <RouterLink
+          to="/"
+          class="inline-flex w-full items-center justify-center py-3.5 rounded-xl
+                 border border-line text-muted hover:text-ink hover:border-ink/20 font-semibold text-sm
+                 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+        >
+          Вернуться в меню
+        </RouterLink>
+      </div>
     </div>
   </main>
 </template>

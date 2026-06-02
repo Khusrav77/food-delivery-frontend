@@ -1,7 +1,14 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { PlacedOrder, PlaceOrderPayload } from './types'
-import { createOrder, fetchOrders, fetchOrder } from '../api/orderApi'
+import type { OrderRating, PlacedOrder, PlaceOrderPayload } from './types'
+import {
+  createOrder,
+  fetchOrders,
+  fetchOrder,
+  cancelOrder,
+  submitRating,
+  advanceOrderStatus,
+} from '../api/orderApi'
 
 export const useOrderStore = defineStore('order', () => {
   const lastOrder = ref<PlacedOrder | null>(null)
@@ -52,9 +59,37 @@ export const useOrderStore = defineStore('order', () => {
     }
   }
 
+  // Держим current и соответствующий элемент list синхронными после мутаций статуса/оценки.
+  function sync(order: PlacedOrder): void {
+    if (current.value?.id === order.id) current.value = order
+    const i = list.value.findIndex((o) => o.id === order.id)
+    if (i !== -1) list.value[i] = order
+    if (lastOrder.value?.id === order.id) lastOrder.value = order
+  }
+
+  async function cancel(id: string): Promise<PlacedOrder> {
+    const order = await cancelOrder(id)
+    sync(order)
+    return order
+  }
+
+  async function rate(id: string, payload: OrderRating): Promise<PlacedOrder> {
+    const order = await submitRating(id, payload)
+    sync(order)
+    return order
+  }
+
+  async function advanceCurrent(): Promise<PlacedOrder | null> {
+    if (!current.value) return null
+    const order = await advanceOrderStatus(current.value.id)
+    sync(order)
+    return order
+  }
+
   return {
     lastOrder, placing, error, place,
     list, loadingList, listError, fetchAll,
     current, loadingCurrent, fetchOne,
+    cancel, rate, advanceCurrent,
   }
 })

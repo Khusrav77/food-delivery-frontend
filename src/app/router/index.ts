@@ -70,6 +70,7 @@ export const router = createRouter({
         { path: 'analytics', component: () => import('@/pages/admin/AnalyticsPage.vue') },
         { path: 'promotions', component: () => import('@/pages/admin/PromotionsPage.vue') },
         { path: 'settings', component: () => import('@/pages/admin/SettingsPage.vue') },
+        { path: 'bonus-settings', component: () => import('@/pages/admin/BonusSettingsPage.vue') },
       ],
     },
   ],

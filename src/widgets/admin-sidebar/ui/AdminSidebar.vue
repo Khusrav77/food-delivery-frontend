@@ -2,7 +2,7 @@
 import { RouterLink, useRoute } from 'vue-router'
 import {
   LayoutDashboard, ShoppingBag, Store, UtensilsCrossed,
-  Bike, Users, BarChart3, Tag, Settings, ChevronRight, MapPin,
+  Bike, Users, BarChart3, Tag, Settings, ChevronRight, MapPin, Gift,
 } from 'lucide-vue-next'
 
 interface NavItem {
@@ -45,6 +45,7 @@ const groups: NavGroup[] = [
     title: 'Система',
     items: [
       { label: 'Настройки', to: '/admin/settings', icon: Settings },
+      { label: 'Бонусы', to: '/admin/bonus-settings', icon: Gift },
     ],
   },
 ]

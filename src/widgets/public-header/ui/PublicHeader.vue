@@ -9,7 +9,7 @@ import { usePublicHeader } from '../model/usePublicHeader'
 const {
   isAuthenticated, user, initials,
   cartCount, cartTotal, favoritesCount,
-  openCart, login, logout,
+  openCart, goToLogin, goToAccount, goToBonuses,
 } = usePublicHeader()
 </script>
 
@@ -67,13 +67,14 @@ const {
       <template v-if="!isAuthenticated">
         <button
           class="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-medium text-ink border border-line-strong rounded-full hover:border-ink/30 hover:bg-surface-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-          @click="login()"
+          @click="goToLogin()"
         >
           <User :size="14" class="text-muted" />
           Войти
         </button>
         <button
           class="hidden sm:flex items-center px-3.5 py-1.5 text-sm font-semibold text-accent bg-accent-soft rounded-full hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          @click="goToLogin()"
         >
           Бонусы
         </button>
@@ -104,19 +105,20 @@ const {
 
         <button
           class="hidden sm:flex w-9 h-9 rounded-full bg-accent-soft border border-accent/25 items-center justify-center text-accent text-[13px] font-bold hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-          :title="`${user?.name} — выйти`"
-          @click="logout()"
+          :title="`${user?.name} — личный кабинет`"
+          @click="goToAccount()"
         >
           {{ initials }}
         </button>
 
-        <span
+        <button
           v-if="user && user.bonusBalance !== undefined"
-          class="hidden sm:flex items-center gap-1 px-3 py-1.5 bg-accent-soft rounded-full text-sm font-semibold text-accent select-none"
+          class="hidden sm:flex items-center gap-1 px-3 py-1.5 bg-accent-soft rounded-full text-sm font-semibold text-accent hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          @click="goToBonuses()"
         >
           <Star :size="12" class="fill-accent text-accent" />
           {{ user.bonusBalance }}
-        </span>
+        </button>
       </template>
 
       <!-- Cart -->

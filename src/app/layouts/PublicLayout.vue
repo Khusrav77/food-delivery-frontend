@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 import { PublicHeader } from '@/widgets/public-header'
 import { CartDrawer } from '@/widgets/cart-drawer'
+import { ToastContainer } from '@/shared/ui/Toast'
 </script>
 
 <template>
@@ -9,5 +10,6 @@ import { CartDrawer } from '@/widgets/cart-drawer'
     <PublicHeader />
     <RouterView />
     <CartDrawer />
+    <ToastContainer />
   </div>
 </template>

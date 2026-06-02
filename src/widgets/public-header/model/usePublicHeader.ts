@@ -31,6 +31,10 @@ export function usePublicHeader() {
     router.push('/favorites')
   }
 
+  function goToSearch(): void {
+    router.push('/search')
+  }
+
   return {
     isAuthenticated: auth.isAuthenticated,
     user: auth.user,
@@ -43,5 +47,6 @@ export function usePublicHeader() {
     goToAccount,
     goToBonuses,
     goToFavorites,
+    goToSearch,
   }
 }

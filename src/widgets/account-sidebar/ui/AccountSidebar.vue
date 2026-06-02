@@ -1,22 +1,28 @@
 <script setup lang="ts">
 import { RouterLink, useRouter, useRoute } from 'vue-router'
-import { User, MapPin, ShoppingBag, Star, Ticket, CreditCard, LogOut, ChevronRight } from 'lucide-vue-next'
+import { onMounted } from 'vue'
+import { User, MapPin, ShoppingBag, Star, Bell, Ticket, CreditCard, Users, LogOut, ChevronRight } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/entities/user'
+import { useNotificationStore } from '@/entities/notification'
 import { useAuth } from '@/features/auth'
 
 const { user, initials } = storeToRefs(useUserStore())
+const notificationStore = useNotificationStore()
+const { unreadCount } = storeToRefs(notificationStore)
 const auth = useAuth()
 const router = useRouter()
 const route = useRoute()
 
 const NAV = [
-  { to: '/account/profile',   label: 'Профиль',    icon: User },
-  { to: '/account/addresses', label: 'Адреса',     icon: MapPin },
-  { to: '/account/orders',    label: 'Заказы',     icon: ShoppingBag },
-  { to: '/account/bonuses',   label: 'Бонусы',     icon: Star },
-  { to: '/account/promo',     label: 'Промокоды',  icon: Ticket },
-  { to: '/account/cards',     label: 'Мои карты',  icon: CreditCard },
+  { to: '/account/profile',       label: 'Профиль',      icon: User },
+  { to: '/account/addresses',     label: 'Адреса',       icon: MapPin },
+  { to: '/account/orders',        label: 'Заказы',       icon: ShoppingBag },
+  { to: '/account/bonuses',       label: 'Бонусы',       icon: Star },
+  { to: '/account/notifications', label: 'Уведомления',  icon: Bell },
+  { to: '/account/promo',         label: 'Промокоды',    icon: Ticket },
+  { to: '/account/cards',         label: 'Мои карты',    icon: CreditCard },
+  { to: '/account/referral',      label: 'Реферальная',  icon: Users },
 ]
 
 function isActive(to: string): boolean {
@@ -27,6 +33,8 @@ async function logout(): Promise<void> {
   await auth.logout()
   router.push('/')
 }
+
+onMounted(notificationStore.fetchAll)
 </script>
 
 <template>
@@ -62,7 +70,14 @@ async function logout(): Promise<void> {
               :class="isActive(item.to) ? 'text-accent' : 'text-faint group-hover:text-ink'"
             />
             <span class="flex-1">{{ item.label }}</span>
-            <ChevronRight v-if="isActive(item.to)" :size="13" class="text-accent/50" />
+            <span
+              v-if="item.to === '/account/notifications' && unreadCount > 0"
+              class="min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-white text-[10px] font-bold
+                     flex items-center justify-center shrink-0"
+            >
+              {{ unreadCount }}
+            </span>
+            <ChevronRight v-else-if="isActive(item.to)" :size="13" class="text-accent/50" />
           </RouterLink>
         </li>
       </ul>
@@ -90,7 +105,16 @@ async function logout(): Promise<void> {
       class="flex-1 flex flex-col items-center gap-0.5 py-2.5 text-[10px] font-medium transition-colors"
       :class="isActive(item.to) ? 'text-accent' : 'text-faint'"
     >
-      <component :is="item.icon" :size="20" />
+      <span class="relative">
+        <component :is="item.icon" :size="20" />
+        <span
+          v-if="item.to === '/account/notifications' && unreadCount > 0"
+          class="absolute -top-1 -right-1.5 min-w-[14px] h-[14px] px-0.5 rounded-full bg-accent text-white
+                 text-[9px] font-bold leading-none flex items-center justify-center"
+        >
+          {{ unreadCount }}
+        </span>
+      </span>
       {{ item.label }}
     </RouterLink>
   </nav>

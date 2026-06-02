@@ -11,6 +11,7 @@ export const router = createRouter({
       component: PublicLayout,
       children: [
         { path: '', component: () => import('@/pages/home/HomePage.vue') },
+        { path: 'search', component: () => import('@/pages/search/SearchPage.vue') },
         { path: 'favorites', component: () => import('@/pages/favorites/FavoritesPage.vue') },
         { path: 'checkout', component: () => import('@/pages/checkout/CheckoutPage.vue') },
         { path: 'checkout/success', component: () => import('@/pages/checkout/CheckoutSuccessPage.vue') },
@@ -29,8 +30,10 @@ export const router = createRouter({
             { path: 'addresses', component: () => import('@/pages/account/AddressesPage.vue') },
             { path: 'orders', component: () => import('@/pages/account/OrdersPage.vue') },
             { path: 'bonuses', component: () => import('@/pages/account/BonusesPage.vue') },
+            { path: 'notifications', component: () => import('@/pages/account/NotificationsPage.vue') },
             { path: 'promo', component: () => import('@/pages/account/PromoCodesPage.vue') },
             { path: 'cards', component: () => import('@/pages/account/CardsPage.vue') },
+            { path: 'referral', component: () => import('@/pages/account/ReferralPage.vue') },
           ],
         },
       ],

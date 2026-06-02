@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ShoppingCart, UtensilsCrossed } from 'lucide-vue-next'
-import { type Product } from '@/entities/dish'
+import { type Product, getActiveItems, formatItemLabel } from '@/entities/dish'
+import { useCartStore } from '@/entities/cart'
 import { FavoriteButton } from '@/features/favorite-toggle'
 import { useDishCard } from '../model/useDishCard'
 import CardTagList from './CardTagList.vue'
@@ -9,6 +10,26 @@ const props = defineProps<{ product: Product }>()
 const emit = defineEmits<{ select: [product: Product] }>()
 
 const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } = useDishCard(props.product)
+
+const cart = useCartStore()
+
+function addToCart(e: MouseEvent): void {
+  e.stopPropagation()
+  const activeItems = getActiveItems(props.product)
+  if (isMulti.value || activeItems.length === 0) {
+    emit('select', props.product)
+    return
+  }
+  const item = activeItems[0]
+  cart.addItem({
+    menuItemId: item.id,
+    productId: props.product.id,
+    productName: props.product.name,
+    variantName: formatItemLabel(item),
+    price: item.price,
+    image: item.images[0]?.url ?? null,
+  })
+}
 </script>
 
 <template>
@@ -94,8 +115,8 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
           class="flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-medium text-white
                  bg-accent hover:bg-accent-hover active:bg-orange-600 rounded-xl transition-colors
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-          aria-label="Добавить в корзину"
-          @click.stop
+          :aria-label="isMulti ? 'Выбрать вариант' : 'Добавить в корзину'"
+          @click="addToCart"
         >
           <ShoppingCart :size="14" />
           В корзину

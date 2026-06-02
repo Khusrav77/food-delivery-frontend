@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { X, ShoppingCart } from 'lucide-vue-next'
 import { type Product, formatItemLabel } from '@/entities/dish'
 import { useCartStore } from '@/entities/cart'
+import { useToastStore } from '@/shared/lib/toast'
 import { useDishPreview } from '../model/useDishPreview'
 
 const props = defineProps<{ product: Product | null; show: boolean }>()
@@ -12,6 +13,7 @@ const { selectedItem, activeItems, displayPrice, displayImage, selectItem } =
   useDishPreview(computed(() => props.product))
 
 const cart = useCartStore()
+const toast = useToastStore()
 
 watch(() => props.show, (isOpen) => {
   document.body.style.overflow = isOpen ? 'hidden' : ''
@@ -27,6 +29,7 @@ function addToCart(): void {
     price: selectedItem.value.price,
     image: displayImage.value,
   })
+  toast.success(`${props.product.name} добавлен в корзину`)
   emit('close')
 }
 

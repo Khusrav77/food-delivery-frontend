@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { MessageSquare } from 'lucide-vue-next'
 import { useCartStore } from '@/entities/cart'
+import { useToastStore } from '@/shared/lib/toast'
 import {
   useCheckout,
   AddressSection,
@@ -14,6 +15,7 @@ import {
 
 const router = useRouter()
 const cart = useCartStore()
+const toast = useToastStore()
 
 const {
   draft, errors,
@@ -36,7 +38,12 @@ onMounted(() => {
 
 async function onSubmit(): Promise<void> {
   const ok = await submit()
-  if (ok) router.push('/checkout/success')
+  if (ok) {
+    toast.success('Заказ принят! Мы уже начали готовить.')
+    router.push('/checkout/success')
+  } else {
+    toast.error('Не удалось оформить заказ. Попробуйте ещё раз.')
+  }
 }
 </script>
 

@@ -2,6 +2,7 @@
 import { ShoppingCart, UtensilsCrossed } from 'lucide-vue-next'
 import { type Product, getActiveItems, formatItemLabel } from '@/entities/dish'
 import { useCartStore } from '@/entities/cart'
+import { useToastStore } from '@/shared/lib/toast'
 import { FavoriteButton } from '@/features/favorite-toggle'
 import { useDishCard } from '../model/useDishCard'
 import CardTagList from './CardTagList.vue'
@@ -12,6 +13,7 @@ const emit = defineEmits<{ select: [product: Product] }>()
 const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } = useDishCard(props.product)
 
 const cart = useCartStore()
+const toast = useToastStore()
 
 function addToCart(e: MouseEvent): void {
   e.stopPropagation()
@@ -29,6 +31,7 @@ function addToCart(e: MouseEvent): void {
     price: item.price,
     image: item.images[0]?.url ?? null,
   })
+  toast.success(`${props.product.name} добавлен в корзину`)
 }
 </script>
 

@@ -6,7 +6,7 @@ export interface ApiError {
   fields?: Record<string, string>
 }
 
-const AUTH_TOKEN_KEY = 'auth_token'
+export const AUTH_TOKEN_KEY = 'auth_token'
 
 export const http = axios.create({
   baseURL: import.meta.env.VITE_API_URL,

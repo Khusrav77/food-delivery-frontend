@@ -1,6 +1,8 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { AUTH_TOKEN_KEY } from '@/shared/api'
 import type { IUser } from './types'
+import { getMe } from '../api/authApi'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<IUser | null>(null)
@@ -12,7 +14,7 @@ export const useUserStore = defineStore('user', () => {
     return user.value.name
       .split(' ')
       .slice(0, 2)
-      .map(w => w[0])
+      .map((w) => w[0])
       .join('')
       .toUpperCase()
   })
@@ -25,5 +27,24 @@ export const useUserStore = defineStore('user', () => {
     user.value = null
   }
 
-  return { user, isAuthenticated, initials, setUser, clear }
+  function setToken(token: string): void {
+    localStorage.setItem(AUTH_TOKEN_KEY, token)
+  }
+
+  function clearToken(): void {
+    localStorage.removeItem(AUTH_TOKEN_KEY)
+  }
+
+  // Вызывается при старте приложения — восстанавливает сессию из токена.
+  async function init(): Promise<void> {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY)
+    if (!token) return
+    try {
+      user.value = await getMe()
+    } catch {
+      localStorage.removeItem(AUTH_TOKEN_KEY)
+    }
+  }
+
+  return { user, isAuthenticated, initials, setUser, clear, setToken, clearToken, init }
 })

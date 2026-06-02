@@ -9,7 +9,7 @@ import { usePublicHeader } from '../model/usePublicHeader'
 const {
   isAuthenticated, user, initials,
   cartCount, cartTotal, favoritesCount,
-  openCart, login, logout,
+  openCart, goToLogin, logout,
 } = usePublicHeader()
 </script>
 
@@ -67,7 +67,7 @@ const {
       <template v-if="!isAuthenticated">
         <button
           class="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-medium text-ink border border-line-strong rounded-full hover:border-ink/30 hover:bg-surface-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-          @click="login()"
+          @click="goToLogin()"
         >
           <User :size="14" class="text-muted" />
           Войти

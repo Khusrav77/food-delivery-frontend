@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AdminLayout from '@/app/layouts/AdminLayout.vue'
 import PublicLayout from '@/app/layouts/PublicLayout.vue'
+import { useUserStore } from '@/entities/user'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -13,6 +14,27 @@ export const router = createRouter({
         { path: 'checkout', component: () => import('@/pages/checkout/CheckoutPage.vue') },
         { path: 'checkout/success', component: () => import('@/pages/checkout/CheckoutSuccessPage.vue') },
       ],
+    },
+    // Auth pages — вне PublicLayout (нет хедера/корзины)
+    {
+      path: '/login',
+      component: () => import('@/pages/auth/LoginPage.vue'),
+      meta: { guestOnly: true },
+    },
+    {
+      path: '/register',
+      component: () => import('@/pages/auth/RegisterPage.vue'),
+      meta: { guestOnly: true },
+    },
+    {
+      path: '/forgot-password',
+      component: () => import('@/pages/auth/ForgotPasswordPage.vue'),
+      meta: { guestOnly: true },
+    },
+    {
+      path: '/reset-password',
+      component: () => import('@/pages/auth/ResetPasswordPage.vue'),
+      meta: { guestOnly: true },
     },
     {
       path: '/admin',
@@ -30,4 +52,10 @@ export const router = createRouter({
       ],
     },
   ],
+})
+
+// Если пользователь уже авторизован — не пускать на /login, /register и т.д.
+// useUserStore() вызывается внутри guard (не на уровне модуля) — Pinia уже активна.
+router.beforeEach((to) => {
+  if (to.meta.guestOnly && useUserStore().isAuthenticated) return '/'
 })

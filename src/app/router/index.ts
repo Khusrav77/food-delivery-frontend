@@ -59,6 +59,7 @@ export const router = createRouter({
       children: [
         { path: 'dashboard', component: () => import('@/pages/admin/DashboardPage.vue') },
         { path: 'orders', component: () => import('@/pages/admin/OrdersPage.vue') },
+        { path: 'orders/:id', component: () => import('@/pages/admin/OrderDetailPage.vue') },
         { path: 'restaurants', component: () => import('@/pages/admin/RestaurantsPage.vue') },
         { path: 'menu', component: () => import('@/pages/admin/MenuPage.vue') },
         { path: 'couriers', component: () => import('@/pages/admin/CouriersPage.vue') },

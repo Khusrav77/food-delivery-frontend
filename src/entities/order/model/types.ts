@@ -63,3 +63,12 @@ export interface PlacedOrder {
   payload: PlaceOrderPayload
   rating: OrderRating | null
 }
+
+// расширение для admin-панели: добавляет клиента, курьера и зону
+export interface AdminOrder extends PlacedOrder {
+  clientName: string
+  clientPhone: string
+  courierId: string | null
+  courierName: string | null
+  deliveryZone: 'free' | 'paid' | 'none'
+}

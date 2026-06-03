@@ -75,6 +75,7 @@ export const router = createRouter({
         { path: 'delivery-zones', component: () => import('@/pages/admin/DeliveryZonesPage.vue') },
         { path: 'analytics', component: () => import('@/pages/admin/AnalyticsPage.vue') },
         { path: 'promotions', component: () => import('@/pages/admin/PromotionsPage.vue') },
+        { path: 'banners', component: () => import('@/pages/admin/BannersPage.vue') },
         { path: 'settings', component: () => import('@/pages/admin/SettingsPage.vue') },
         { path: 'bonus-settings', component: () => import('@/pages/admin/BonusSettingsPage.vue') },
       ],

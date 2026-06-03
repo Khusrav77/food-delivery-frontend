@@ -25,6 +25,11 @@ export function useSearchPage() {
     selectedProduct.value = null
   }
 
+  function close(): void {
+    if (window.history.length > 1) router.back()
+    else router.push('/')
+  }
+
   watch(search.query, (q) => {
     router.replace({ query: { q: q || undefined } })
   })
@@ -38,8 +43,6 @@ export function useSearchPage() {
 
   return reactive({
     query: search.query,
-    minPrice: search.minPrice,
-    maxPrice: search.maxPrice,
     selectedCategoryId: search.selectedCategoryId,
     selectedTagId: search.selectedTagId,
     results: search.results,
@@ -49,6 +52,7 @@ export function useSearchPage() {
     selectedProduct,
     openPreview,
     closePreview,
+    close,
     loading: productStore.loading,
     categories: categoryStore.categories,
     tags: tagStore.tags,

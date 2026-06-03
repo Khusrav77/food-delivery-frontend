@@ -31,7 +31,7 @@ const OVERLAY: Record<string, string> = {
       :key="tag.id"
       class="inline-flex items-center gap-1 rounded-full font-semibold px-2.5 py-1 text-xs leading-none"
       :class="[
-        (variant === 'overlay' ? OVERLAY : SOFT)[tag.color] ?? 'bg-slate-100 text-slate-700',
+        (variant === 'overlay' ? OVERLAY : SOFT)[tag.color] ?? 'bg-surface-soft text-muted',
         variant === 'overlay' ? 'backdrop-blur-sm shadow-sm' : '',
       ]"
     >

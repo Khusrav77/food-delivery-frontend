@@ -116,7 +116,7 @@ function submit(): void {
                     @click="draft.type = type"
                   >
                     <span
-                      class="w-4 h-4 rounded-full border-2 border-white shadow-sm"
+                      class="w-4 h-4 rounded-full border-2 border-surface shadow-sm"
                       :style="{ backgroundColor: ZONE_TYPE_META[type].color }"
                     />
                     {{ ZONE_TYPE_META[type].label }}

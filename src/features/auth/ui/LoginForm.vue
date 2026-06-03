@@ -13,7 +13,7 @@ const inputClass = (field: string, extra = '') =>
   `w-full px-3.5 py-2.5 rounded-xl border text-ink text-sm placeholder:text-faint
    focus-visible:outline-none focus-visible:ring-2 transition-colors ${extra}
    ${(errors.value as Record<string, string>)[field]
-     ? 'border-red-400 bg-white focus-visible:border-red-400 focus-visible:ring-red-200'
+     ? 'border-red-400 bg-surface focus-visible:border-red-400 focus-visible:ring-red-200'
      : 'border-line bg-surface focus-visible:border-accent focus-visible:ring-accent/20'}`
 
 async function onSubmit(): Promise<void> {

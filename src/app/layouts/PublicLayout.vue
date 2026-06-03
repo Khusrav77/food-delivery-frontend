@@ -4,6 +4,10 @@ import { PublicHeader } from '@/widgets/public-header'
 import { PublicFooter } from '@/widgets/public-footer'
 import { CartDrawer } from '@/widgets/cart-drawer'
 import { ToastContainer } from '@/shared/ui/Toast'
+import { useThemeStore } from '@/entities/theme'
+
+const themeStore = useThemeStore()
+themeStore.setActiveArea('client')
 </script>
 
 <template>

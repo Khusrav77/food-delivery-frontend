@@ -6,6 +6,7 @@ import {
 } from 'lucide-vue-next'
 import { usePublicHeader } from '../model/usePublicHeader'
 import { LocationPickerModal } from '@/features/location-picker'
+import { ThemeToggle } from '@/features/theme-toggle'
 
 const {
   isAuthenticated, user, initials,
@@ -68,6 +69,9 @@ const {
       >
         <Search :size="15" />
       </button>
+
+      <!-- Theme toggle -->
+      <ThemeToggle area="client" />
 
       <!-- Guest: Войти + Бонусы -->
       <template v-if="!isAuthenticated">

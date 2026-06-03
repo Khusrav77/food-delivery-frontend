@@ -86,7 +86,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 При работе над этим репозиторием следуй **`.claude/docs/AI_TEAM.md`** и правилам из **`.claude/rules/`**. Каждый ответ — на русском, код/коммиты/имена — на английском.
 
-**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind CSS v4). Admin-панель и Client-часть реализованы со строгим разделением UI / Logic / Business Rules. API-слой подключён к реальному бэкенду. Проведён полный аудит + исправления: баги, безопасность (Open Redirect), FSD-нарушения (entities/favorite, DishCardPublic удалён), типографика (Plus Jakarta Sans), мобильный UX (touch targets, carousel swipe, checkout bottom bar).
+**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind CSS v4). Admin-панель и Client-часть реализованы со строгим разделением UI / Logic / Business Rules. API-слой подключён к реальному бэкенду. Проведён полный аудит + исправления: баги, безопасность (Open Redirect), FSD-нарушения (entities/favorite, DishCardPublic удалён), типографика (Plus Jakarta Sans), мобильный UX (touch targets, carousel swipe, checkout bottom bar). Реализована dark/light тема: `entities/theme` (Pinia, localStorage, раздельно для client/admin), `features/theme-toggle` (кнопка в хедерах), `@custom-variant dark` + `.dark` CSS-переменные в `index.css`.
 
 ## Workflow (Inbox → Active → Outbox)
 
@@ -165,6 +165,7 @@ src/
 │   ├── checkout/         # useCheckout, checkoutDraft, checkoutTotals, deliveryZone, 5 секций UI
 │   ├── edit-profile/     # useProfileForm, profileRules → shared/lib/validators
 │   ├── favorite-toggle/  # FavoriteButton.vue (store → entities/favorite)
+│   ├── theme-toggle/     # ThemeToggle.vue (props: area: ThemeArea) — sun/moon icon, store → entities/theme
 │   ├── dish-search/      # useSearch
 │   ├── address-manager/  # useAddressManager, AddressCard, AddressFormModal
 │   ├── card-manager/     # useCardManager, CardItem, CardFormModal
@@ -179,6 +180,7 @@ src/
 │   ├── banner-manager/   # CRUD + drag-сортировка баннеров (admin): useBannerManager, BannerCard, BannerFormModal
 │   └── location-picker/  # выбор города + адрес на карте (Leaflet): useLocationPicker, useLocationMap, locationDraft, LocationPickerModal
 ├── entities/
+│   ├── theme/        # ThemeMode, ThemeArea, useThemeStore — раздельные темы client/admin, localStorage persist, class .dark на <html>
 │   ├── favorite/     # useFavoriteStore — localStorage persist (используется из widgets + pages)
 │   ├── delivery-location/  # ICity, IDeliveryLocation, CITIES, useDeliveryLocationStore — выбранный город+адрес, localStorage persist
 │   ├── banner/       # useBannerStore — промо-баннеры: localStorage persist + seed из assets, resolveBannerImage (preset-ключи)
@@ -216,6 +218,7 @@ src/
 > `useFavoriteStore` живёт в `entities/favorite` — он shared state для widgets (header) и pages (favorites). `features/favorite-toggle` содержит только UI-компонент `FavoriteButton`.
 > `useBannerStore` (`entities/banner`) — единый источник промо-баннеров: клиентский `widgets/promo-carousel` показывает `visibleBanners`, админский `features/banner-manager` (страница `/admin/banners`) делает CRUD + drag-сортировку. Персист в localStorage с seed из `src/assets/*.jpeg`; `image` хранит `preset:<id>` или URL, `resolveBannerImage()` резолвит на рендере (устойчиво к ре-хешу ассетов при сборке).
 > `useDeliveryLocationStore` (`entities/delivery-location`) — выбранный город+адрес (localStorage persist), точка входа — чип в `widgets/public-header`, открывающий `features/location-picker` (LocationPickerModal). Карта на Leaflet+OSM (как admin zone-editor): фикс. список `CITIES`, поиск/reverse-геокодинг через `shared/api/nominatim`, зона доставки — `pointInPolygon` (`shared/lib/geo`) по полигонам `entities/delivery-zone`. СПб — город по умолчанию (только для него заданы seed-зоны).
+> `useThemeStore` (`entities/theme`) — раздельные темы для `client` и `admin` (два ключа в localStorage: `theme:client`, `theme:admin`). Первый визит: `prefers-color-scheme`, далее — сохранённый выбор. Тоггл `.dark` на `<html>` → переопределяет CSS-переменные токенов (`--color-canvas`, `--color-surface`, ...) из `.dark {}` в `index.css`. Переключатель — `features/theme-toggle` (`<ThemeToggle area="client|admin" />`): в `widgets/public-header` и `widgets/admin-header`. `PublicLayout` / `AdminLayout` вызывают `setActiveArea()` в `<script setup>` для анти-FOUC.
 
 ### Ключевые архитектурные правила
 

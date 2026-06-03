@@ -68,7 +68,7 @@ const {
             </p>
             <span
               v-if="banner.ctaLabel"
-              class="inline-block bg-white text-ink text-xs font-bold px-5 py-2.5 rounded-lg group-hover:bg-white/90 transition-colors shadow-sm"
+              class="inline-block bg-surface text-ink text-xs font-bold px-5 py-2.5 rounded-lg group-hover:bg-surface-soft transition-colors shadow-sm"
             >
               {{ banner.ctaLabel }}
             </span>

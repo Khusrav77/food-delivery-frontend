@@ -56,7 +56,7 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
         <div v-if="sortable" class="absolute top-2 right-2 z-10 flex flex-col gap-1">
           <button
             type="button"
-            class="grid place-items-center w-7 h-7 rounded-lg bg-white/90 backdrop-blur-sm shadow-sm transition-colors
+            class="grid place-items-center w-7 h-7 rounded-lg bg-surface/90 backdrop-blur-sm shadow-sm transition-colors
                    text-muted hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
             :disabled="!canMoveUp"
@@ -67,7 +67,7 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
           </button>
           <button
             type="button"
-            class="grid place-items-center w-7 h-7 rounded-lg bg-white/90 backdrop-blur-sm shadow-sm transition-colors
+            class="grid place-items-center w-7 h-7 rounded-lg bg-surface/90 backdrop-blur-sm shadow-sm transition-colors
                    text-muted hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
             :disabled="!canMoveDown"

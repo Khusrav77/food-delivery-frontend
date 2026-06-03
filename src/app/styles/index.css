@@ -6,9 +6,9 @@
   --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   /* Surfaces */
-  --color-canvas: #fef9f5;
+  --color-canvas: #f1f1f1;
   --color-surface: #ffffff;
-  --color-surface-soft: #fdf8f3;
+  --color-surface-soft: #f7f7f7;
 
   /* Ink / text */
   --color-ink: #18181b;
@@ -16,8 +16,8 @@
   --color-faint: #9c9ca4;
 
   /* Hairlines */
-  --color-line: #ecebe6;
-  --color-line-strong: #dddbd3;
+  --color-line: #e8e8e8;
+  --color-line-strong: #d8d8d8;
 
   /* Soft orange accent */
   --color-accent: #fb923c;

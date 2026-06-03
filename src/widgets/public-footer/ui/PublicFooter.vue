@@ -57,7 +57,7 @@ const year = new Date().getFullYear()
               :key="social.label"
               :href="social.href"
               :aria-label="social.label"
-              class="w-9 h-9 rounded-full border border-line-strong flex items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+              :class="['w-9 h-9 rounded-full border border-line-strong flex items-center justify-center text-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/40', social.hoverClass]"
             >
               <component :is="social.icon" :size="16" />
             </a>

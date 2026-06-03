@@ -1,4 +1,6 @@
-export { isEmail, isPhone, isIdentifier } from '@/shared/lib/validators'
+import { isEmail, isPhone, isIdentifier } from '@/shared/lib/validators'
+
+export { isEmail, isPhone, isIdentifier }
 
 export type FormErrors = Record<string, string>
 

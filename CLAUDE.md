@@ -150,9 +150,9 @@ src/
 │   ├── public-footer/    # PublicFooter + footerNav config
 │   ├── account-sidebar/  # десктоп sidebar + мобильный bottom tab bar (4 + «Ещё»)
 │   ├── cart-drawer/      # CartDrawer (side panel)
-│   ├── dish-card/        # DishCardA (client), DishCardAdmin; useDishCard, useImageGallery
+│   ├── dish-card/        # DishCardA (client, 4-кол, cart-stepper [−N+]); DishCardAdmin; useDishCard, useImageGallery
 │   ├── dish-preview/     # DishPreviewModal + useDishPreview
-│   ├── promo-carousel/   # PromoCarousel (image + overlay, swipe + dots) — читает entities/banner
+│   ├── promo-carousel/   # PromoCarousel (image + overlay, autoplay 4s, pause on hover, swipe) — читает entities/banner
 │   ├── products-section/ # ProductsSection
 │   ├── category-strip/   # CategoryStrip
 │   ├── loyalty-banner/   # LoyaltyBanner

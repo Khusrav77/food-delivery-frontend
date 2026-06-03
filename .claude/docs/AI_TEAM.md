@@ -20,21 +20,20 @@
 
 | Категория | Выбор | Версия |
 |---|---|---|
-| Framework | Vue | 3.4+ (Composition API, `<script setup>`) |
-| Language | TypeScript | 5.4+, strict mode |
-| Build | Vite | 5+ |
+| Framework | Vue | 3.5+ (Composition API, `<script setup>`) |
+| Language | TypeScript | strict mode (`noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`) |
+| Build | Vite | 6+ |
 | Router | Vue Router | 4+ |
 | State | Pinia | 2+ (setup stores) |
-| HTTP | Axios | с единым instance + interceptors |
-| Styling | TailwindCSS | 3+ (mobile-first) |
-| Icons | lucide-vue-next | — |
-| Forms | VeeValidate + Zod | для валидации схем |
+| HTTP | Axios | с единым instance + interceptors (`shared/api/http.ts`) |
+| Styling | TailwindCSS | **v4** (mobile-first, CSS-first config) |
+| Icons | lucide-vue-next | 1.0+ |
+| Fonts | Plus Jakarta Sans (display) + Nunito (body) | Google Fonts, CSS vars |
+| Drag & Drop | vuedraggable (SortableJS) | обёртка `shared/ui/Sortable` |
 | Architecture | Feature-Sliced Design | v2.1 |
-| Testing | Vitest + Vue Test Utils | unit/component |
-| E2E | Playwright | smoke + критичные сценарии |
-| Lint/Format | ESLint + Prettier + vue-tsc | obligatory |
-| Node | 20 LTS | — |
-| Package manager | pnpm | — |
+| Type check | vue-tsc | `vue-tsc -b` (нет отдельного lint/test runner) |
+| Node | 22 LTS | nvm `.nvmrc = v20.10.0` (используется 22) |
+| Package manager | npm | — |
 
 Изменение стека без явного запроса пользователя — запрещено.
 
@@ -266,20 +265,18 @@ onMounted(menu.init)
 
 ---
 
-## 11. PROJECT SCOPE (MVP modules)
+## 11. PROJECT SCOPE (реализованные модули)
 
-Для контекста — какие модули составляют приложение:
+Актуальное состояние — подробности в `.claude/docs/SPEC.md`.
 
-1. **Auth** — login, register, OTP, password reset, JWT refresh
-2. **Restaurants Catalog** — список, фильтры (cuisine, rating, delivery time, price), поиск, сортировка
-3. **Restaurant Page** — меню, категории блюд, info, reviews
-4. **Cart** — добавление, изменение количества, промокоды, расчёт total
-5. **Checkout** — адрес доставки, время, способ оплаты, подтверждение
-6. **Orders** — история, текущий заказ, статус-трекинг
-7. **Favorites** — избранные рестораны/блюда
-8. **Profile** — личные данные, адреса, способы оплаты, настройки
-9. **Search** — глобальный поиск по ресторанам и блюдам
-10. **Notifications** — уведомления о заказе
+**Client (`feat/client`, `/`):**
+Auth · Главная (карусель-баннеры + 4-кол сетка блюд + cart stepper) · Корзина (drawer) · Checkout + Success · Профиль (адреса, заказы, бонусы, карты, промокоды, реферал, уведомления) · Избранное · Поиск · Трекинг заказа · Оценка заказа · Публичный футер
+
+**Admin (`feat/admin`, `/admin`):**
+Dashboard · Меню (CRUD блюд/вариантов/тегов/категорий + drag-sort) · Заказы (таблица + детали + смена статуса) · Промокоды (CRUD) · Баннеры (CRUD + drag-sort, localStorage) · Доставка (зоны) · Аналитика/Рестораны/Курьеры/Клиенты — заглушки
+
+**Shared state (localStorage persist):** favorites · banners · mock-user (auth)
+**In-memory state:** cart · orders (до backend)
 
 ---
 

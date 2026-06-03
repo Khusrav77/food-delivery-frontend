@@ -34,6 +34,7 @@ export interface CheckoutDraft {
   tipMode: TipMode
   tipPercent: number // 0.05 | 0.1 — когда tipMode === 'percent'
   tipCustom: number // когда tipMode === 'custom'
+  leaveAtDoor: boolean
 }
 
 export interface TotalsBreakdown {

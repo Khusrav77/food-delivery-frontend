@@ -35,6 +35,7 @@ export interface PlaceOrderPayload {
   items: OrderItem[]
   address: string
   comment: string
+  leaveAtDoor: boolean
   paymentMethod: PaymentMethod
   promoCode: string | null
   bonusUsed: number

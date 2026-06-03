@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MapPin, Plus, Check, Loader2, AlertTriangle } from 'lucide-vue-next'
+import { MapPin, Plus, Check, Loader2, AlertTriangle, DoorClosed } from 'lucide-vue-next'
 import type { IAddress, AddressLabel } from '@/entities/address'
 import type { CheckoutDraft, ZoneInfo } from '../model/types'
 import type { DraftErrors } from '../model/checkoutDraft'
@@ -106,6 +106,33 @@ function shortAddress(a: IAddress): string {
         :class="[inputClass, 'col-span-2 sm:col-span-1']"
       />
     </div>
+
+    <!-- Leave at door -->
+    <button
+      type="button"
+      class="w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+      :class="props.draft.leaveAtDoor
+        ? 'border-accent bg-accent-soft text-ink'
+        : 'border-line text-muted hover:border-ink/20 hover:text-ink'"
+      @click="props.draft.leaveAtDoor = !props.draft.leaveAtDoor"
+    >
+      <div
+        class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors"
+        :class="props.draft.leaveAtDoor ? 'bg-accent text-white' : 'bg-surface-soft text-muted'"
+      >
+        <DoorClosed :size="16" />
+      </div>
+      <div class="flex-1 text-left">
+        <p class="text-sm font-medium leading-none mb-0.5">Оставить у двери</p>
+        <p class="text-xs text-faint leading-none">Курьер оставит заказ у двери и уйдёт</p>
+      </div>
+      <div
+        class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors"
+        :class="props.draft.leaveAtDoor ? 'border-accent bg-accent' : 'border-line'"
+      >
+        <Check v-if="props.draft.leaveAtDoor" :size="11" class="text-white" strokeWidth="3" />
+      </div>
+    </button>
 
     <!-- Zone status -->
     <div

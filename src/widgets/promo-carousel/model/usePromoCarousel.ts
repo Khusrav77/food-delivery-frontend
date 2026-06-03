@@ -1,9 +1,13 @@
 import { ref, computed, onMounted, onUnmounted, type Ref } from 'vue'
-import { PROMO_SLIDES } from '../config/promoSlides'
+import { storeToRefs } from 'pinia'
+import { useBannerStore } from '@/entities/banner'
 
 const GAP = 16
+const AUTOPLAY_MS = 4000
 
 export function usePromoCarousel(containerRef: Readonly<Ref<HTMLElement | null>>) {
+  const { visibleBanners } = storeToRefs(useBannerStore())
+
   const containerWidth = ref(0)
   const offset = ref(0)
 
@@ -13,7 +17,7 @@ export function usePromoCarousel(containerRef: Readonly<Ref<HTMLElement | null>>
     return 3
   })
 
-  const maxOffset = computed(() => Math.max(0, PROMO_SLIDES.length - visible.value))
+  const maxOffset = computed(() => Math.max(0, visibleBanners.value.length - visible.value))
 
   const cardWidth = computed(() =>
     containerWidth.value > 0
@@ -23,6 +27,22 @@ export function usePromoCarousel(containerRef: Readonly<Ref<HTMLElement | null>>
 
   const translateX = computed(() => offset.value * (cardWidth.value + GAP))
 
+  // --- Autoplay ---
+  let timer: ReturnType<typeof setInterval> | null = null
+
+  function startAutoplay(): void {
+    stopAutoplay()
+    if (maxOffset.value === 0) return
+    timer = setInterval(() => {
+      offset.value = offset.value < maxOffset.value ? offset.value + 1 : 0
+    }, AUTOPLAY_MS)
+  }
+
+  function stopAutoplay(): void {
+    if (timer !== null) { clearInterval(timer); timer = null }
+  }
+
+  // --- Resize observer ---
   let ro: ResizeObserver | null = null
 
   onMounted(() => {
@@ -33,29 +53,51 @@ export function usePromoCarousel(containerRef: Readonly<Ref<HTMLElement | null>>
       offset.value = Math.min(offset.value, maxOffset.value)
     })
     ro.observe(containerRef.value)
+    startAutoplay()
   })
 
-  onUnmounted(() => ro?.disconnect())
+  onUnmounted(() => {
+    ro?.disconnect()
+    stopAutoplay()
+  })
 
-  function prev() { offset.value = Math.max(0, offset.value - 1) }
-  function next() { offset.value = Math.min(maxOffset.value, offset.value + 1) }
-
-  // Touch swipe support
-  let touchStartX = 0
-
-  function onTouchStart(e: TouchEvent) {
-    touchStartX = e.touches[0].clientX
+  // Reset timer on manual interaction so it doesn't jump immediately after user action.
+  function prev(): void {
+    offset.value = Math.max(0, offset.value - 1)
+    startAutoplay()
   }
 
-  function onTouchEnd(e: TouchEvent) {
+  function next(): void {
+    offset.value = Math.min(maxOffset.value, offset.value + 1)
+    startAutoplay()
+  }
+
+  function goTo(i: number): void {
+    offset.value = i
+    startAutoplay()
+  }
+
+  // --- Touch swipe ---
+  let touchStartX = 0
+
+  function onTouchStart(e: TouchEvent): void {
+    touchStartX = e.touches[0].clientX
+    stopAutoplay()
+  }
+
+  function onTouchEnd(e: TouchEvent): void {
     const delta = touchStartX - e.changedTouches[0].clientX
-    if (Math.abs(delta) < 40) return
+    if (Math.abs(delta) < 40) { startAutoplay(); return }
     if (delta > 0) next()
     else prev()
   }
 
+  // --- Pause on hover ---
+  function onMouseEnter(): void { stopAutoplay() }
+  function onMouseLeave(): void { startAutoplay() }
+
   return {
-    slides: PROMO_SLIDES,
+    banners: visibleBanners,
     cardWidth,
     translateX,
     offset,
@@ -63,7 +105,10 @@ export function usePromoCarousel(containerRef: Readonly<Ref<HTMLElement | null>>
     visible,
     prev,
     next,
+    goTo,
     onTouchStart,
     onTouchEnd,
+    onMouseEnter,
+    onMouseLeave,
   }
 }

@@ -1,8 +1,10 @@
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '@/features/auth'
 import { useCartStore } from '@/entities/cart'
 import { useFavoriteStore } from '@/entities/favorite'
+import { useDeliveryLocationStore } from '@/entities/delivery-location'
 
 export function usePublicHeader() {
   const auth = useAuth()
@@ -11,6 +13,9 @@ export function usePublicHeader() {
   const cartStore = useCartStore()
   const { count: cartCount, formattedTotal: cartTotal } = storeToRefs(cartStore)
   const { count: favoritesCount } = storeToRefs(useFavoriteStore())
+
+  const { shortLabel: locationLabel, hasLocation } = storeToRefs(useDeliveryLocationStore())
+  const pickerOpen = ref(false)
 
   function goToLogin(): void {
     const current = route.fullPath
@@ -42,6 +47,11 @@ export function usePublicHeader() {
     cartCount,
     cartTotal,
     favoritesCount,
+    locationLabel,
+    hasLocation,
+    pickerOpen,
+    openPicker: () => { pickerOpen.value = true },
+    closePicker: () => { pickerOpen.value = false },
     openCart: cartStore.open,
     goToLogin,
     goToAccount,

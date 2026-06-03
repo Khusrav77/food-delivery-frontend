@@ -5,10 +5,12 @@ import {
   Heart, User, Star, UtensilsCrossed, LayoutDashboard,
 } from 'lucide-vue-next'
 import { usePublicHeader } from '../model/usePublicHeader'
+import { LocationPickerModal } from '@/features/location-picker'
 
 const {
   isAuthenticated, user, initials,
   cartCount, cartTotal, favoritesCount,
+  locationLabel, hasLocation, pickerOpen, openPicker, closePicker,
   openCart, goToLogin, goToAccount, goToBonuses, goToFavorites, goToSearch,
 } = usePublicHeader()
 </script>
@@ -27,17 +29,20 @@ const {
 
       <!-- Location -->
       <button
-        class="hidden md:flex flex-col items-start gap-0.5 pl-4 border-l border-line shrink-0 group"
-        aria-label="Выбрать город"
+        class="hidden md:flex flex-col items-start gap-0.5 pl-4 border-l border-line shrink-0 group max-w-[220px]"
+        aria-label="Выбрать город и адрес доставки"
+        @click="openPicker()"
       >
         <span class="flex items-center gap-1 text-[13px] font-semibold text-ink group-hover:text-accent transition-colors leading-none">
           <MapPin :size="12" class="text-accent shrink-0" />
-          Санкт-Петербург
-          <ChevronDown :size="11" class="text-faint group-hover:text-accent transition-colors" />
+          <span class="truncate max-w-[170px]">{{ hasLocation ? locationLabel : 'Выбрать город' }}</span>
+          <ChevronDown :size="11" class="text-faint group-hover:text-accent transition-colors shrink-0" />
         </span>
         <span class="text-[11px] text-faint leading-none pl-[17px]">
           Доставка ·
-          <span class="text-accent hover:text-accent-hover transition-colors">Указать адрес ›</span>
+          <span class="text-accent hover:text-accent-hover transition-colors">
+            {{ hasLocation ? 'Изменить адрес ›' : 'Указать адрес ›' }}
+          </span>
         </span>
       </button>
 
@@ -143,5 +148,7 @@ const {
       </button>
 
     </div>
+
+    <LocationPickerModal v-if="pickerOpen" @close="closePicker()" />
   </header>
 </template>

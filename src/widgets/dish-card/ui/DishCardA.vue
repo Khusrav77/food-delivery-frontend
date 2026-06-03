@@ -156,7 +156,7 @@ function decrement(e: MouseEvent): void {
             <div
               v-if="inCart && !isMulti"
               key="stepper"
-              class="flex items-center bg-accent rounded-xl overflow-hidden h-11 motion-reduce:transition-none"
+              class="flex items-center bg-accent rounded-full overflow-hidden h-11 motion-reduce:transition-none"
             >
               <button
                 type="button"
@@ -188,7 +188,7 @@ function decrement(e: MouseEvent): void {
               v-else
               key="add"
               type="button"
-              class="grid place-items-center w-11 h-11 rounded-xl bg-accent hover:bg-accent-hover
+              class="grid place-items-center w-11 h-11 rounded-full bg-accent hover:bg-accent-hover
                      text-white transition-[background-color,transform] duration-200 active:scale-90
                      motion-reduce:transition-none motion-reduce:active:scale-100
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"

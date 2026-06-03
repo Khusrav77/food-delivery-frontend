@@ -168,6 +168,8 @@ categories
 // entities/favorite   → localStorage (client-only, нет таблицы в БД)
 // entities/banner     → localStorage (client+admin, нет таблицы в БД; seed из src/assets/*.jpeg)
 //                       image хранит `preset:<id>` или URL; resolveBannerImage() резолвит на рендере
+// entities/delivery-location → localStorage (client-only; выбранный город+адрес+координаты)
+//                       геокодинг через shared/api/nominatim (OSM), зона — pointInPolygon по entities/delivery-zone
 // entities/cart       → in-memory Pinia store (нет персиста; CartItem: menuItemId, qty, price, image)
 // shared/lib/validators.ts → EMAIL_RE, PHONE_RE, isEmail, isPhone, isIdentifier (единый источник)
 
@@ -375,7 +377,7 @@ GET    /users/me/bonuses        → { balance: number, history: BonusEntry[] }
 | Auth (вход/регистрация) | `/login`, `/register` | ✅ Готово | Формы, валидация (shared/lib/validators), JWT, восстановление пароля (§1.1) |
 | Личный кабинет | `/account/*` | ✅ Готово | Профиль, адреса, история заказов, бонусы, промокоды, карты, реферал (§1.2–§1.11); mobile 4+«Ещё» nav |
 | Избранное | `/favorites` | ✅ Готово | Сетка избранных блюд 4-кол (2→3→4), empty state; store в entities/favorite |
-| Поиск | `/search` | ✅ Готово | Глобальный поиск + фильтры (категория, тег, цена) 4-кол (2→3→4); page composable useSearchPage |
+| Поиск | `/search` | ✅ Готово | Глобальный поиск + инлайн-фильтры (категория, тег) в одной строке с полем; 4-кол (2→3→4); page composable useSearchPage |
 | Отслеживание заказа | `/orders/:id/track` | ✅ Готово | Статус-шкала, ETA, отмена (до on_the_way), авто-прогресс (§1.7) |
 | Оценка заказа | модал | ✅ Готово | Звёзды 1–5, комментарий, авто-открытие после доставки (§1.8) |
 | Toast-уведомления | shared | ✅ Готово | success/error/info/warning (§1.9) |

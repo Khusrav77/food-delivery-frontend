@@ -176,9 +176,11 @@ src/
 │   ├── category-manager/ # CRUD + drag-and-drop сортировка категорий
 │   ├── reorder-products/ # drag-and-drop сортировка блюд
 │   ├── tag-manager/      # CRUD тегов (admin)
-│   └── banner-manager/   # CRUD + drag-сортировка баннеров (admin): useBannerManager, BannerCard, BannerFormModal
+│   ├── banner-manager/   # CRUD + drag-сортировка баннеров (admin): useBannerManager, BannerCard, BannerFormModal
+│   └── location-picker/  # выбор города + адрес на карте (Leaflet): useLocationPicker, useLocationMap, locationDraft, LocationPickerModal
 ├── entities/
 │   ├── favorite/     # useFavoriteStore — localStorage persist (используется из widgets + pages)
+│   ├── delivery-location/  # ICity, IDeliveryLocation, CITIES, useDeliveryLocationStore — выбранный город+адрес, localStorage persist
 │   ├── banner/       # useBannerStore — промо-баннеры: localStorage persist + seed из assets, resolveBannerImage (preset-ключи)
 │   ├── dish/         # Product/MenuItem: types, store, api, ui/DishCard
 │   ├── category/     # types, store, api
@@ -193,12 +195,13 @@ src/
 │   ├── referral/     # IReferral, useReferralStore, referralApi
 │   └── notification/ # INotification, useNotificationStore, notificationApi
 └── shared/
-    ├── api/          # http.ts (Axios + JWT interceptor)
+    ├── api/          # http.ts (Axios + JWT interceptor); nominatim.ts (OSM геокодинг: searchPlaces, reverseGeocode)
     ├── lib/
     │   ├── validators.ts  # EMAIL_RE, PHONE_RE, isEmail, isPhone, isIdentifier
     │   ├── money.ts       # formatPrice
     │   ├── date.ts        # formatDateTime
     │   ├── position.ts    # sortByPosition, diffChanged
+    │   ├── geo.ts         # pointInPolygon (ray-casting) — определение зоны по координатам
     │   ├── toast.ts       # useToastStore
     │   └── useScrollSpy.ts
     └── ui/
@@ -212,6 +215,7 @@ src/
 > Порядок категорий и блюд хранится в поле `position`; админка меняет его перетаскиванием (`vuedraggable`), стор пересортировывает после fetch — клиент и админка выводят в одном порядке.  
 > `useFavoriteStore` живёт в `entities/favorite` — он shared state для widgets (header) и pages (favorites). `features/favorite-toggle` содержит только UI-компонент `FavoriteButton`.
 > `useBannerStore` (`entities/banner`) — единый источник промо-баннеров: клиентский `widgets/promo-carousel` показывает `visibleBanners`, админский `features/banner-manager` (страница `/admin/banners`) делает CRUD + drag-сортировку. Персист в localStorage с seed из `src/assets/*.jpeg`; `image` хранит `preset:<id>` или URL, `resolveBannerImage()` резолвит на рендере (устойчиво к ре-хешу ассетов при сборке).
+> `useDeliveryLocationStore` (`entities/delivery-location`) — выбранный город+адрес (localStorage persist), точка входа — чип в `widgets/public-header`, открывающий `features/location-picker` (LocationPickerModal). Карта на Leaflet+OSM (как admin zone-editor): фикс. список `CITIES`, поиск/reverse-геокодинг через `shared/api/nominatim`, зона доставки — `pointInPolygon` (`shared/lib/geo`) по полигонам `entities/delivery-zone`. СПб — город по умолчанию (только для него заданы seed-зоны).
 
 ### Ключевые архитектурные правила
 

@@ -2,7 +2,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '@/features/auth'
 import { useCartStore } from '@/entities/cart'
-import { useFavoriteStore } from '@/features/favorite-toggle'
+import { useFavoriteStore } from '@/entities/favorite'
 
 export function usePublicHeader() {
   const auth = useAuth()
@@ -27,6 +27,14 @@ export function usePublicHeader() {
     router.push('/account/bonuses')
   }
 
+  function goToFavorites(): void {
+    router.push('/favorites')
+  }
+
+  function goToSearch(): void {
+    router.push('/search')
+  }
+
   return {
     isAuthenticated: auth.isAuthenticated,
     user: auth.user,
@@ -38,5 +46,7 @@ export function usePublicHeader() {
     goToLogin,
     goToAccount,
     goToBonuses,
+    goToFavorites,
+    goToSearch,
   }
 }

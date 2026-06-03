@@ -165,6 +165,8 @@ categories
 // entities/user       → users
 // entities/address    → addresses
 // entities/order      → orders + order_items
+// entities/favorite   → localStorage (client-only, нет таблицы в БД)
+// shared/lib/validators.ts → EMAIL_RE, PHONE_RE, isEmail, isPhone, isIdentifier (единый источник)
 
 interface IUser {
   id: string
@@ -362,15 +364,18 @@ GET    /users/me/bonuses        → { balance: number, history: BonusEntry[] }
 
 | Модуль | Путь | Статус | Описание |
 |---|---|---|---|
-| Главная / меню | `/` | ✅ Готово | Промокарусель, scroll-spy категории, карточки блюд, модал-превью, back-to-top |
+| Главная / меню | `/` | ✅ Готово | Промокарусель (swipe + dots), scroll-spy категории, карточки блюд, модал-превью, back-to-top |
 | Корзина | drawer | ✅ Готово | Список товаров, qty, итог, переход на checkout |
-| Оформление заказа | `/checkout` | ✅ Готово | Адрес (saved + new), зона доставки, оплата, промокод, бонусы, чаевые, сводка |
+| Оформление заказа | `/checkout` | ✅ Готово | Адрес (saved + new), зона, оплата, промокод, бонусы, чаевые, сводка; mobile sticky bottom bar |
 | Успешный заказ | `/checkout/success` | ✅ Готово | Номер заказа, итог, ETA, кнопка в меню |
-| Auth (вход/регистрация) | `/login`, `/register` | ✅ Готово | Формы, валидация, JWT, восстановление пароля (§1.1) |
-| Личный кабинет | `/account/*` | ✅ Готово | Профиль, адреса, история заказов, бонусы (§1.2–1.3) |
+| Auth (вход/регистрация) | `/login`, `/register` | ✅ Готово | Формы, валидация (shared/lib/validators), JWT, восстановление пароля (§1.1) |
+| Личный кабинет | `/account/*` | ✅ Готово | Профиль, адреса, история заказов, бонусы, промокоды, карты, реферал (§1.2–§1.11); mobile 4+«Ещё» nav |
+| Избранное | `/favorites` | ✅ Готово | Сетка избранных блюд, empty state; store в entities/favorite |
+| Поиск | `/search` | ✅ Готово | Глобальный поиск + фильтры (категория, тег, цена); page composable useSearchPage |
 | Отслеживание заказа | `/orders/:id/track` | ✅ Готово | Статус-шкала, ETA, отмена (до on_the_way), авто-прогресс (§1.7) |
 | Оценка заказа | модал | ✅ Готово | Звёзды 1–5, комментарий, авто-открытие после доставки (§1.8) |
 | Toast-уведомления | shared | ✅ Готово | success/error/info/warning (§1.9) |
+| Публичный футер | layout | ✅ Готово | Бренд, nav-колонки, контакты, соцсети, app badges, платёжные методы |
 
 ---
 

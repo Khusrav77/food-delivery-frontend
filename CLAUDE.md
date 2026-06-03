@@ -86,7 +86,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 При работе над этим репозиторием следуй **`.claude/docs/AI_TEAM.md`** и правилам из **`.claude/rules/`**. Каждый ответ — на русском, код/коммиты/имена — на английском.
 
-**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind). Admin-панель реализована со строгим разделением UI / Logic / Business Rules. API-слой подключён к реальному бэкенду.
+**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind CSS v4). Admin-панель и Client-часть реализованы со строгим разделением UI / Logic / Business Rules. API-слой подключён к реальному бэкенду. Проведён полный аудит + исправления: баги, безопасность (Open Redirect), FSD-нарушения (entities/favorite, DishCardPublic удалён), типографика (Plus Jakarta Sans), мобильный UX (touch targets, carousel swipe, checkout bottom bar).
 
 ## Workflow (Inbox → Active → Outbox)
 
@@ -125,45 +125,90 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Stack & structure
 
-Vue 3 + TypeScript + Vite + Pinia + Vue Router + Tailwind CSS v4.
+Vue 3 + TypeScript + Vite + Pinia + Vue Router + Tailwind CSS v4.  
+**Шрифты:** `--font-display: "Plus Jakarta Sans"` (заголовки) + `--font-sans: "Nunito"` (body).
 
 ```
 src/
-├── app/              # router, layouts, styles
+├── app/              # router, layouts (PublicLayout, AdminLayout), styles/index.css
 ├── pages/
-│   └── admin/
-│       ├── model/    # page-composables (useMenuPage и др.)
-│       └── *.vue     # тонкие страницы — только composition
+│   ├── admin/        # admin-страницы + model/useMenuPage.ts
+│   ├── account/      # профиль, адреса, заказы, бонусы, промокоды, карты, реферал, уведомления
+│   │   └── AccountLayout.vue
+│   ├── auth/         # login, register, forgot-password, reset-password
+│   ├── checkout/     # CheckoutPage.vue, CheckoutSuccessPage.vue
+│   ├── favorites/    # FavoritesPage.vue
+│   ├── home/
+│   │   ├── model/    # useHomePage.ts, menuSections.ts
+│   │   └── HomePage.vue
+│   ├── orders/       # TrackOrderPage.vue
+│   └── search/
+│       ├── model/    # useSearchPage.ts — page composable
+│       └── SearchPage.vue
 ├── widgets/
+│   ├── public-header/    # PublicHeader + usePublicHeader
+│   ├── public-footer/    # PublicFooter + footerNav config
+│   ├── account-sidebar/  # десктоп sidebar + мобильный bottom tab bar (4 + «Ещё»)
+│   ├── cart-drawer/      # CartDrawer (side panel)
+│   ├── dish-card/        # DishCardA (client), DishCardAdmin; useDishCard, useImageGallery
+│   ├── dish-preview/     # DishPreviewModal + useDishPreview
+│   ├── promo-carousel/   # PromoCarousel (swipe + dots) + usePromoCarousel
+│   ├── products-section/ # ProductsSection
+│   ├── category-strip/   # CategoryStrip
+│   ├── loyalty-banner/   # LoyaltyBanner
 │   ├── admin-sidebar/
 │   ├── admin-header/
-│   ├── menu/         # MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts
-│   └── dashboard/    # DashboardStats, RecentOrdersTable, OrderStatusBreakdown, TopRestaurants
+│   ├── menu/             # MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts
+│   └── dashboard/        # DashboardStats, RecentOrdersTable, OrderStatusBreakdown, TopRestaurants
 ├── features/
-│   ├── product-form/         # CRUD блюда
-│   │   ├── model/
-│   │   │   ├── types.ts      # MenuItemDraft
-│   │   │   ├── dishDraft.ts  # чистые функции: validate, transform
-│   │   │   └── useDishForm.ts
-│   │   └── ui/
-│   ├── menu-filter/          # фильтрация меню (useMenuFilter)
-│   ├── category-manager/     # CRUD + drag-and-drop сортировка категорий (useCategoryManager)
-│   ├── reorder-products/     # drag-and-drop сортировка блюд в категории (useReorderProducts)
-│   └── tag-manager/          # CRUD тегов (useTagManager)
+│   ├── auth/             # login, register, forgot, reset-confirm; authRules → shared/lib/validators
+│   ├── checkout/         # useCheckout, checkoutDraft, checkoutTotals, deliveryZone, 5 секций UI
+│   ├── edit-profile/     # useProfileForm, profileRules → shared/lib/validators
+│   ├── favorite-toggle/  # FavoriteButton.vue (store → entities/favorite)
+│   ├── dish-search/      # useSearch
+│   ├── address-manager/  # useAddressManager, AddressCard, AddressFormModal
+│   ├── card-manager/     # useCardManager, CardItem, CardFormModal
+│   ├── order-history/    # useOrderHistory, useReorder, OrderCard, OrderDetailView, OrderFilters
+│   ├── order-rating/     # useOrderRating, ratingDraft, RatingModal, StarRating
+│   ├── order-tracking/   # useOrderTracking, trackingRules, OrderTrackingView
+│   ├── product-form/     # CRUD блюда (admin)
+│   ├── menu-filter/      # фильтрация меню admin (useMenuFilter)
+│   ├── category-manager/ # CRUD + drag-and-drop сортировка категорий
+│   ├── reorder-products/ # drag-and-drop сортировка блюд
+│   └── tag-manager/      # CRUD тегов (admin)
 ├── entities/
+│   ├── favorite/     # useFavoriteStore — localStorage persist (используется из widgets + pages)
 │   ├── dish/         # Product/MenuItem: types, store, api, ui/DishCard
 │   ├── category/     # types, store, api
-│   └── tag/          # types, store, api, ui/TagBadge
+│   ├── tag/          # types, store, api, ui/TagBadge
+│   ├── user/         # IUser, useUserStore, authApi
+│   ├── cart/         # CartItem, useCartStore
+│   ├── order/        # PlacedOrder, useOrderStore, useAdminOrderStore, OrderStatusTimeline
+│   ├── address/      # IAddress, useAddressStore, addressApi
+│   ├── card/         # ICard, useCardStore, cardApi, cardBrand
+│   ├── bonus/        # IBonusEntry, useBonusStore, bonusApi
+│   ├── promo/        # IPromoCode, usePromoStore, promoApi, discount
+│   ├── referral/     # IReferral, useReferralStore, referralApi
+│   └── notification/ # INotification, useNotificationStore, notificationApi
 └── shared/
     ├── api/          # http.ts (Axios + JWT interceptor)
-    ├── lib/          # position.ts (sortByPosition, diffChanged — чистая логика порядка)
+    ├── lib/
+    │   ├── validators.ts  # EMAIL_RE, PHONE_RE, isEmail, isPhone, isIdentifier
+    │   ├── money.ts       # formatPrice
+    │   ├── date.ts        # formatDateTime
+    │   ├── position.ts    # sortByPosition, diffChanged
+    │   ├── toast.ts       # useToastStore
+    │   └── useScrollSpy.ts
     └── ui/
-        ├── Sortable/         # типизированная обёртка над vuedraggable (drag-and-drop списки)
+        ├── BackToTop/
+        ├── Sortable/         # типизированная обёртка над vuedraggable
         ├── StatsCard/
+        ├── Toast/
         └── UnderConstruction/  # виджет-заглушка для страниц "в разработке"
 ```
 
-> Порядок категорий и блюд хранится в поле `position`; админка меняет его перетаскиванием (`vuedraggable`), стор пересортировывает после fetch — клиент и админка выводят в одном порядке.
+> Порядок категорий и блюд хранится в поле `position`; админка меняет его перетаскиванием (`vuedraggable`), стор пересортировывает после fetch — клиент и админка выводят в одном порядке.  
+> `useFavoriteStore` живёт в `entities/favorite` — он shared state для widgets (header) и pages (favorites). `features/favorite-toggle` содержит только UI-компонент `FavoriteButton`.
 
 ### Ключевые архитектурные правила
 

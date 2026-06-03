@@ -9,7 +9,7 @@ import { usePublicHeader } from '../model/usePublicHeader'
 const {
   isAuthenticated, user, initials,
   cartCount, cartTotal, favoritesCount,
-  openCart, goToLogin, goToAccount, goToBonuses,
+  openCart, goToLogin, goToAccount, goToBonuses, goToFavorites, goToSearch,
 } = usePublicHeader()
 </script>
 
@@ -59,6 +59,7 @@ const {
       <button
         class="w-9 h-9 rounded-full border border-line-strong flex items-center justify-center text-muted hover:text-ink hover:border-ink/30 hover:bg-surface-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
         aria-label="Поиск"
+        @click="goToSearch()"
       >
         <Search :size="15" />
       </button>
@@ -95,6 +96,7 @@ const {
         <button
           class="relative hidden sm:flex w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           aria-label="Избранное"
+          @click="goToFavorites"
         >
           <Heart :size="15" />
           <span

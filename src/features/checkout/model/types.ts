@@ -28,6 +28,7 @@ export interface CheckoutDraft {
   addressComment: string // комментарий курьеру (часть адреса)
   orderComment: string // комментарий к заказу
   paymentMethod: PaymentMethod
+  savedCardId: string | null // выбранная сохранённая карта (только при paymentMethod === 'card')
   promoInput: string
   bonusToUse: number
   tipMode: TipMode

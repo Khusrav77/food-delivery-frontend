@@ -19,7 +19,7 @@ import { Gift } from 'lucide-vue-next'
         С первого заказа в течение 10 дней после регистрации
       </p>
       <RouterLink
-        to="/admin/dashboard"
+        to="/register"
         class="inline-block bg-surface text-ink font-bold px-6 py-3 rounded-lg hover:bg-surface-soft transition-colors text-sm shadow-sm"
       >
         Зарегистрироваться

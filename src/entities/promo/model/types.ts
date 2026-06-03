@@ -4,11 +4,13 @@ export interface IPromoCode {
   id: string
   code: string
   type: PromoDiscountType
-  value: number           // 10 = 10% или 200 = 200 ₽
+  value: number
+  minOrder: number
   expiresAt: string | null
-  usageLimit: number | null // null = без лимита
+  description: string
+  usageLimit: number | null
   usageCount: number
-  totalDiscount: number   // суммарная сумма скидок
+  totalDiscount: number
   isActive: boolean
   createdAt: string
 }
@@ -17,8 +19,8 @@ export interface IPromoCodeDraft {
   code: string
   type: PromoDiscountType
   value: string
-  expiresAt: string       // '' = без срока
-  usageLimit: string      // '' = без лимита
+  expiresAt: string
+  usageLimit: string
 }
 
 export interface IPromoCodeDraftErrors {

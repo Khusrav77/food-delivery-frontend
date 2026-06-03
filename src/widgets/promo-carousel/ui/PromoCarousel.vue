@@ -4,7 +4,10 @@ import { ChevronLeft, ChevronRight, Bike, Gift, Truck, ChefHat, Star } from 'luc
 import { usePromoCarousel } from '../model/usePromoCarousel'
 
 const containerRef = useTemplateRef<HTMLElement>('containerRef')
-const { slides, cardWidth, translateX, offset, maxOffset, prev, next } = usePromoCarousel(containerRef)
+const {
+  slides, cardWidth, translateX, offset, maxOffset, visible,
+  prev, next, onTouchStart, onTouchEnd,
+} = usePromoCarousel(containerRef)
 
 const iconMap: Record<string, Component> = { Bike, Gift, Truck, ChefHat, Star }
 </script>
@@ -12,7 +15,12 @@ const iconMap: Record<string, Component> = { Bike, Gift, Truck, ChefHat, Star }
 <template>
   <div class="relative">
     <!-- Track container -->
-    <div ref="containerRef" class="overflow-hidden">
+    <div
+      ref="containerRef"
+      class="overflow-hidden"
+      @touchstart.passive="onTouchStart"
+      @touchend.passive="onTouchEnd"
+    >
       <div
         class="flex gap-4 transition-transform duration-300 ease-in-out"
         :style="{ transform: `translateX(-${translateX}px)` }"
@@ -26,11 +34,7 @@ const iconMap: Record<string, Component> = { Bike, Gift, Truck, ChefHat, Star }
         >
           <!-- Top row: icon + badge -->
           <div class="flex items-start justify-between">
-            <component
-              :is="iconMap[slide.icon]"
-              :size="36"
-              class="text-white/90"
-            />
+            <component :is="iconMap[slide.icon]" :size="36" class="text-white/90" />
             <span
               v-if="slide.badge"
               class="bg-white/25 backdrop-blur-sm text-white text-xs font-extrabold px-3 py-1 rounded-full"
@@ -41,7 +45,7 @@ const iconMap: Record<string, Component> = { Bike, Gift, Truck, ChefHat, Star }
 
           <!-- Bottom: text + cta -->
           <div>
-            <h3 class="font-sans text-xl md:text-2xl font-extrabold text-white leading-snug mb-1.5">
+            <h3 class="font-display text-xl md:text-2xl font-extrabold text-white leading-snug mb-1.5">
               {{ slide.title }}
             </h3>
             <p class="text-white/70 text-xs md:text-sm mb-4">{{ slide.subtitle }}</p>
@@ -74,5 +78,21 @@ const iconMap: Record<string, Component> = { Bike, Gift, Truck, ChefHat, Star }
     >
       <ChevronRight :size="18" />
     </button>
+
+    <!-- Dot indicators -->
+    <div
+      v-if="maxOffset > 0"
+      class="flex justify-center gap-2 mt-4"
+      aria-hidden="true"
+    >
+      <button
+        v-for="i in maxOffset + 1"
+        :key="i"
+        class="rounded-full transition-all duration-200"
+        :class="i - 1 === offset ? 'w-5 h-2 bg-accent' : 'w-2 h-2 bg-line-strong hover:bg-muted'"
+        :aria-label="`Слайд ${i}`"
+        @click="offset = i - 1"
+      />
+    </div>
   </div>
 </template>

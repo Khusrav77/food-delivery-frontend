@@ -21,6 +21,7 @@ export const useOrderStore = defineStore('order', () => {
 
   const current = ref<PlacedOrder | null>(null)
   const loadingCurrent = ref(false)
+  const currentError = ref<string | null>(null)
 
   async function place(payload: PlaceOrderPayload): Promise<PlacedOrder> {
     placing.value = true
@@ -52,8 +53,11 @@ export const useOrderStore = defineStore('order', () => {
 
   async function fetchOne(id: string): Promise<void> {
     loadingCurrent.value = true
+    currentError.value = null
     try {
       current.value = await fetchOrder(id)
+    } catch (e) {
+      currentError.value = (e as { message?: string }).message ?? 'Ошибка загрузки заказа'
     } finally {
       loadingCurrent.value = false
     }
@@ -89,7 +93,7 @@ export const useOrderStore = defineStore('order', () => {
   return {
     lastOrder, placing, error, place,
     list, loadingList, listError, fetchAll,
-    current, loadingCurrent, fetchOne,
+    current, loadingCurrent, currentError, fetchOne,
     cancel, rate, advanceCurrent,
   }
 })

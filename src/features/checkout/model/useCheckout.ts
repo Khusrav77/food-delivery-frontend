@@ -1,8 +1,9 @@
-import { reactive, ref, computed, watch } from 'vue'
+import { reactive, ref, computed, watch, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/entities/cart'
 import { useUserStore } from '@/entities/user'
 import { useAddressStore } from '@/entities/address'
+import { useCardStore } from '@/entities/card'
 import { useOrderStore, type OrderItem } from '@/entities/order'
 import type { ZoneInfo, PromoResult } from './types'
 import {
@@ -22,6 +23,7 @@ export function useCheckout() {
   const cart = useCartStore()
   const userStore = useUserStore()
   const addressStore = useAddressStore()
+  const cardStore = useCardStore()
   const orderStore = useOrderStore()
   const { placing } = storeToRefs(orderStore)
 
@@ -106,6 +108,8 @@ export function useCheckout() {
     },
   )
 
+  onUnmounted(() => clearTimeout(zoneTimer))
+
   // держим введённые бонусы в допустимом диапазоне (при вводе и при изменении суммы/баланса)
   watch([subtotal, bonusBalance, () => draft.bonusToUse], () => {
     const clamped = clampBonus(draft.bonusToUse, subtotal.value, bonusBalance.value)
@@ -157,9 +161,11 @@ export function useCheckout() {
   }
 
   async function init(): Promise<void> {
-    await addressStore.fetchAll()
+    await Promise.all([addressStore.fetchAll(), cardStore.fetchAll()])
     const primary = addressStore.primary
     if (primary) selectSavedAddress(primary.id)
+    const primaryCard = cardStore.primary
+    if (primaryCard) draft.savedCardId = primaryCard.id
   }
 
   async function submit(): Promise<boolean> {
@@ -201,6 +207,8 @@ export function useCheckout() {
     canSubmit,
     savedAddresses: computed(() => addressStore.list),
     addressesLoading: computed(() => addressStore.loading),
+    savedCards: computed(() => cardStore.list),
+    cardsLoading: computed(() => cardStore.loading),
     init,
     selectSavedAddress,
     useNewAddress,

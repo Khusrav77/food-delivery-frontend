@@ -9,9 +9,9 @@ const emit = defineEmits<{ success: [] }>()
 const { form, errors, serverError, loading, submit } = useRegisterForm()
 const showPassword = ref(false)
 
-const base = 'w-full px-3.5 py-2.5 rounded-xl border text-ink text-sm placeholder:text-faint focus-visible:outline-none focus:ring-2 transition-colors'
-const ok   = 'border-line bg-surface focus:border-accent focus:ring-accent/20'
-const err  = 'border-red-400 bg-white focus:border-red-400 focus:ring-red-200'
+const base = 'w-full px-3.5 py-2.5 rounded-xl border text-ink text-sm placeholder:text-faint focus-visible:outline-none focus-visible:ring-2 transition-colors'
+const ok   = 'border-line bg-surface focus-visible:border-accent focus-visible:ring-accent/20'
+const err  = 'border-red-400 bg-white focus-visible:border-red-400 focus-visible:ring-red-200'
 const cls  = (f: string, extra = '') => `${base} ${(errors.value as Record<string,string>)[f] ? err : ok} ${extra}`
 
 async function onSubmit(): Promise<void> {

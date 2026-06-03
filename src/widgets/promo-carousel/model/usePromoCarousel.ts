@@ -40,5 +40,30 @@ export function usePromoCarousel(containerRef: Readonly<Ref<HTMLElement | null>>
   function prev() { offset.value = Math.max(0, offset.value - 1) }
   function next() { offset.value = Math.min(maxOffset.value, offset.value + 1) }
 
-  return { slides: PROMO_SLIDES, cardWidth, translateX, offset, maxOffset, prev, next }
+  // Touch swipe support
+  let touchStartX = 0
+
+  function onTouchStart(e: TouchEvent) {
+    touchStartX = e.touches[0].clientX
+  }
+
+  function onTouchEnd(e: TouchEvent) {
+    const delta = touchStartX - e.changedTouches[0].clientX
+    if (Math.abs(delta) < 40) return
+    if (delta > 0) next()
+    else prev()
+  }
+
+  return {
+    slides: PROMO_SLIDES,
+    cardWidth,
+    translateX,
+    offset,
+    maxOffset,
+    visible,
+    prev,
+    next,
+    onTouchStart,
+    onTouchEnd,
+  }
 }

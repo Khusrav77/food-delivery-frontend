@@ -70,6 +70,8 @@ onUnmounted(() => {
                 v-if="displayImage"
                 :src="displayImage"
                 :alt="product.name"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover"
               />
               <div v-else class="w-full h-full flex items-center justify-center">

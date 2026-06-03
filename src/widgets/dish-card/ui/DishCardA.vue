@@ -39,7 +39,7 @@ function addToCart(e: MouseEvent): void {
   <article
     class="group cursor-pointer bg-surface rounded-3xl border border-line overflow-hidden flex flex-col
            hover:border-accent/30 hover:shadow-[0_16px_40px_-12px_rgba(251,146,60,0.25)]
-           transition-all duration-300 hover:-translate-y-1"
+           transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1"
     @click="emit('select', props.product)"
   >
     <!-- Gallery — inset with own rounded corners to create a frame effect -->
@@ -53,6 +53,8 @@ function addToCart(e: MouseEvent): void {
           v-if="gallery.current"
           :src="gallery.current"
           :alt="product.name"
+          loading="lazy"
+          decoding="async"
           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div v-else class="w-full h-full grid place-items-center">

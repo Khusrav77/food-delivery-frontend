@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { ArrowLeft, MapPin, CreditCard, MessageSquare, User, Phone, Truck, Star } from 'lucide-vue-next'
-import { useAdminOrderStore, STATUS_META, ORDER_STEPS, PAYMENT_LABEL, MOCK_COURIERS, OrderStatusTimeline } from '@/entities/order'
+import { useAdminOrderStore, STATUS_META, ORDER_STEPS, PAYMENT_LABEL, OrderStatusTimeline } from '@/entities/order'
 import type { OrderStatus } from '@/entities/order'
 import { useToastStore } from '@/shared/lib/toast'
 import { formatDateTime } from '@/shared/lib/date'
@@ -26,7 +26,11 @@ statusOptions.push({ value: 'cancelled', label: STATUS_META.cancelled.label })
 
 const courierOptions = [
   { id: null, name: '— Не назначен —' },
-  ...MOCK_COURIERS,
+  { id: 'c-1', name: 'Дмитрий Орлов' },
+  { id: 'c-2', name: 'Алексей Ковалёв' },
+  { id: 'c-3', name: 'Илья Петров' },
+  { id: 'c-4', name: 'Максим Фёдоров' },
+  { id: 'c-5', name: 'Евгений Сидоров' },
 ]
 
 onMounted(() => store.fetchOne(route.params.id as string))

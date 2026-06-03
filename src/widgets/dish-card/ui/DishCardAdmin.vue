@@ -39,6 +39,8 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
           v-if="gallery.current"
           :src="gallery.current"
           :alt="product.name"
+          loading="lazy"
+          decoding="async"
           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div v-else class="w-full h-full grid place-items-center">

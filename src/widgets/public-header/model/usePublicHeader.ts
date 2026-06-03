@@ -2,7 +2,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuth } from '@/features/auth'
 import { useCartStore } from '@/entities/cart'
-import { useFavoriteStore } from '@/features/favorite-toggle'
+import { useFavoriteStore } from '@/entities/favorite'
 
 export function usePublicHeader() {
   const auth = useAuth()

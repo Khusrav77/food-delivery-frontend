@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, useRouter, useRoute } from 'vue-router'
-import { onMounted } from 'vue'
-import { User, MapPin, ShoppingBag, Star, Bell, Ticket, CreditCard, Users, LogOut, ChevronRight } from 'lucide-vue-next'
+import { ref, onMounted } from 'vue'
+import { User, MapPin, ShoppingBag, Star, Bell, Ticket, CreditCard, Users, LogOut, ChevronRight, MoreHorizontal } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/entities/user'
 import { useNotificationStore } from '@/entities/notification'
@@ -24,6 +24,12 @@ const NAV = [
   { to: '/account/cards',         label: 'Мои карты',    icon: CreditCard },
   { to: '/account/referral',      label: 'Реферальная',  icon: Users },
 ]
+
+// Первые 4 всегда видны, остальные — под «Ещё»
+const MOBILE_NAV_PRIMARY = NAV.slice(0, 4)
+const MOBILE_NAV_EXTRA = NAV.slice(4)
+
+const moreOpen = ref(false)
 
 function isActive(to: string): boolean {
   return route.path.startsWith(to)
@@ -96,26 +102,60 @@ onMounted(notificationStore.fetchAll)
     </nav>
   </aside>
 
-  <!-- Mobile tab bar -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface border-t border-line flex">
-    <RouterLink
-      v-for="item in NAV"
-      :key="item.to"
-      :to="item.to"
-      class="flex-1 flex flex-col items-center gap-0.5 py-2.5 text-[10px] font-medium transition-colors"
-      :class="isActive(item.to) ? 'text-accent' : 'text-faint'"
-    >
-      <span class="relative">
-        <component :is="item.icon" :size="20" />
-        <span
-          v-if="item.to === '/account/notifications' && unreadCount > 0"
-          class="absolute -top-1 -right-1.5 min-w-[14px] h-[14px] px-0.5 rounded-full bg-accent text-white
-                 text-[9px] font-bold leading-none flex items-center justify-center"
-        >
-          {{ unreadCount }}
+  <!-- Mobile tab bar: 4 primary + «Ещё» -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface border-t border-line">
+    <div class="flex">
+      <RouterLink
+        v-for="item in MOBILE_NAV_PRIMARY"
+        :key="item.to"
+        :to="item.to"
+        class="flex-1 flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-medium transition-colors"
+        :class="isActive(item.to) ? 'text-accent' : 'text-faint'"
+      >
+        <span class="relative">
+          <component :is="item.icon" :size="22" />
+          <span
+            v-if="item.to === '/account/notifications' && unreadCount > 0"
+            class="absolute -top-1 -right-1.5 min-w-[14px] h-[14px] px-0.5 rounded-full bg-accent text-white
+                   text-[9px] font-bold leading-none flex items-center justify-center"
+          >{{ unreadCount }}</span>
         </span>
-      </span>
-      {{ item.label }}
-    </RouterLink>
+        {{ item.label }}
+      </RouterLink>
+
+      <!-- Ещё -->
+      <button
+        class="flex-1 flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-medium transition-colors"
+        :class="moreOpen ? 'text-accent' : 'text-faint'"
+        @click="moreOpen = !moreOpen"
+      >
+        <MoreHorizontal :size="22" />
+        Ещё
+      </button>
+    </div>
+
+    <!-- Extra items dropdown -->
+    <Transition name="slide-up">
+      <div v-if="moreOpen" class="border-t border-line bg-surface grid grid-cols-2">
+        <RouterLink
+          v-for="item in MOBILE_NAV_EXTRA"
+          :key="item.to"
+          :to="item.to"
+          class="flex items-center gap-2.5 px-4 py-3 text-sm font-medium transition-colors"
+          :class="isActive(item.to) ? 'text-accent' : 'text-muted hover:text-ink'"
+          @click="moreOpen = false"
+        >
+          <component :is="item.icon" :size="18" class="shrink-0" :class="isActive(item.to) ? 'text-accent' : 'text-faint'" />
+          {{ item.label }}
+        </RouterLink>
+      </div>
+    </Transition>
   </nav>
 </template>
+
+<style scoped>
+.slide-up-enter-active,
+.slide-up-leave-active { transition: transform 0.2s ease, opacity 0.2s ease; }
+.slide-up-enter-from,
+.slide-up-leave-to { transform: translateY(100%); opacity: 0; }
+</style>

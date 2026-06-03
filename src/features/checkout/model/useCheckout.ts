@@ -1,4 +1,4 @@
-import { reactive, ref, computed, watch } from 'vue'
+import { reactive, ref, computed, watch, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/entities/cart'
 import { useUserStore } from '@/entities/user'
@@ -107,6 +107,8 @@ export function useCheckout() {
       }, 500)
     },
   )
+
+  onUnmounted(() => clearTimeout(zoneTimer))
 
   // держим введённые бонусы в допустимом диапазоне (при вводе и при изменении суммы/баланса)
   watch([subtotal, bonusBalance, () => draft.bonusToUse], () => {

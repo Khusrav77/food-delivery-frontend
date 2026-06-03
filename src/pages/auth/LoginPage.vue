@@ -9,7 +9,8 @@ const toast  = useToastStore()
 
 function onSuccess(): void {
   toast.success('Добро пожаловать!')
-  const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
+  const raw = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
+  const redirect = raw.startsWith('/') && !raw.startsWith('//') ? raw : '/'
   router.push(redirect)
 }
 </script>

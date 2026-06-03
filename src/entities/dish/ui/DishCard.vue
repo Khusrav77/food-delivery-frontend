@@ -56,6 +56,8 @@ function formatSizes(mi: Product['menuItems'][number]) {
       <img
         :src="previewImage || fallback"
         :alt="product.name"
+        loading="lazy"
+        decoding="async"
         class="w-full h-full object-cover"
         @error="($event.target as HTMLImageElement).src = fallback"
       />

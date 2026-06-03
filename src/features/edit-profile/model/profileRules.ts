@@ -1,4 +1,5 @@
 import type { IUpdateProfilePayload } from '@/entities/user'
+import { isEmail, isPhone } from '@/shared/lib/validators'
 
 export interface ProfileErrors {
   firstName?: string
@@ -7,15 +8,12 @@ export interface ProfileErrors {
   phone?: string
 }
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const PHONE_RE = /^[+7-8][\d\s\-()]{9,}$/
-
 export function validateProfile(p: IUpdateProfilePayload): ProfileErrors {
   const e: ProfileErrors = {}
   if (!p.firstName.trim()) e.firstName = 'Введите имя'
   if (!p.lastName.trim()) e.lastName = 'Введите фамилию'
-  if (p.email && !EMAIL_RE.test(p.email)) e.email = 'Некорректный email'
-  if (p.phone && !PHONE_RE.test(p.phone)) e.phone = 'Некорректный телефон'
+  if (p.email && !isEmail(p.email)) e.email = 'Некорректный email'
+  if (p.phone && !isPhone(p.phone)) e.phone = 'Некорректный телефон'
   return e
 }
 

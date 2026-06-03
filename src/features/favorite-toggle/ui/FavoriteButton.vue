@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Heart } from 'lucide-vue-next'
-import { useFavoriteStore } from '../model/store'
+import { useFavoriteStore } from '@/entities/favorite'
 
 const props = withDefaults(defineProps<{ productId: string; size?: number }>(), { size: 18 })
 

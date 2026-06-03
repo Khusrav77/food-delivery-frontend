@@ -86,6 +86,8 @@ function goToCheckout(): void {
                 v-if="item.image"
                 :src="item.image"
                 :alt="item.productName"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover"
               />
               <UtensilsCrossed v-else :size="22" class="text-faint opacity-30" />
@@ -100,25 +102,27 @@ function goToCheckout(): void {
 
               <!-- Qty + price -->
               <div class="flex items-center justify-between mt-2">
-                <div class="flex items-center gap-1.5 bg-surface rounded-lg border border-line p-0.5">
+                <div class="flex items-center gap-0.5 bg-surface rounded-lg border border-line p-0.5">
                   <button
-                    class="w-7 h-7 flex items-center justify-center rounded-md text-muted
-                           hover:text-ink hover:bg-surface-soft transition-colors"
+                    class="w-9 h-9 flex items-center justify-center rounded-md text-muted
+                           hover:text-ink hover:bg-surface-soft transition-colors
+                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
                     :aria-label="`Уменьшить количество ${item.productName}`"
                     @click="cart.updateQuantity(item.menuItemId, item.quantity - 1)"
                   >
-                    <Minus :size="12" />
+                    <Minus :size="13" />
                   </button>
-                  <span class="text-sm font-semibold text-ink min-w-[18px] text-center leading-none select-none">
+                  <span class="text-sm font-semibold text-ink min-w-[22px] text-center leading-none select-none">
                     {{ item.quantity }}
                   </span>
                   <button
-                    class="w-7 h-7 flex items-center justify-center rounded-md text-muted
-                           hover:text-accent hover:bg-accent-soft transition-colors"
+                    class="w-9 h-9 flex items-center justify-center rounded-md text-muted
+                           hover:text-accent hover:bg-accent-soft transition-colors
+                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
                     :aria-label="`Увеличить количество ${item.productName}`"
                     @click="cart.updateQuantity(item.menuItemId, item.quantity + 1)"
                   >
-                    <Plus :size="12" />
+                    <Plus :size="13" />
                   </button>
                 </div>
                 <span class="text-sm font-semibold text-ink">
@@ -129,13 +133,13 @@ function goToCheckout(): void {
 
             <!-- Remove -->
             <button
-              class="shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-faint self-start mt-0.5
+              class="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg text-faint self-start
                      hover:text-red-500 hover:bg-red-50 transition-colors
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
               :aria-label="`Удалить ${item.productName} из корзины`"
               @click="cart.removeItem(item.menuItemId)"
             >
-              <Trash2 :size="13" />
+              <Trash2 :size="14" />
             </button>
           </div>
         </div>

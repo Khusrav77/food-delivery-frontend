@@ -2,7 +2,7 @@
 import { RouterLink, useRoute } from 'vue-router'
 import {
   LayoutDashboard, ShoppingBag, Store, UtensilsCrossed,
-  Bike, Users, BarChart3, Tag, Settings, ChevronRight,
+  Bike, Users, BarChart3, Tag, Settings, ChevronRight, MapPin, Gift,
 } from 'lucide-vue-next'
 
 interface NavItem {
@@ -31,13 +31,15 @@ const groups: NavGroup[] = [
       { label: 'Меню', to: '/admin/menu', icon: UtensilsCrossed },
       { label: 'Курьеры', to: '/admin/couriers', icon: Bike },
       { label: 'Клиенты', to: '/admin/customers', icon: Users },
+      { label: 'Зоны доставки', to: '/admin/delivery-zones', icon: MapPin },
+      { label: 'Промоакции', to: '/admin/promotions', icon: Tag },
+      { label: 'Бонусы', to: '/admin/bonus-settings', icon: Gift },
     ],
   },
   {
     title: 'Аналитика',
     items: [
       { label: 'Аналитика', to: '/admin/analytics', icon: BarChart3 },
-      { label: 'Промоакции', to: '/admin/promotions', icon: Tag },
     ],
   },
   {

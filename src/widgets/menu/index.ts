@@ -1,0 +1,5 @@
+export { default as MenuHeader } from './MenuHeader.vue'
+export { default as ProductFilters } from './ProductFilters.vue'
+export { default as CategoryTabs } from './CategoryTabs.vue'
+export { default as ProductGrid } from './ProductGrid.vue'
+export { default as EmptyProducts } from './EmptyProducts.vue'

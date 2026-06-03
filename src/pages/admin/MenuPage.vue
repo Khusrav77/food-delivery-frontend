@@ -3,11 +3,7 @@ import { onMounted } from 'vue'
 
 import { useMenuPage } from './model/useMenuPage'
 
-import MenuHeader from '@/widgets/menu/MenuHeader.vue'
-import ProductFilters from '@/widgets/menu/ProductFilters.vue'
-import CategoryTabs from '@/widgets/menu/CategoryTabs.vue'
-import ProductGrid from '@/widgets/menu/ProductGrid.vue'
-import EmptyProducts from '@/widgets/menu/EmptyProducts.vue'
+import { MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts } from '@/widgets/menu'
 
 import { DishFormModal } from '@/features/product-form'
 import { CategoryManagerModal } from '@/features/category-manager'

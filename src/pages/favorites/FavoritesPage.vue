@@ -43,13 +43,13 @@ onMounted(() => {
     </div>
 
     <!-- Loading -->
-    <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div v-if="loading" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
       <div
-        v-for="i in 6"
+        v-for="i in 8"
         :key="i"
         class="bg-surface rounded-3xl border border-line overflow-hidden animate-pulse"
       >
-        <div class="px-3 pt-3">
+        <div class="px-2.5 pt-2.5">
           <div class="aspect-[4/3] bg-surface-soft rounded-2xl" />
         </div>
         <div class="p-4 space-y-3">
@@ -85,7 +85,7 @@ onMounted(() => {
     </div>
 
     <!-- Grid -->
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div v-else class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
       <DishCardA
         v-for="product in favoriteProducts"
         :key="product.id"
@@ -98,6 +98,7 @@ onMounted(() => {
     <DishPreviewModal
       v-if="selectedProduct"
       :product="selectedProduct"
+      :show="selectedProduct !== null"
       @close="selectedProduct = null"
     />
   </main>

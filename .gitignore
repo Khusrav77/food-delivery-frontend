@@ -15,6 +15,12 @@ dist-ssr
 .env.local
 .env.*.local
 
+# Claude local workflow (personal, not for team)
+.claude/local.md
+.claude/memory/inbox.md
+.claude/memory/active.md
+.claude/memory/outbox.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

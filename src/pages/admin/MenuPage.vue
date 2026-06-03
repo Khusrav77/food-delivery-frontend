@@ -3,11 +3,7 @@ import { onMounted } from 'vue'
 
 import { useMenuPage } from './model/useMenuPage'
 
-import MenuHeader from '@/widgets/menu/MenuHeader.vue'
-import ProductFilters from '@/widgets/menu/ProductFilters.vue'
-import CategoryTabs from '@/widgets/menu/CategoryTabs.vue'
-import ProductGrid from '@/widgets/menu/ProductGrid.vue'
-import EmptyProducts from '@/widgets/menu/EmptyProducts.vue'
+import { MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts } from '@/widgets/menu'
 
 import { DishFormModal } from '@/features/product-form'
 import { CategoryManagerModal } from '@/features/category-manager'
@@ -35,9 +31,17 @@ onMounted(menu.init)
 
     <CategoryTabs v-model="menu.activeCategoryId" />
 
+    <p
+      v-if="menu.filteredProducts.length && !menu.canSort"
+      class="text-xs text-faint"
+    >
+      Выберите конкретную категорию (без поиска и фильтра по тегам), чтобы менять порядок блюд перетаскиванием.
+    </p>
+
     <ProductGrid
       v-if="menu.filteredProducts.length"
       :products="menu.filteredProducts"
+      :sortable="menu.canSort"
       @edit="menu.openEdit"
     />
 

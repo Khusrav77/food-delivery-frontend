@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import { Pencil, Trash2, UtensilsCrossed } from 'lucide-vue-next'
+import { ChevronUp, ChevronDown, Pencil, Trash2, UtensilsCrossed } from 'lucide-vue-next'
 import { type Product } from '@/entities/dish'
 import { useDishCard } from '../model/useDishCard'
 import CardTagList from './CardTagList.vue'
 
-const props = defineProps<{ product: Product }>()
+const props = defineProps<{
+  product: Product
+  sortable?: boolean
+  canMoveUp?: boolean
+  canMoveDown?: boolean
+}>()
 const emit = defineEmits<{
   edit: [product: Product]
   remove: [id: string]
   toggleActive: [id: string]
+  moveUp: []
+  moveDown: []
 }>()
 
 const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } = useDishCard(props.product)
@@ -32,6 +39,8 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
           v-if="gallery.current"
           :src="gallery.current"
           :alt="product.name"
+          loading="lazy"
+          decoding="async"
           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div v-else class="w-full h-full grid place-items-center">
@@ -41,6 +50,32 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
         <!-- Tags -->
         <div v-if="tags.length" class="absolute top-2.5 left-2.5 max-w-[72%]">
           <CardTagList :tags="tags" variant="overlay" />
+        </div>
+
+        <!-- Sort controls (sort mode only) -->
+        <div v-if="sortable" class="absolute top-2 right-2 z-10 flex flex-col gap-1">
+          <button
+            type="button"
+            class="grid place-items-center w-7 h-7 rounded-lg bg-white/90 backdrop-blur-sm shadow-sm transition-colors
+                   text-muted hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+            :disabled="!canMoveUp"
+            aria-label="Переместить выше"
+            @click.stop="emit('moveUp')"
+          >
+            <ChevronUp :size="14" />
+          </button>
+          <button
+            type="button"
+            class="grid place-items-center w-7 h-7 rounded-lg bg-white/90 backdrop-blur-sm shadow-sm transition-colors
+                   text-muted hover:text-accent disabled:opacity-30 disabled:cursor-not-allowed
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+            :disabled="!canMoveDown"
+            aria-label="Переместить ниже"
+            @click.stop="emit('moveDown')"
+          >
+            <ChevronDown :size="14" />
+          </button>
         </div>
 
         <!-- Inactive overlay -->

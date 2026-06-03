@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { X, Pencil, Trash2, Check } from 'lucide-vue-next'
+import { X, Pencil, Trash2, Check, ChevronUp, ChevronDown } from 'lucide-vue-next'
 import { useCategoryManager } from '../model/useCategoryManager'
 
 const emit = defineEmits<{ close: [] }>()
 
 const {
-  categoryStore,
   productStore,
+  orderedCategories,
   newName,
   editingId,
   editingName,
@@ -14,6 +14,8 @@ const {
   confirmEdit,
   addCategory,
   remove,
+  moveCategoryUp,
+  moveCategoryDown,
 } = useCategoryManager()
 </script>
 
@@ -30,44 +32,66 @@ const {
           </button>
         </div>
 
-        <div class="p-5 space-y-2 max-h-80 overflow-y-auto">
-          <div
-            v-for="cat in categoryStore.categories"
-            :key="cat.id"
-            class="flex items-center gap-2 group"
-          >
-            <template v-if="editingId === cat.id">
-              <input
-                v-model="editingName"
-                class="flex-1 border border-accent rounded-lg px-2 py-1 text-sm focus:outline-none"
-                @keyup.enter="confirmEdit(cat.id)"
-                @keyup.escape="editingId = null"
-              />
-              <button class="p-1 text-accent hover:text-accent-hover" @click="confirmEdit(cat.id)">
-                <Check :size="16" />
-              </button>
-            </template>
-            <template v-else>
-              <span class="flex-1 text-sm text-ink">{{ cat.name }}</span>
-              <span class="text-xs text-faint">
-                {{ productStore.products.filter(d => d.categoryId === cat.id).length }} блюд
-              </span>
-              <button
-                class="p-1 text-faint hover:text-accent transition-colors"
-                @click="startEdit(cat.id, cat.name)"
-              >
-                <Pencil :size="14" />
-              </button>
-              <button
-                class="p-1 text-faint hover:text-red-500 transition-colors"
-                @click="remove(cat.id)"
-              >
-                <Trash2 :size="14" />
-              </button>
-            </template>
+        <div class="p-5 max-h-80 overflow-y-auto">
+          <div class="space-y-2">
+            <div
+              v-for="(cat, index) in orderedCategories"
+              :key="cat.id"
+              class="flex items-center gap-2 group"
+            >
+              <!-- Move buttons -->
+              <div class="flex flex-col gap-0.5">
+                <button
+                  class="p-0.5 rounded text-faint transition-colors hover:text-accent disabled:opacity-25 disabled:cursor-not-allowed"
+                  :disabled="index === 0"
+                  aria-label="Переместить выше"
+                  @click="moveCategoryUp(cat.id)"
+                >
+                  <ChevronUp :size="14" />
+                </button>
+                <button
+                  class="p-0.5 rounded text-faint transition-colors hover:text-accent disabled:opacity-25 disabled:cursor-not-allowed"
+                  :disabled="index === orderedCategories.length - 1"
+                  aria-label="Переместить ниже"
+                  @click="moveCategoryDown(cat.id)"
+                >
+                  <ChevronDown :size="14" />
+                </button>
+              </div>
+
+              <template v-if="editingId === cat.id">
+                <input
+                  v-model="editingName"
+                  class="flex-1 border border-accent rounded-lg px-2 py-1 text-sm focus:outline-none"
+                  @keyup.enter="confirmEdit(cat.id)"
+                  @keyup.escape="editingId = null"
+                />
+                <button class="p-1 text-accent hover:text-accent-hover" @click="confirmEdit(cat.id)">
+                  <Check :size="16" />
+                </button>
+              </template>
+              <template v-else>
+                <span class="flex-1 text-sm text-ink">{{ cat.name }}</span>
+                <span class="text-xs text-faint">
+                  {{ productStore.products.filter(d => d.categoryId === cat.id).length }} блюд
+                </span>
+                <button
+                  class="p-1 text-faint hover:text-accent transition-colors"
+                  @click="startEdit(cat.id, cat.name)"
+                >
+                  <Pencil :size="14" />
+                </button>
+                <button
+                  class="p-1 text-faint hover:text-red-500 transition-colors"
+                  @click="remove(cat.id)"
+                >
+                  <Trash2 :size="14" />
+                </button>
+              </template>
+            </div>
           </div>
 
-          <p v-if="!categoryStore.categories.length" class="text-faint text-sm text-center py-4">
+          <p v-if="!orderedCategories.length" class="text-faint text-sm text-center py-4">
             Нет категорий
           </p>
         </div>

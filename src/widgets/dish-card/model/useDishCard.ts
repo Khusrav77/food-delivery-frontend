@@ -8,8 +8,8 @@ import {
   getProductTagIds,
   getMinPrice,
   hasMultiplePrices,
-  formatPrice,
 } from '@/entities/dish'
+import { formatPrice } from '@/shared/lib/money'
 import { useTagStore, resolveTagStyle, type TagColor } from '@/entities/tag'
 import { useImageGallery } from './useImageGallery'
 

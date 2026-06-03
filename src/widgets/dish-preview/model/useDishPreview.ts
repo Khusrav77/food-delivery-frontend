@@ -1,5 +1,6 @@
 import { ref, computed, watch, type Ref } from 'vue'
-import { type Product, type MenuItem, getActiveItems, formatPrice } from '@/entities/dish'
+import { type Product, type MenuItem, getActiveItems } from '@/entities/dish'
+import { formatPrice } from '@/shared/lib/money'
 
 export function useDishPreview(productRef: Ref<Product | null>) {
   const selectedItem = ref<MenuItem | null>(null)

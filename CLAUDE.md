@@ -86,85 +86,129 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 При работе над этим репозиторием следуй **`.claude/docs/AI_TEAM.md`** и правилам из **`.claude/rules/`**. Каждый ответ — на русском, код/коммиты/имена — на английском.
 
-**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind). Admin-панель реализована со строгим разделением UI / Logic / Business Rules. API-слой подключён к реальному бэкенду.
+**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind CSS v4). Admin-панель и Client-часть реализованы со строгим разделением UI / Logic / Business Rules. API-слой подключён к реальному бэкенду. Проведён полный аудит + исправления: баги, безопасность (Open Redirect), FSD-нарушения (entities/favorite, DishCardPublic удалён), типографика (Plus Jakarta Sans), мобильный UX (touch targets, carousel swipe, checkout bottom bar).
+
+## Workflow (Inbox → Active → Outbox)
+
+Задачи и ТЗ хранятся в `.claude/memory/` (gitignored — только локально):
+
+| Файл | Назначение |
+|---|---|
+| `inbox.md` | Новые ТЗ и идеи — пиши сюда перед сессией |
+| `active.md` | Текущая задача: ТЗ + декомпозиция на блоки + прогресс |
+| `outbox.md` | Done-архив: что сделано, коммиты, решения |
+
+**Процесс:** ты пишешь ТЗ в `inbox.md` → Claude переносит в `active.md` и дополняет декомпозицией → выполняет блоки, отмечая `[x]` → по завершению переносит запись в `outbox.md` и очищает `active.md`.
+
+Локальные пути, порты и команды запуска — в `.claude/local.md` (gitignored).
 
 ## Commands
 
 ### Фронтенд
-- `node node_modules/vite/bin/vite.js` — запуск dev-сервера (Node 22 через nvm)
+- `node node_modules/vite/bin/vite.js` — dev-сервер (Node 22 через nvm; полная команда в `.claude/local.md`)
 - `npm run build` — type-check (`vue-tsc -b`) + production build в `dist/`
 - `npm run preview` — превью production-сборки
 
 > Нет test runner и linter. Ошибки типов — через `vue-tsc` при сборке. Флаги: `noUnusedLocals`, `noUnusedParameters`, `erasableSyntaxOnly`, `noFallthroughCasesInSwitch`.
 
-### Бэкенд (`~/GitProjects/Java-Repositories/foo-delivery-backend-app`)
-- `docker compose -f docker/docker-compose.yml up -d` — запуск PostgreSQL (порт 5437)
-- `./mvnw spring-boot:run` — запуск Spring Boot (порт 8080)
-
-### Запуск полного стека (один раз)
-
-```bash
-# 1. Postgres (если не запущен)
-docker compose -f ~/GitProjects/Java-Repositories/foo-delivery-backend-app/docker/docker-compose.yml up -d
-
-# 2. Бэкенд (в отдельном терминале)
-cd ~/GitProjects/Java-Repositories/foo-delivery-backend-app && ./mvnw spring-boot:run
-
-# 3. Фронтенд (в отдельном терминале, Node 22)
-cd ~/GitProjects/Vue/food-delivery-vue-app && node node_modules/vite/bin/vite.js
-```
-
-Приложение: **http://localhost:5173**
-
-### Переменные окружения
-- `.env` — `VITE_API_URL=/api/v1` (Vite proxy → Spring Boot :8080)
-- Vite proxy `/api` → `http://localhost:8080` настроен в `vite.config.ts`
+### Бэкенд и полный стек
+Команды запуска с локальными путями — в **`.claude/local.md`** (gitignored).
+Используй `/run-app` для автоматического запуска всего стека.
 
 ## Backend connection
 
-Бэкенд: `~/GitProjects/Java-Repositories/foo-delivery-backend-app`
-- Spring Boot 3, PostgreSQL (порт 5437, БД `food_delivery_db`)
 - Base URL: `http://localhost:8080/api/v1`
-- CORS настроен для `http://localhost:5173` (`config/WebConfig.java`)
+- CORS настроен для `http://localhost:5173`
 - API-слой фронта: `src/shared/api/http.ts` (Axios + JWT interceptor)
 - Entity API-функции: `src/entities/*/api/*.ts`
+- Локальные пути и порты → `.claude/local.md`
 
 ## Stack & structure
 
-Vue 3 + TypeScript + Vite + Pinia + Vue Router + Tailwind CSS v4.
+Vue 3 + TypeScript + Vite + Pinia + Vue Router + Tailwind CSS v4.  
+**Шрифты:** `--font-display: "Plus Jakarta Sans"` (заголовки) + `--font-sans: "Nunito"` (body).
 
 ```
 src/
-├── app/              # router, layouts, styles
+├── app/              # router, layouts (PublicLayout, AdminLayout), styles/index.css
 ├── pages/
-│   └── admin/
-│       ├── model/    # page-composables (useMenuPage и др.)
-│       └── *.vue     # тонкие страницы — только composition
+│   ├── admin/        # admin-страницы + model/useMenuPage.ts
+│   ├── account/      # профиль, адреса, заказы, бонусы, промокоды, карты, реферал, уведомления
+│   │   └── AccountLayout.vue
+│   ├── auth/         # login, register, forgot-password, reset-password
+│   ├── checkout/     # CheckoutPage.vue, CheckoutSuccessPage.vue
+│   ├── favorites/    # FavoritesPage.vue
+│   ├── home/
+│   │   ├── model/    # useHomePage.ts, menuSections.ts
+│   │   └── HomePage.vue
+│   ├── orders/       # TrackOrderPage.vue
+│   └── search/
+│       ├── model/    # useSearchPage.ts — page composable
+│       └── SearchPage.vue
 ├── widgets/
+│   ├── public-header/    # PublicHeader + usePublicHeader
+│   ├── public-footer/    # PublicFooter + footerNav config
+│   ├── account-sidebar/  # десктоп sidebar + мобильный bottom tab bar (4 + «Ещё»)
+│   ├── cart-drawer/      # CartDrawer (side panel)
+│   ├── dish-card/        # DishCardA (client), DishCardAdmin; useDishCard, useImageGallery
+│   ├── dish-preview/     # DishPreviewModal + useDishPreview
+│   ├── promo-carousel/   # PromoCarousel (swipe + dots) + usePromoCarousel
+│   ├── products-section/ # ProductsSection
+│   ├── category-strip/   # CategoryStrip
+│   ├── loyalty-banner/   # LoyaltyBanner
 │   ├── admin-sidebar/
 │   ├── admin-header/
-│   ├── menu/         # MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts
-│   └── dashboard/    # DashboardStats, RecentOrdersTable, OrderStatusBreakdown, TopRestaurants
+│   ├── menu/             # MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts
+│   └── dashboard/        # DashboardStats, RecentOrdersTable, OrderStatusBreakdown, TopRestaurants
 ├── features/
-│   ├── product-form/         # CRUD блюда
-│   │   ├── model/
-│   │   │   ├── types.ts      # MenuItemDraft
-│   │   │   ├── dishDraft.ts  # чистые функции: validate, transform
-│   │   │   └── useDishForm.ts
-│   │   └── ui/
-│   ├── menu-filter/          # фильтрация меню (useMenuFilter)
-│   ├── category-manager/     # CRUD категорий (useCategoryManager)
-│   └── tag-manager/          # CRUD тегов (useTagManager)
+│   ├── auth/             # login, register, forgot, reset-confirm; authRules → shared/lib/validators
+│   ├── checkout/         # useCheckout, checkoutDraft, checkoutTotals, deliveryZone, 5 секций UI
+│   ├── edit-profile/     # useProfileForm, profileRules → shared/lib/validators
+│   ├── favorite-toggle/  # FavoriteButton.vue (store → entities/favorite)
+│   ├── dish-search/      # useSearch
+│   ├── address-manager/  # useAddressManager, AddressCard, AddressFormModal
+│   ├── card-manager/     # useCardManager, CardItem, CardFormModal
+│   ├── order-history/    # useOrderHistory, useReorder, OrderCard, OrderDetailView, OrderFilters
+│   ├── order-rating/     # useOrderRating, ratingDraft, RatingModal, StarRating
+│   ├── order-tracking/   # useOrderTracking, trackingRules, OrderTrackingView
+│   ├── product-form/     # CRUD блюда (admin)
+│   ├── menu-filter/      # фильтрация меню admin (useMenuFilter)
+│   ├── category-manager/ # CRUD + drag-and-drop сортировка категорий
+│   ├── reorder-products/ # drag-and-drop сортировка блюд
+│   └── tag-manager/      # CRUD тегов (admin)
 ├── entities/
+│   ├── favorite/     # useFavoriteStore — localStorage persist (используется из widgets + pages)
 │   ├── dish/         # Product/MenuItem: types, store, api, ui/DishCard
 │   ├── category/     # types, store, api
-│   └── tag/          # types, store, api, ui/TagBadge
+│   ├── tag/          # types, store, api, ui/TagBadge
+│   ├── user/         # IUser, useUserStore, authApi
+│   ├── cart/         # CartItem, useCartStore
+│   ├── order/        # PlacedOrder, useOrderStore, useAdminOrderStore, OrderStatusTimeline
+│   ├── address/      # IAddress, useAddressStore, addressApi
+│   ├── card/         # ICard, useCardStore, cardApi, cardBrand
+│   ├── bonus/        # IBonusEntry, useBonusStore, bonusApi
+│   ├── promo/        # IPromoCode, usePromoStore, promoApi, discount
+│   ├── referral/     # IReferral, useReferralStore, referralApi
+│   └── notification/ # INotification, useNotificationStore, notificationApi
 └── shared/
     ├── api/          # http.ts (Axios + JWT interceptor)
+    ├── lib/
+    │   ├── validators.ts  # EMAIL_RE, PHONE_RE, isEmail, isPhone, isIdentifier
+    │   ├── money.ts       # formatPrice
+    │   ├── date.ts        # formatDateTime
+    │   ├── position.ts    # sortByPosition, diffChanged
+    │   ├── toast.ts       # useToastStore
+    │   └── useScrollSpy.ts
     └── ui/
+        ├── BackToTop/
+        ├── Sortable/         # типизированная обёртка над vuedraggable
         ├── StatsCard/
+        ├── Toast/
         └── UnderConstruction/  # виджет-заглушка для страниц "в разработке"
 ```
+
+> Порядок категорий и блюд хранится в поле `position`; админка меняет его перетаскиванием (`vuedraggable`), стор пересортировывает после fetch — клиент и админка выводят в одном порядке.  
+> `useFavoriteStore` живёт в `entities/favorite` — он shared state для widgets (header) и pages (favorites). `features/favorite-toggle` содержит только UI-компонент `FavoriteButton`.
 
 ### Ключевые архитектурные правила
 

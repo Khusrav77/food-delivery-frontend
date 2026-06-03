@@ -2,6 +2,8 @@
 import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { X, ShoppingCart } from 'lucide-vue-next'
 import { type Product, formatItemLabel } from '@/entities/dish'
+import { useCartStore } from '@/entities/cart'
+import { useToastStore } from '@/shared/lib/toast'
 import { useDishPreview } from '../model/useDishPreview'
 
 const props = defineProps<{ product: Product | null; show: boolean }>()
@@ -10,9 +12,26 @@ const emit = defineEmits<{ close: [] }>()
 const { selectedItem, activeItems, displayPrice, displayImage, selectItem } =
   useDishPreview(computed(() => props.product))
 
+const cart = useCartStore()
+const toast = useToastStore()
+
 watch(() => props.show, (isOpen) => {
   document.body.style.overflow = isOpen ? 'hidden' : ''
 })
+
+function addToCart(): void {
+  if (!selectedItem.value || !props.product) return
+  cart.addItem({
+    menuItemId: selectedItem.value.id,
+    productId: props.product.id,
+    productName: props.product.name,
+    variantName: formatItemLabel(selectedItem.value),
+    price: selectedItem.value.price,
+    image: displayImage.value,
+  })
+  toast.success(`${props.product.name} добавлен в корзину`)
+  emit('close')
+}
 
 function onBackdropClick(e: MouseEvent): void {
   if (e.target === e.currentTarget) emit('close')
@@ -51,6 +70,8 @@ onUnmounted(() => {
                 v-if="displayImage"
                 :src="displayImage"
                 :alt="product.name"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover"
               />
               <div v-else class="w-full h-full flex items-center justify-center">
@@ -103,7 +124,9 @@ onUnmounted(() => {
                 <button
                   class="flex items-center gap-2 px-5 py-3
                          bg-accent hover:bg-accent-hover active:bg-orange-600
-                         text-white font-medium rounded-lg transition-colors"
+                         text-white font-medium rounded-lg transition-colors
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                  @click="addToCart()"
                 >
                   <ShoppingCart :size="18" />
                   В корзину

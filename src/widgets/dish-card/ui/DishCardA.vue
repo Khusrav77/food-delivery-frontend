@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ShoppingCart, UtensilsCrossed } from 'lucide-vue-next'
-import { type Product } from '@/entities/dish'
+import { type Product, getActiveItems, formatItemLabel } from '@/entities/dish'
+import { useCartStore } from '@/entities/cart'
+import { useToastStore } from '@/shared/lib/toast'
 import { FavoriteButton } from '@/features/favorite-toggle'
 import { useDishCard } from '../model/useDishCard'
 import CardTagList from './CardTagList.vue'
@@ -9,13 +11,35 @@ const props = defineProps<{ product: Product }>()
 const emit = defineEmits<{ select: [product: Product] }>()
 
 const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } = useDishCard(props.product)
+
+const cart = useCartStore()
+const toast = useToastStore()
+
+function addToCart(e: MouseEvent): void {
+  e.stopPropagation()
+  const activeItems = getActiveItems(props.product)
+  if (isMulti.value || activeItems.length === 0) {
+    emit('select', props.product)
+    return
+  }
+  const item = activeItems[0]
+  cart.addItem({
+    menuItemId: item.id,
+    productId: props.product.id,
+    productName: props.product.name,
+    variantName: formatItemLabel(item),
+    price: item.price,
+    image: item.images[0]?.url ?? null,
+  })
+  toast.success(`${props.product.name} добавлен в корзину`)
+}
 </script>
 
 <template>
   <article
     class="group cursor-pointer bg-surface rounded-3xl border border-line overflow-hidden flex flex-col
            hover:border-accent/30 hover:shadow-[0_16px_40px_-12px_rgba(251,146,60,0.25)]
-           transition-all duration-300 hover:-translate-y-1"
+           transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1"
     @click="emit('select', props.product)"
   >
     <!-- Gallery — inset with own rounded corners to create a frame effect -->
@@ -29,6 +53,8 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
           v-if="gallery.current"
           :src="gallery.current"
           :alt="product.name"
+          loading="lazy"
+          decoding="async"
           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div v-else class="w-full h-full grid place-items-center">
@@ -94,8 +120,8 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
           class="flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-medium text-white
                  bg-accent hover:bg-accent-hover active:bg-orange-600 rounded-xl transition-colors
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-          aria-label="Добавить в корзину"
-          @click.stop
+          :aria-label="isMulti ? 'Выбрать вариант' : 'Добавить в корзину'"
+          @click="addToCart"
         >
           <ShoppingCart :size="14" />
           В корзину

@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 import { AdminSidebar } from '@/widgets/admin-sidebar'
 import { AdminHeader } from '@/widgets/admin-header'
+import { ToastContainer } from '@/shared/ui/Toast'
 </script>
 
 <template>
@@ -14,4 +15,5 @@ import { AdminHeader } from '@/widgets/admin-header'
       </main>
     </div>
   </div>
+  <ToastContainer />
 </template>

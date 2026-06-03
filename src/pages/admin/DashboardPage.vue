@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import DashboardStats from '@/widgets/dashboard/DashboardStats.vue'
-import RecentOrdersTable from '@/widgets/dashboard/RecentOrdersTable.vue'
-import OrderStatusBreakdown from '@/widgets/dashboard/OrderStatusBreakdown.vue'
-import TopRestaurants from '@/widgets/dashboard/TopRestaurants.vue'
+import { DashboardStats, RecentOrdersTable, OrderStatusBreakdown, TopRestaurants } from '@/widgets/dashboard'
 </script>
 
 <template>

@@ -1,1 +1,1 @@
-export { http, type ApiError } from './http'
+export { http, type ApiError, AUTH_TOKEN_KEY } from './http'

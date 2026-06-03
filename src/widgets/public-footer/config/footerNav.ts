@@ -15,6 +15,7 @@ export interface IFooterSocial {
   label: string
   href: string
   icon: Component
+  hoverClass: string
 }
 
 export const FOOTER_COLUMNS: IFooterColumn[] = [
@@ -50,10 +51,30 @@ export const FOOTER_COLUMNS: IFooterColumn[] = [
 ]
 
 export const FOOTER_SOCIALS: IFooterSocial[] = [
-  { label: 'Telegram', href: '#', icon: Send },
-  { label: 'Instagram', href: '#', icon: Instagram },
-  { label: 'Facebook', href: '#', icon: Facebook },
-  { label: 'YouTube', href: '#', icon: Youtube },
+  {
+    label: 'Telegram',
+    href: '#',
+    icon: Send,
+    hoverClass: 'hover:text-[#229ED9] hover:border-[#229ED9]/40 hover:bg-[#229ED9]/10',
+  },
+  {
+    label: 'Instagram',
+    href: '#',
+    icon: Instagram,
+    hoverClass: 'hover:text-[#E1306C] hover:border-[#E1306C]/40 hover:bg-[#E1306C]/10',
+  },
+  {
+    label: 'Facebook',
+    href: '#',
+    icon: Facebook,
+    hoverClass: 'hover:text-[#1877F2] hover:border-[#1877F2]/40 hover:bg-[#1877F2]/10',
+  },
+  {
+    label: 'YouTube',
+    href: '#',
+    icon: Youtube,
+    hoverClass: 'hover:text-[#FF0000] hover:border-[#FF0000]/40 hover:bg-[#FF0000]/10',
+  },
 ]
 
 export const FOOTER_CONTACTS = {

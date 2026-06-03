@@ -166,6 +166,9 @@ categories
 // entities/address    → addresses
 // entities/order      → orders + order_items
 // entities/favorite   → localStorage (client-only, нет таблицы в БД)
+// entities/banner     → localStorage (client+admin, нет таблицы в БД; seed из src/assets/*.jpeg)
+//                       image хранит `preset:<id>` или URL; resolveBannerImage() резолвит на рендере
+// entities/cart       → in-memory Pinia store (нет персиста; CartItem: menuItemId, qty, price, image)
 // shared/lib/validators.ts → EMAIL_RE, PHONE_RE, isEmail, isPhone, isIdentifier (единый источник)
 
 interface IUser {
@@ -357,21 +360,22 @@ GET    /users/me/bonuses        → { balance: number, history: BonusEntry[] }
 | Курьеры | `/admin/couriers` | ⬜ Заглушка | Список курьеров, статусы |
 | Клиенты | `/admin/customers` | ⬜ Заглушка | База клиентов |
 | Аналитика | `/admin/analytics` | ⬜ Заглушка | Графики, отчёты |
-| Промоакции | `/admin/promotions` | ⬜ Заглушка | Промокоды, баннеры |
+| Промоакции | `/admin/promotions` | ✅ Готово | Промокоды: CRUD, toggle активности |
+| Баннеры | `/admin/banners` | ✅ Готово | CRUD баннеров карусели + drag-сортировка; localStorage persist |
 | Настройки | `/admin/settings` | ⬜ Заглушка | Конфигурация |
 
 ### 6.2 Customer Site (ветка `feat/client`)
 
 | Модуль | Путь | Статус | Описание |
 |---|---|---|---|
-| Главная / меню | `/` | ✅ Готово | Промокарусель (swipe + dots), scroll-spy категории, карточки блюд, модал-превью, back-to-top |
-| Корзина | drawer | ✅ Готово | Список товаров, qty, итог, переход на checkout |
+| Главная / меню | `/` | ✅ Готово | Промокарусель (картинки-баннеры, autoplay 4s, swipe + dots, пауза на hover); scroll-spy категории; карточки блюд 4-кол (2→3→4); cart-stepper [−N+] прямо в карточке; модал-превью, back-to-top |
+| Корзина | drawer | ✅ Готово | Список товаров, qty (+/−), итог, переход на checkout; qty также управляется stepper-ом прямо в карточке |
 | Оформление заказа | `/checkout` | ✅ Готово | Адрес (saved + new), зона, оплата, промокод, бонусы, чаевые, сводка; mobile sticky bottom bar |
 | Успешный заказ | `/checkout/success` | ✅ Готово | Номер заказа, итог, ETA, кнопка в меню |
 | Auth (вход/регистрация) | `/login`, `/register` | ✅ Готово | Формы, валидация (shared/lib/validators), JWT, восстановление пароля (§1.1) |
 | Личный кабинет | `/account/*` | ✅ Готово | Профиль, адреса, история заказов, бонусы, промокоды, карты, реферал (§1.2–§1.11); mobile 4+«Ещё» nav |
-| Избранное | `/favorites` | ✅ Готово | Сетка избранных блюд, empty state; store в entities/favorite |
-| Поиск | `/search` | ✅ Готово | Глобальный поиск + фильтры (категория, тег, цена); page composable useSearchPage |
+| Избранное | `/favorites` | ✅ Готово | Сетка избранных блюд 4-кол (2→3→4), empty state; store в entities/favorite |
+| Поиск | `/search` | ✅ Готово | Глобальный поиск + фильтры (категория, тег, цена) 4-кол (2→3→4); page composable useSearchPage |
 | Отслеживание заказа | `/orders/:id/track` | ✅ Готово | Статус-шкала, ETA, отмена (до on_the_way), авто-прогресс (§1.7) |
 | Оценка заказа | модал | ✅ Готово | Звёзды 1–5, комментарий, авто-открытие после доставки (§1.8) |
 | Toast-уведомления | shared | ✅ Готово | success/error/info/warning (§1.9) |
@@ -414,7 +418,7 @@ GET    /users/me/bonuses        → { balance: number, history: BonusEntry[] }
 | `order_items` | ⬜ | Позиции заказа |
 | `delivery_zones` | ⬜ | Полигоны зон доставки (§2.4) |
 | `promo_codes` | ⬜ | Промокоды (§2.7) |
-| `promotions` | ⬜ | Баннеры и акционные периоды |
+| `promotions` | ⬜ | Акционные периоды (баннеры сейчас в localStorage через entities/banner) |
 | `nutrition` | ⬜ | Пищевая ценность |
 
 ---

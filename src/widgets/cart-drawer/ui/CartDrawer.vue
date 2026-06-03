@@ -102,9 +102,9 @@ function goToCheckout(): void {
 
               <!-- Qty + price -->
               <div class="flex items-center justify-between mt-2">
-                <div class="flex items-center gap-0.5 bg-surface rounded-lg border border-line p-0.5">
+                <div class="flex items-center gap-0.5 bg-surface rounded-full border border-line p-0.5">
                   <button
-                    class="w-9 h-9 flex items-center justify-center rounded-md text-muted
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-muted
                            hover:text-ink hover:bg-surface-soft transition-colors
                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
                     :aria-label="`Уменьшить количество ${item.productName}`"
@@ -116,7 +116,7 @@ function goToCheckout(): void {
                     {{ item.quantity }}
                   </span>
                   <button
-                    class="w-9 h-9 flex items-center justify-center rounded-md text-muted
+                    class="w-9 h-9 flex items-center justify-center rounded-full text-muted
                            hover:text-accent hover:bg-accent-soft transition-colors
                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
                     :aria-label="`Увеличить количество ${item.productName}`"

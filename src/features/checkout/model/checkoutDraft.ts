@@ -20,6 +20,7 @@ export function defaultDraft(): CheckoutDraft {
     tipMode: 'none',
     tipPercent: 0.05,
     tipCustom: 0,
+    leaveAtDoor: false,
   }
 }
 
@@ -79,6 +80,7 @@ export function buildPayload(p: {
     items: p.items,
     address: formatAddress(p.draft),
     comment: p.draft.orderComment,
+    leaveAtDoor: p.draft.leaveAtDoor,
     paymentMethod: p.draft.paymentMethod,
     promoCode: p.promoCode,
     bonusUsed: p.totals.bonusUsed,

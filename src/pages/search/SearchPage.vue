@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Search, SlidersHorizontal, X, UtensilsCrossed } from 'lucide-vue-next'
+import { Search, X, UtensilsCrossed } from 'lucide-vue-next'
 import { DishCardA } from '@/widgets/dish-card'
 import { DishPreviewModal } from '@/widgets/dish-preview'
 import { useSearchPage } from './model/useSearchPage'
@@ -8,112 +8,69 @@ const page = useSearchPage()
 </script>
 
 <template>
-  <main class="max-w-7xl mx-auto px-4 md:px-6 pt-6 pb-16">
-    <!-- Search field -->
-    <div class="relative">
-      <Search :size="20" class="absolute left-4 top-1/2 -translate-y-1/2 text-faint pointer-events-none" />
-      <input
-        v-model="page.query"
-        type="search"
-        autofocus
-        placeholder="Найдите бургер, пиццу, суп…"
-        class="w-full h-14 md:h-16 pl-12 pr-12 rounded-2xl bg-surface border border-line-strong
-               text-ink text-lg font-medium placeholder:text-faint placeholder:font-normal
-               focus:outline-none focus-visible:border-accent/60 focus-visible:ring-2 focus-visible:ring-accent/20 transition-all"
-      />
-      <button
-        v-if="page.query"
-        class="absolute right-4 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-surface-soft
-               flex items-center justify-center text-muted hover:text-ink transition-colors
-               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-        aria-label="Очистить запрос"
-        @click="page.query = ''"
-      >
-        <X :size="15" />
-      </button>
-    </div>
+  <main class="max-w-7xl mx-auto px-4 md:px-6 pt-4 pb-16">
+    <!-- Toolbar: search + filters + close (column on mobile, row on tablet+) -->
+    <div class="flex flex-col md:flex-row items-stretch md:items-center gap-2">
+      <div class="relative md:flex-1 md:min-w-0">
+        <Search :size="18" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-faint pointer-events-none" />
+        <input
+          v-model="page.query"
+          type="search"
+          autofocus
+          placeholder="Найдите бургер, пиццу, суп…"
+          class="w-full h-11 md:h-12 pl-11 pr-11 rounded-xl bg-surface border border-line-strong
+                 text-ink text-base font-medium placeholder:text-faint placeholder:font-normal
+                 focus:outline-none focus-visible:border-accent/60 focus-visible:ring-2 focus-visible:ring-accent/20 transition-all"
+        />
+        <button
+          v-if="page.query"
+          class="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-surface-soft
+                 flex items-center justify-center text-muted hover:text-ink transition-colors
+                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          aria-label="Очистить запрос"
+          @click="page.query = ''"
+        >
+          <X :size="14" />
+        </button>
+      </div>
 
-    <!-- Filters toggle (mobile) -->
-    <div class="mt-4 flex items-center justify-between md:hidden">
-      <button
-        class="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-line-strong text-sm font-medium
-               text-ink hover:bg-surface-soft transition-colors
-               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-        @click="page.filtersOpen = !page.filtersOpen"
+      <select
+        v-model="page.selectedCategoryId"
+        class="shrink-0 h-11 md:h-12 px-3 rounded-xl bg-surface border border-line-strong text-sm font-medium text-ink
+               focus:outline-none focus-visible:border-accent/60 focus-visible:ring-2 focus-visible:ring-accent/20 transition-all"
       >
-        <SlidersHorizontal :size="15" />
-        Фильтры
-        <span v-if="page.hasFilters" class="w-2 h-2 rounded-full bg-accent" />
-      </button>
+        <option :value="null">Все категории</option>
+        <option v-for="cat in page.categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+      </select>
+
+      <select
+        v-model="page.selectedTagId"
+        class="shrink-0 h-11 md:h-12 px-3 rounded-xl bg-surface border border-line-strong text-sm font-medium text-ink
+               focus:outline-none focus-visible:border-accent/60 focus-visible:ring-2 focus-visible:ring-accent/20 transition-all"
+      >
+        <option :value="null">Все теги</option>
+        <option v-for="tag in page.tags" :key="tag.id" :value="tag.id">{{ tag.label }}</option>
+      </select>
+
       <button
         v-if="page.hasFilters"
-        class="text-sm font-medium text-accent hover:text-accent-hover transition-colors"
-        @click="page.clearFilters"
-      >
-        Сбросить
-      </button>
-    </div>
-
-    <!-- Filters -->
-    <div
-      class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
-      :class="page.filtersOpen ? 'grid' : 'hidden md:grid'"
-    >
-      <label class="flex flex-col gap-1.5">
-        <span class="text-xs font-medium text-faint">Категория</span>
-        <select
-          v-model="page.selectedCategoryId"
-          class="h-11 px-3 rounded-xl bg-surface border border-line-strong text-sm font-medium text-ink
-                 focus:outline-none focus-visible:border-accent/60 focus-visible:ring-2 focus-visible:ring-accent/20 transition-all"
-        >
-          <option :value="null">Все категории</option>
-          <option v-for="cat in page.categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
-        </select>
-      </label>
-
-      <label class="flex flex-col gap-1.5">
-        <span class="text-xs font-medium text-faint">Тег</span>
-        <select
-          v-model="page.selectedTagId"
-          class="h-11 px-3 rounded-xl bg-surface border border-line-strong text-sm font-medium text-ink
-                 focus:outline-none focus-visible:border-accent/60 focus-visible:ring-2 focus-visible:ring-accent/20 transition-all"
-        >
-          <option :value="null">Все теги</option>
-          <option v-for="tag in page.tags" :key="tag.id" :value="tag.id">{{ tag.label }}</option>
-        </select>
-      </label>
-
-      <label class="flex flex-col gap-1.5">
-        <span class="text-xs font-medium text-faint">Цена от, ₽</span>
-        <input
-          v-model.number="page.minPrice"
-          type="number" min="0" placeholder="0"
-          class="h-11 px-3 rounded-xl bg-surface border border-line-strong text-sm font-medium text-ink
-                 placeholder:text-faint placeholder:font-normal
-                 focus:outline-none focus-visible:border-accent/60 focus-visible:ring-2 focus-visible:ring-accent/20 transition-all"
-        />
-      </label>
-
-      <label class="flex flex-col gap-1.5">
-        <span class="text-xs font-medium text-faint">Цена до, ₽</span>
-        <input
-          v-model.number="page.maxPrice"
-          type="number" min="0" placeholder="∞"
-          class="h-11 px-3 rounded-xl bg-surface border border-line-strong text-sm font-medium text-ink
-                 placeholder:text-faint placeholder:font-normal
-                 focus:outline-none focus-visible:border-accent/60 focus-visible:ring-2 focus-visible:ring-accent/20 transition-all"
-        />
-      </label>
-    </div>
-
-    <!-- Reset (desktop) -->
-    <div v-if="page.hasFilters" class="mt-3 hidden md:flex">
-      <button
-        class="flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-hover transition-colors focus-visible:outline-none"
+        class="shrink-0 h-11 md:h-12 px-3 rounded-xl border border-accent/40 text-sm font-medium text-accent
+               flex items-center gap-1.5 justify-center hover:bg-accent/5 transition-colors
+               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
         @click="page.clearFilters"
       >
         <X :size="14" />
-        Сбросить фильтры
+        Сбросить
+      </button>
+
+      <button
+        class="shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-xl bg-surface border border-line-strong
+               flex items-center justify-center text-muted hover:text-ink hover:bg-surface-soft transition-colors
+               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+        aria-label="Закрыть поиск"
+        @click="page.close"
+      >
+        <X :size="18" />
       </button>
     </div>
 

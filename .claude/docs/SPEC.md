@@ -168,6 +168,8 @@ categories
 // entities/favorite   → localStorage (client-only, нет таблицы в БД)
 // entities/banner     → localStorage (client+admin, нет таблицы в БД; seed из src/assets/*.jpeg)
 //                       image хранит `preset:<id>` или URL; resolveBannerImage() резолвит на рендере
+// entities/delivery-location → localStorage (client-only; выбранный город+адрес+координаты)
+//                       геокодинг через shared/api/nominatim (OSM), зона — pointInPolygon по entities/delivery-zone
 // entities/cart       → in-memory Pinia store (нет персиста; CartItem: menuItemId, qty, price, image)
 // shared/lib/validators.ts → EMAIL_RE, PHONE_RE, isEmail, isPhone, isIdentifier (единый источник)
 

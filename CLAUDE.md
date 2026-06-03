@@ -152,7 +152,7 @@ src/
 │   ├── cart-drawer/      # CartDrawer (side panel)
 │   ├── dish-card/        # DishCardA (client), DishCardAdmin; useDishCard, useImageGallery
 │   ├── dish-preview/     # DishPreviewModal + useDishPreview
-│   ├── promo-carousel/   # PromoCarousel (swipe + dots) + usePromoCarousel
+│   ├── promo-carousel/   # PromoCarousel (image + overlay, swipe + dots) — читает entities/banner
 │   ├── products-section/ # ProductsSection
 │   ├── category-strip/   # CategoryStrip
 │   ├── loyalty-banner/   # LoyaltyBanner
@@ -175,9 +175,11 @@ src/
 │   ├── menu-filter/      # фильтрация меню admin (useMenuFilter)
 │   ├── category-manager/ # CRUD + drag-and-drop сортировка категорий
 │   ├── reorder-products/ # drag-and-drop сортировка блюд
-│   └── tag-manager/      # CRUD тегов (admin)
+│   ├── tag-manager/      # CRUD тегов (admin)
+│   └── banner-manager/   # CRUD + drag-сортировка баннеров (admin): useBannerManager, BannerCard, BannerFormModal
 ├── entities/
 │   ├── favorite/     # useFavoriteStore — localStorage persist (используется из widgets + pages)
+│   ├── banner/       # useBannerStore — промо-баннеры: localStorage persist + seed из assets, resolveBannerImage (preset-ключи)
 │   ├── dish/         # Product/MenuItem: types, store, api, ui/DishCard
 │   ├── category/     # types, store, api
 │   ├── tag/          # types, store, api, ui/TagBadge
@@ -209,6 +211,7 @@ src/
 
 > Порядок категорий и блюд хранится в поле `position`; админка меняет его перетаскиванием (`vuedraggable`), стор пересортировывает после fetch — клиент и админка выводят в одном порядке.  
 > `useFavoriteStore` живёт в `entities/favorite` — он shared state для widgets (header) и pages (favorites). `features/favorite-toggle` содержит только UI-компонент `FavoriteButton`.
+> `useBannerStore` (`entities/banner`) — единый источник промо-баннеров: клиентский `widgets/promo-carousel` показывает `visibleBanners`, админский `features/banner-manager` (страница `/admin/banners`) делает CRUD + drag-сортировку. Персист в localStorage с seed из `src/assets/*.jpeg`; `image` хранит `preset:<id>` или URL, `resolveBannerImage()` резолвит на рендере (устойчиво к ре-хешу ассетов при сборке).
 
 ### Ключевые архитектурные правила
 

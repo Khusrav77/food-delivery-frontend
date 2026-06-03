@@ -118,9 +118,9 @@ const page = useSearchPage()
     </div>
 
     <!-- Loading skeleton -->
-    <div v-if="page.loading" class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <div v-for="i in 6" :key="i" class="bg-surface rounded-3xl border border-line overflow-hidden">
-        <div class="px-3 pt-3">
+    <div v-if="page.loading" class="mt-8 grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div v-for="i in 8" :key="i" class="bg-surface rounded-3xl border border-line overflow-hidden">
+        <div class="px-2.5 pt-2.5">
           <div class="aspect-[4/3] rounded-2xl bg-surface-soft animate-pulse" />
         </div>
         <div class="p-4 space-y-3">
@@ -171,7 +171,7 @@ const page = useSearchPage()
       <p class="text-sm text-muted mb-4">
         Найдено: <span class="font-semibold text-ink">{{ page.results.length }}</span>
       </p>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <DishCardA
           v-for="product in page.results"
           :key="product.id"

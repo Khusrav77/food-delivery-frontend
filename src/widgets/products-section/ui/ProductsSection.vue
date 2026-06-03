@@ -16,13 +16,13 @@ const emit = defineEmits<{ select: [product: Product] }>()
   <div v-if="loading" class="space-y-10 mt-8">
     <div v-for="n in 2" :key="n" class="space-y-4">
       <div class="h-7 bg-surface-soft rounded-lg w-40 animate-pulse" />
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
         <div
-          v-for="k in 3"
+          v-for="k in 4"
           :key="k"
           class="bg-surface rounded-3xl border border-line overflow-hidden animate-pulse"
         >
-          <div class="px-3 pt-3">
+          <div class="px-2.5 pt-2.5">
             <div class="aspect-[4/3] bg-surface-soft rounded-2xl" />
           </div>
           <div class="p-4 space-y-3">
@@ -58,7 +58,7 @@ const emit = defineEmits<{ select: [product: Product] }>()
       <h3 class="font-display text-2xl md:text-3xl font-extrabold text-ink tracking-tight mb-5">
         {{ section.name }}
       </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
         <DishCardA
           v-for="product in section.products"
           :key="product.id"

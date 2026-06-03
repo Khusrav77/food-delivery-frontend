@@ -136,6 +136,7 @@ src/
 │   ├── account/      # профиль, адреса, заказы, бонусы, промокоды, карты, реферал, уведомления
 │   │   └── AccountLayout.vue
 │   ├── auth/         # login, register, forgot-password, reset-password
+│   ├── cart/         # CartPage.vue — страница корзины (sticky CTA над таб-баром)
 │   ├── checkout/     # CheckoutPage.vue, CheckoutSuccessPage.vue
 │   ├── favorites/    # FavoritesPage.vue
 │   ├── home/
@@ -158,6 +159,7 @@ src/
 │   ├── loyalty-banner/   # LoyaltyBanner
 │   ├── admin-sidebar/
 │   ├── admin-header/
+│   ├── mobile-tab-bar/   # MobileTabBar (md:hidden fixed bottom-0): 5 вкладок, бейджи cart/favorites, anti-FOUC
 │   ├── menu/             # MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts
 │   └── dashboard/        # DashboardStats, RecentOrdersTable, OrderStatusBreakdown, TopRestaurants
 ├── features/

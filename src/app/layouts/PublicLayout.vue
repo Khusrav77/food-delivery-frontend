@@ -1,23 +1,30 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { computed } from 'vue'
+import { useRoute, RouterView } from 'vue-router'
 import { PublicHeader } from '@/widgets/public-header'
 import { PublicFooter } from '@/widgets/public-footer'
 import { CartDrawer } from '@/widgets/cart-drawer'
+import { MobileTabBar } from '@/widgets/mobile-tab-bar'
 import { ToastContainer } from '@/shared/ui/Toast'
 import { useThemeStore } from '@/entities/theme'
 
 const themeStore = useThemeStore()
 themeStore.setActiveArea('client')
+
+const route = useRoute()
+const showTabBar = computed(() => !route.path.startsWith('/checkout'))
 </script>
 
 <template>
   <div class="min-h-screen flex flex-col bg-canvas">
     <PublicHeader />
-    <div class="flex-1">
+    <!-- pb-14 on mobile reserves space above the fixed tab bar -->
+    <div class="flex-1 pb-14 md:pb-0">
       <RouterView />
     </div>
     <PublicFooter />
     <CartDrawer />
     <ToastContainer />
+    <MobileTabBar v-if="showTabBar" />
   </div>
 </template>

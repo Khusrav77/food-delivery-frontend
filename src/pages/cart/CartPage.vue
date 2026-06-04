@@ -132,8 +132,8 @@ const cart = useCartStore()
         </div>
       </div>
 
-      <!-- Sticky CTA — sticks above the mobile tab bar (bottom-14 = 56px) -->
-      <div class="sticky bottom-14 md:bottom-0 z-20 mt-4 bg-canvas pt-2 pb-2">
+      <!-- Sticky CTA — sticks above the floating mobile tab bar -->
+      <div class="sticky bottom-24 md:bottom-0 z-20 mt-4 bg-canvas pt-2 pb-2">
         <div class="bg-surface border border-line rounded-2xl p-4 space-y-3 shadow-sm">
           <div class="flex items-center justify-between px-1">
             <span class="text-muted text-sm">Итого</span>

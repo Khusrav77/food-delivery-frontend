@@ -7,7 +7,9 @@ import { useCartStore } from '@/entities/cart'
 import { useToastStore } from '@/shared/lib/toast'
 import {
   useCheckout,
+  FulfillmentToggle,
   AddressSection,
+  PickupSection,
   PaymentSection,
   PromoBonusSection,
   TipSection,
@@ -24,9 +26,10 @@ const {
   promo, promoError, promoLoading,
   bonusBalance, maxBonusValue,
   totals, tip, etaMinutes, placing, canSubmit,
+  branches, branchesLoading,
   savedAddresses, addressesLoading,
   savedCards,
-  init, selectSavedAddress, useNewAddress,
+  init, setMode, selectSavedAddress, useNewAddress, selectBranch,
   submitPromo, removePromo, setTipPercent, setTipNone, setTipCustom, submit,
 } = useCheckout()
 
@@ -58,16 +61,39 @@ async function onSubmit(): Promise<void> {
     <div class="grid gap-6 lg:grid-cols-[1fr_380px] items-start">
       <!-- Left: form -->
       <div class="space-y-5">
-        <AddressSection
-          :draft="draft"
-          :saved-addresses="savedAddresses"
-          :loading="addressesLoading"
-          :zone="zone"
-          :zone-loading="zoneLoading"
-          :errors="errors"
-          @select-saved="selectSavedAddress"
-          @use-new="useNewAddress"
+
+        <!-- 1. Fulfillment mode toggle -->
+        <FulfillmentToggle
+          :model-value="draft.fulfillmentMode"
+          @update:model-value="setMode"
         />
+
+        <!-- 2a. Delivery address -->
+        <Transition name="section-swap" mode="out-in">
+          <AddressSection
+            v-if="draft.fulfillmentMode === 'delivery'"
+            key="delivery"
+            :draft="draft"
+            :saved-addresses="savedAddresses"
+            :loading="addressesLoading"
+            :zone="zone"
+            :zone-loading="zoneLoading"
+            :errors="errors"
+            @select-saved="selectSavedAddress"
+            @use-new="useNewAddress"
+          />
+
+          <!-- 2b. Pickup branch selection -->
+          <PickupSection
+            v-else
+            key="pickup"
+            :branches="branches"
+            :loading="branchesLoading"
+            :selected-id="draft.pickupBranchId"
+            :errors="errors"
+            @select="selectBranch"
+          />
+        </Transition>
 
         <PaymentSection :draft="draft" :saved-cards="savedCards" />
 
@@ -109,7 +135,7 @@ async function onSubmit(): Promise<void> {
         </section>
       </div>
 
-      <!-- Right: summary (hidden on mobile, sticky on desktop) -->
+      <!-- Right: summary (sticky on desktop) -->
       <div class="hidden lg:block lg:sticky lg:top-20">
         <OrderSummary
           :items="cart.items"
@@ -121,6 +147,7 @@ async function onSubmit(): Promise<void> {
           :is-below-min-order="isBelowMinOrder"
           :can-submit="canSubmit"
           :placing="placing"
+          :fulfillment-mode="draft.fulfillmentMode"
           @submit="onSubmit"
         />
       </div>
@@ -150,3 +177,18 @@ async function onSubmit(): Promise<void> {
     </button>
   </div>
 </template>
+
+<style scoped>
+.section-swap-enter-active,
+.section-swap-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.section-swap-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.section-swap-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+</style>

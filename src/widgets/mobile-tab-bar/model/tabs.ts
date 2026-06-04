@@ -1,4 +1,4 @@
-import { Home, Search, ShoppingCart, Heart, User } from 'lucide-vue-next'
+import { Home, Search, ShoppingCart, Heart } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
 export interface Tab {
@@ -7,7 +7,6 @@ export interface Tab {
   icon: Component
   badge?: 'cart' | 'favorites'
   exact?: boolean
-  profileTab?: boolean
 }
 
 export const TABS: Tab[] = [
@@ -15,5 +14,4 @@ export const TABS: Tab[] = [
   { to: '/search',    label: 'Поиск',      icon: Search },
   { to: '/cart',      label: 'Корзина',    icon: ShoppingCart, badge: 'cart' },
   { to: '/favorites', label: 'Избранное',  icon: Heart,        badge: 'favorites' },
-  { to: '/account',   label: 'Профиль',    icon: User,         profileTab: true },
 ]

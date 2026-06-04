@@ -18,8 +18,8 @@ const showTabBar = computed(() => !route.path.startsWith('/checkout'))
 <template>
   <div class="min-h-screen flex flex-col bg-canvas">
     <PublicHeader />
-    <!-- pb-14 on mobile reserves space above the fixed tab bar -->
-    <div class="flex-1 pb-14 md:pb-0">
+    <!-- pb on mobile reserves space above the floating tab bar (pill + 20px inset) -->
+    <div class="flex-1 pb-28 md:pb-0">
       <RouterView />
     </div>
     <PublicFooter />

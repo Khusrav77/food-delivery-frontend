@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ShoppingBag, Clock, ArrowRight, Loader2, AlertTriangle } from 'lucide-vue-next'
 import type { CartItem } from '@/entities/cart'
-import type { TotalsBreakdown, ZoneInfo } from '../model/types'
+import type { TotalsBreakdown, ZoneInfo, FulfillmentMode } from '../model/types'
 import { formatPrice } from '@/shared/lib/money'
 
 defineProps<{
@@ -14,6 +14,7 @@ defineProps<{
   isBelowMinOrder: boolean
   canSubmit: boolean
   placing: boolean
+  fulfillmentMode: FulfillmentMode
 }>()
 
 const emit = defineEmits<{ submit: [] }>()
@@ -47,9 +48,10 @@ const emit = defineEmits<{ submit: [] }>()
         <dd class="text-ink">{{ formatPrice(totals.subtotal) }}</dd>
       </div>
       <div class="flex justify-between">
-        <dt class="text-muted">Доставка</dt>
+        <dt class="text-muted">{{ fulfillmentMode === 'pickup' ? 'Самовывоз' : 'Доставка' }}</dt>
         <dd class="text-ink">
           <span v-if="zoneLoading" class="text-faint">…</span>
+          <span v-else-if="fulfillmentMode === 'pickup'" class="text-emerald-600">Бесплатно</span>
           <span v-else-if="totals.deliveryCost === 0" class="text-emerald-600">Бесплатно</span>
           <span v-else>{{ formatPrice(totals.deliveryCost) }}</span>
         </dd>
@@ -77,7 +79,7 @@ const emit = defineEmits<{ submit: [] }>()
 
     <div v-if="zone && !isZoneUnavailable" class="flex items-center gap-2 text-sm text-muted">
       <Clock :size="15" class="text-accent" />
-      Примерное время доставки ~{{ etaMinutes }} мин
+      {{ fulfillmentMode === 'pickup' ? `Готовность через ~${etaMinutes} мин` : `Примерное время доставки ~${etaMinutes} мин` }}
     </div>
 
     <!-- Blocking notices -->

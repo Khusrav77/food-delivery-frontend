@@ -26,7 +26,6 @@ export const router = createRouter({
           component: () => import('@/pages/account/AccountLayout.vue'),
           meta: { requiresAuth: true },
           children: [
-            { path: '', redirect: '/account/profile' },
             { path: 'profile', component: () => import('@/pages/account/ProfilePage.vue') },
             { path: 'addresses', component: () => import('@/pages/account/AddressesPage.vue') },
             { path: 'orders', component: () => import('@/pages/account/OrdersPage.vue') },

@@ -4,6 +4,8 @@ import type { PlaceOrderPayload, OrderItem } from '@/entities/order'
 
 export function defaultDraft(): CheckoutDraft {
   return {
+    fulfillmentMode: 'delivery',
+    pickupBranchId: null,
     savedAddressId: null,
     label: 'home',
     street: '',
@@ -50,10 +52,15 @@ export function clearAddress(draft: CheckoutDraft): void {
 export interface DraftErrors {
   street?: string
   house?: string
+  pickupBranch?: string
 }
 
 export function validate(draft: CheckoutDraft): DraftErrors {
   const errors: DraftErrors = {}
+  if (draft.fulfillmentMode === 'pickup') {
+    if (!draft.pickupBranchId) errors.pickupBranch = 'Выберите точку самовывоза'
+    return errors
+  }
   if (!draft.street.trim()) errors.street = 'Укажите улицу'
   if (!draft.house.trim()) errors.house = 'Укажите дом'
   return errors
@@ -75,12 +82,18 @@ export function buildPayload(p: {
   totals: TotalsBreakdown
   promoCode: string | null
   etaMinutes: number
+  branchAddress?: string
 }): PlaceOrderPayload {
+  const isPickup = p.draft.fulfillmentMode === 'pickup'
+  const address = isPickup ? (p.branchAddress ?? '') : formatAddress(p.draft)
+  const comment = isPickup
+    ? ['Самовывоз', p.draft.orderComment].filter(Boolean).join(' · ')
+    : p.draft.orderComment
   return {
     items: p.items,
-    address: formatAddress(p.draft),
-    comment: p.draft.orderComment,
-    leaveAtDoor: p.draft.leaveAtDoor,
+    address,
+    comment,
+    leaveAtDoor: isPickup ? false : p.draft.leaveAtDoor,
     paymentMethod: p.draft.paymentMethod,
     promoCode: p.promoCode,
     bonusUsed: p.totals.bonusUsed,

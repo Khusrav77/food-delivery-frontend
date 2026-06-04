@@ -17,7 +17,11 @@ export interface PromoResult {
 
 export type TipMode = 'none' | 'percent' | 'custom'
 
+export type FulfillmentMode = 'delivery' | 'pickup'
+
 export interface CheckoutDraft {
+  fulfillmentMode: FulfillmentMode
+  pickupBranchId: string | null
   savedAddressId: string | null // null = ввод нового адреса
   label: AddressLabel
   street: string

@@ -149,7 +149,7 @@ src/
 ├── widgets/
 │   ├── public-header/    # PublicHeader + usePublicHeader
 │   ├── public-footer/    # PublicFooter + footerNav config
-│   ├── account-sidebar/  # десктоп sidebar + мобильный bottom tab bar (4 + «Ещё»)
+│   ├── account-sidebar/  # AccountSidebar (desktop) + AccountMobileList (master-список) + AccountMobileHeader («Назад» + заголовок); model/nav.ts (ACCOUNT_NAV)
 │   ├── cart-drawer/      # CartDrawer (side panel)
 │   ├── dish-card/        # DishCardA (client, 4-кол, cart-stepper [−N+]); DishCardAdmin; useDishCard, useImageGallery
 │   ├── dish-preview/     # DishPreviewModal + useDishPreview
@@ -159,14 +159,15 @@ src/
 │   ├── loyalty-banner/   # LoyaltyBanner
 │   ├── admin-sidebar/
 │   ├── admin-header/
-│   ├── mobile-tab-bar/   # MobileTabBar (md:hidden fixed bottom-0): 5 вкладок, бейджи cart/favorites, anti-FOUC
+│   ├── mobile-tab-bar/   # MobileTabBar (md:hidden, плавающая пилюля, отступ 20px, только иконки): 4 вкладки (Главная/Поиск/Корзина/Избранное), бейджи cart/favorites, корзина = data-fly-cart-target
 │   ├── menu/             # MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts
 │   └── dashboard/        # DashboardStats, RecentOrdersTable, OrderStatusBreakdown, TopRestaurants
 ├── features/
 │   ├── auth/             # login, register, forgot, reset-confirm; authRules → shared/lib/validators
-│   ├── checkout/         # useCheckout, checkoutDraft, checkoutTotals, deliveryZone, 5 секций UI
+│   ├── checkout/         # useCheckout, checkoutDraft, checkoutTotals, deliveryZone; FulfillmentMode (delivery|pickup); FulfillmentToggle (сегментный контрол), PickupSection (выбор точки), AddressSection, PaymentSection, PromoBonusSection, TipSection, OrderSummary
 │   ├── edit-profile/     # useProfileForm, profileRules → shared/lib/validators
 │   ├── favorite-toggle/  # FavoriteButton.vue (store → entities/favorite)
+│   ├── fly-to-cart/      # flyToCart(source, imageUrl) — WAAPI-анимация полёта товара к иконке корзины ([data-fly-cart-target], reduced-motion aware)
 │   ├── theme-toggle/     # ThemeToggle.vue (props: area: ThemeArea) — sun/moon icon, store → entities/theme
 │   ├── dish-search/      # useSearch
 │   ├── address-manager/  # useAddressManager, AddressCard, AddressFormModal
@@ -185,6 +186,7 @@ src/
 │   ├── theme/        # ThemeMode, ThemeArea, useThemeStore — раздельные темы client/admin, localStorage persist, class .dark на <html>
 │   ├── favorite/     # useFavoriteStore — localStorage persist (используется из widgets + pages)
 │   ├── delivery-location/  # ICity, IDeliveryLocation, CITIES, useDeliveryLocationStore — выбранный город+адрес, localStorage persist
+│   ├── branch/       # IBranch, IWorkingHours; useBranchStore (client, fetch+cache activeBranches); useAdminBranchStore (CRUD admin)
 │   ├── banner/       # useBannerStore — промо-баннеры: localStorage persist + seed из assets, resolveBannerImage (preset-ключи)
 │   ├── dish/         # Product/MenuItem: types, store, api, ui/DishCard
 │   ├── category/     # types, store, api

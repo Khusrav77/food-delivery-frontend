@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { onMounted } from 'vue'
-import { User, MapPin, ShoppingBag, Star, Bell, Ticket, CreditCard, Users, LogOut, ChevronRight } from 'lucide-vue-next'
+import { LogOut, ChevronRight } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/entities/user'
 import { useNotificationStore } from '@/entities/notification'
 import { useAuth } from '@/features/auth'
+import { ACCOUNT_NAV } from '../model/nav'
 
 const { user, initials } = storeToRefs(useUserStore())
 const notificationStore = useNotificationStore()
@@ -13,17 +14,6 @@ const { unreadCount } = storeToRefs(notificationStore)
 const auth = useAuth()
 const router = useRouter()
 const route = useRoute()
-
-const NAV = [
-  { to: '/account/profile',       label: 'Профиль',      icon: User },
-  { to: '/account/addresses',     label: 'Адреса',       icon: MapPin },
-  { to: '/account/orders',        label: 'Заказы',       icon: ShoppingBag },
-  { to: '/account/bonuses',       label: 'Бонусы',       icon: Star },
-  { to: '/account/notifications', label: 'Уведомления',  icon: Bell },
-  { to: '/account/promo',         label: 'Промокоды',    icon: Ticket },
-  { to: '/account/cards',         label: 'Мои карты',    icon: CreditCard },
-  { to: '/account/referral',      label: 'Реферальная',  icon: Users },
-]
 
 function isActive(to: string): boolean {
   return route.path.startsWith(to)
@@ -38,32 +28,6 @@ onMounted(notificationStore.fetchAll)
 </script>
 
 <template>
-  <!-- Mobile horizontal chips nav -->
-  <nav class="md:hidden w-full overflow-x-auto pb-1 -mb-1 scrollbar-none">
-    <div class="flex gap-2 min-w-max">
-      <RouterLink
-        v-for="item in NAV"
-        :key="item.to"
-        :to="item.to"
-        class="flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap shrink-0 transition-colors"
-        :class="isActive(item.to)
-          ? 'bg-accent-soft text-accent'
-          : 'bg-surface text-muted border border-line hover:text-ink hover:border-line-strong'"
-      >
-        <component :is="item.icon" :size="14" class="shrink-0" />
-        <span class="relative">
-          {{ item.label }}
-          <span
-            v-if="item.to === '/account/notifications' && unreadCount > 0"
-            class="absolute -top-2 -right-3.5 min-w-[14px] h-[14px] px-0.5 rounded-full
-                   bg-accent text-white text-[9px] font-bold leading-none
-                   flex items-center justify-center"
-          >{{ unreadCount }}</span>
-        </span>
-      </RouterLink>
-    </div>
-  </nav>
-
   <!-- Desktop sidebar -->
   <aside class="hidden md:flex flex-col w-56 shrink-0">
     <!-- User card -->
@@ -81,7 +45,7 @@ onMounted(notificationStore.fetchAll)
     <!-- Nav -->
     <nav class="bg-surface rounded-2xl border border-line p-2 flex-1">
       <ul class="space-y-0.5">
-        <li v-for="item in NAV" :key="item.to">
+        <li v-for="item in ACCOUNT_NAV" :key="item.to">
           <RouterLink
             :to="item.to"
             class="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
@@ -122,12 +86,3 @@ onMounted(notificationStore.fetchAll)
     </nav>
   </aside>
 </template>
-
-<style scoped>
-.scrollbar-none {
-  scrollbar-width: none;
-}
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-</style>

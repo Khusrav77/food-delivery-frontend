@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Plus, Minus, UtensilsCrossed } from 'lucide-vue-next'
 import { type Product, getActiveItems, formatItemLabel } from '@/entities/dish'
 import { useCartStore } from '@/entities/cart'
 import { useToastStore } from '@/shared/lib/toast'
 import { FavoriteButton } from '@/features/favorite-toggle'
+import { flyToCart } from '@/features/fly-to-cart'
 import { useDishCard } from '../model/useDishCard'
 import CardTagList from './CardTagList.vue'
 
@@ -12,6 +13,8 @@ const props = defineProps<{ product: Product }>()
 const emit = defineEmits<{ select: [product: Product] }>()
 
 const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } = useDishCard(props.product)
+
+const imgEl = ref<HTMLImageElement | null>(null)
 
 const cart = useCartStore()
 const toast = useToastStore()
@@ -45,6 +48,7 @@ function handleAdd(e: MouseEvent): void {
     price: item.price,
     image: item.images[0]?.url ?? null,
   })
+  flyToCart(imgEl.value, item.images[0]?.url ?? gallery.current)
   toast.success(`${props.product.name} добавлен в корзину`)
 }
 
@@ -82,6 +86,7 @@ function decrement(e: MouseEvent): void {
       >
         <img
           v-if="gallery.current"
+          ref="imgEl"
           :src="gallery.current"
           :alt="product.name"
           loading="lazy"

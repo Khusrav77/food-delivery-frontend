@@ -76,14 +76,14 @@ const {
       <!-- Guest: Войти + Бонусы -->
       <template v-if="!isAuthenticated">
         <button
-          class="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-medium text-ink border border-line-strong rounded-full hover:border-ink/30 hover:bg-surface-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          class="hidden md:flex items-center gap-1.5 px-3.5 py-1.5 text-sm font-medium text-ink border border-line-strong rounded-full hover:border-ink/30 hover:bg-surface-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           @click="goToLogin()"
         >
           <User :size="14" class="text-muted" />
           Войти
         </button>
         <button
-          class="hidden sm:flex items-center px-3.5 py-1.5 text-sm font-semibold text-accent bg-accent-soft rounded-full hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          class="hidden md:flex items-center px-3.5 py-1.5 text-sm font-semibold text-accent bg-accent-soft rounded-full hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           @click="goToLogin()"
         >
           Бонусы
@@ -97,13 +97,13 @@ const {
           href="/admin/dashboard"
           target="_blank"
           rel="noopener"
-          class="hidden sm:flex w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          class="hidden md:flex w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           title="Открыть панель управления"
         >
           <LayoutDashboard :size="15" />
         </a>
         <button
-          class="relative hidden sm:flex w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          class="relative hidden md:flex w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           aria-label="Избранное"
           @click="goToFavorites"
         >
@@ -115,7 +115,7 @@ const {
         </button>
 
         <button
-          class="hidden sm:flex w-9 h-9 rounded-full bg-accent-soft border border-accent/25 items-center justify-center text-accent text-[13px] font-bold hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          class="hidden md:flex w-9 h-9 rounded-full bg-accent-soft border border-accent/25 items-center justify-center text-accent text-[13px] font-bold hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           :title="`${user?.name} — личный кабинет`"
           @click="goToAccount()"
         >
@@ -124,7 +124,7 @@ const {
 
         <button
           v-if="user && user.bonusBalance !== undefined"
-          class="hidden sm:flex items-center gap-1 px-3 py-1.5 bg-accent-soft rounded-full text-sm font-semibold text-accent hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          class="hidden md:flex items-center gap-1 px-3 py-1.5 bg-accent-soft rounded-full text-sm font-semibold text-accent hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           @click="goToBonuses()"
         >
           <Star :size="12" class="fill-accent text-accent" />
@@ -132,9 +132,28 @@ const {
         </button>
       </template>
 
-      <!-- Cart -->
+      <!-- Mobile profile / login (cart lives in the bottom tab bar on mobile) -->
       <button
-        class="flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-1 shrink-0"
+        v-if="isAuthenticated"
+        class="flex md:hidden w-9 h-9 rounded-full bg-accent-soft border border-accent/25 items-center justify-center text-accent text-[13px] font-bold hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 shrink-0"
+        :aria-label="`${user?.name ?? 'Профиль'} — личный кабинет`"
+        @click="goToAccount()"
+      >
+        {{ initials }}
+      </button>
+      <button
+        v-else
+        class="flex md:hidden w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-ink hover:border-ink/30 hover:bg-surface-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 shrink-0"
+        aria-label="Войти"
+        @click="goToLogin()"
+      >
+        <User :size="16" />
+      </button>
+
+      <!-- Cart (desktop only — mobile uses the tab bar) -->
+      <button
+        data-fly-cart-target
+        class="hidden md:flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-full transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-1 shrink-0"
         aria-label="Открыть корзину"
         @click="openCart()"
       >

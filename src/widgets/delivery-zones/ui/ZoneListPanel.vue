@@ -65,7 +65,7 @@ const emit = defineEmits<{
         <div class="flex items-start gap-3">
           <!-- Color indicator -->
           <div
-            class="mt-0.5 w-3 h-3 rounded-full shrink-0 border-2 border-white shadow-sm"
+            class="mt-0.5 w-3 h-3 rounded-full shrink-0 border-2 border-surface shadow-sm"
             :style="{ backgroundColor: ZONE_TYPE_META[zone.type].color }"
           />
 

@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router'
 import { Bell, Search, ChevronRight } from 'lucide-vue-next'
 import { computed } from 'vue'
+import { ThemeToggle } from '@/features/theme-toggle'
 
 const route = useRoute()
 
@@ -40,6 +41,9 @@ const breadcrumb = computed(() => {
         class="bg-transparent text-sm text-ink placeholder-faint outline-none w-full"
       />
     </div>
+
+    <!-- Theme toggle -->
+    <ThemeToggle area="admin" />
 
     <!-- Notifications -->
     <button class="relative p-2 rounded-lg hover:bg-surface-soft transition-colors text-muted hover:text-ink">

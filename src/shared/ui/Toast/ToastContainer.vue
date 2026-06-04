@@ -13,10 +13,10 @@ const ICONS: Record<ToastType, Component> = {
 }
 
 const STYLES: Record<ToastType, { wrap: string; icon: string }> = {
-  success: { wrap: 'border-emerald-200 bg-white',    icon: 'text-emerald-500' },
-  error:   { wrap: 'border-red-200 bg-white',        icon: 'text-red-500'     },
-  info:    { wrap: 'border-blue-200 bg-white',       icon: 'text-blue-500'    },
-  warning: { wrap: 'border-amber-200 bg-white',      icon: 'text-amber-500'   },
+  success: { wrap: 'border-emerald-200 bg-surface',    icon: 'text-emerald-500' },
+  error:   { wrap: 'border-red-200 bg-surface',        icon: 'text-red-500'     },
+  info:    { wrap: 'border-blue-200 bg-surface',       icon: 'text-blue-500'    },
+  warning: { wrap: 'border-amber-200 bg-surface',      icon: 'text-amber-500'   },
 }
 </script>
 

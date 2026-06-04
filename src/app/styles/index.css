@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800;900&family=Nunito:wght@300;400;500;600;700&display=swap');
 
+/* Class-based dark mode — .dark on <html> activates dark: utilities */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Nunito", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -32,6 +35,20 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  /* Dark theme token overrides — applied when .dark is on <html> */
+  .dark {
+    --color-canvas: #141414;
+    --color-surface: #1e1e1f;
+    --color-surface-soft: #262628;
+    --color-ink: #f4f4f5;
+    --color-muted: #a1a1aa;
+    --color-faint: #71717a;
+    --color-line: #2e2e31;
+    --color-line-strong: #3f3f46;
+    --color-accent-soft: #2a1c10;
   }
 }
 

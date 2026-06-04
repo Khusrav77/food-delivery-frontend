@@ -4,6 +4,7 @@ import type { PaymentMethod } from '@/entities/order'
 export const MAX_BONUS_PCT = 0.5
 
 export const DEFAULT_ETA_MINUTES = 45
+export const PICKUP_ETA_MINUTES = 20
 
 // доступные пресеты чаевых в процентах от суммы товаров
 export const TIP_PERCENTS = [0.05, 0.1] as const

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { X, ShoppingCart } from 'lucide-vue-next'
 import { type Product, formatItemLabel } from '@/entities/dish'
 import { useCartStore } from '@/entities/cart'
 import { useToastStore } from '@/shared/lib/toast'
+import { flyToCart } from '@/features/fly-to-cart'
 import { useDishPreview } from '../model/useDishPreview'
 
 const props = defineProps<{ product: Product | null; show: boolean }>()
@@ -14,6 +15,7 @@ const { selectedItem, activeItems, displayPrice, displayImage, selectItem } =
 
 const cart = useCartStore()
 const toast = useToastStore()
+const imgEl = ref<HTMLImageElement | null>(null)
 
 watch(() => props.show, (isOpen) => {
   document.body.style.overflow = isOpen ? 'hidden' : ''
@@ -29,6 +31,7 @@ function addToCart(): void {
     price: selectedItem.value.price,
     image: displayImage.value,
   })
+  flyToCart(imgEl.value, displayImage.value)
   toast.success(`${props.product.name} добавлен в корзину`)
   emit('close')
 }
@@ -68,6 +71,7 @@ onUnmounted(() => {
             <div class="relative aspect-[4/3] sm:aspect-auto sm:w-[44%] shrink-0 bg-surface-soft">
               <img
                 v-if="displayImage"
+                ref="imgEl"
                 :src="displayImage"
                 :alt="product.name"
                 loading="lazy"

@@ -31,7 +31,7 @@ async function onSubmit(): Promise<void> {
         v-model="form.identifier"
         type="text"
         placeholder="email@example.com или +7XXXXXXXXXX"
-        :class="`${base} ${errors.identifier ? 'border-red-400 bg-white focus-visible:border-red-400 focus-visible:ring-red-200' : 'border-line bg-surface focus-visible:border-accent focus-visible:ring-accent/20'}`"
+        :class="`${base} ${errors.identifier ? 'border-red-400 bg-surface focus-visible:border-red-400 focus-visible:ring-red-200' : 'border-line bg-surface focus-visible:border-accent focus-visible:ring-accent/20'}`"
       />
       <p v-if="errors.identifier" class="text-xs text-red-500 px-1">{{ errors.identifier }}</p>
     </div>

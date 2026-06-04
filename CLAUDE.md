@@ -181,6 +181,7 @@ src/
 ├── entities/
 │   ├── favorite/     # useFavoriteStore — localStorage persist (используется из widgets + pages)
 │   ├── delivery-location/  # ICity, IDeliveryLocation, CITIES, useDeliveryLocationStore — выбранный город+адрес, localStorage persist
+│   ├── branch/       # IBranch, IWorkingHours; useBranchStore (client, fetch+cache activeBranches); useAdminBranchStore (CRUD admin)
 │   ├── banner/       # useBannerStore — промо-баннеры: localStorage persist + seed из assets, resolveBannerImage (preset-ключи)
 │   ├── dish/         # Product/MenuItem: types, store, api, ui/DishCard
 │   ├── category/     # types, store, api

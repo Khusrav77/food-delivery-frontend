@@ -25,7 +25,7 @@ onMounted(bonusStore.fetchAll)
     <h2 class="text-lg font-semibold text-ink">Бонусная программа</h2>
 
     <!-- Balance card -->
-    <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-5 text-white">
+    <div class="bg-gradient-to-br from-accent to-emerald-900 rounded-2xl p-5 text-white">
       <p class="text-sm font-medium text-white/80 mb-1">Текущий баланс</p>
       <div class="flex items-end gap-2">
         <span class="text-4xl font-bold">{{ user?.bonusBalance ?? 0 }}</span>

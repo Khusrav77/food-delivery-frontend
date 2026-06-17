@@ -162,7 +162,7 @@ async function onSubmit(): Promise<void> {
     </div>
     <button
       type="button"
-      class="flex items-center gap-2 px-5 py-3 bg-accent hover:bg-accent-hover active:bg-orange-600
+      class="flex items-center gap-2 px-5 py-3 bg-accent hover:bg-accent-hover active:bg-emerald-900
              text-white font-semibold text-sm rounded-xl transition-colors shrink-0
              disabled:opacity-50 disabled:cursor-not-allowed
              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"

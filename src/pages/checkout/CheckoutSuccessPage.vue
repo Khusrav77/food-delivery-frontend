@@ -54,7 +54,7 @@ if (!orderStore.lastOrder) router.replace('/')
         <RouterLink
           :to="`/orders/${order.id}/track`"
           class="inline-flex w-full items-center justify-center py-3.5 rounded-xl
-                 bg-accent hover:bg-accent-hover active:bg-orange-600 text-white font-semibold text-sm
+                 bg-accent hover:bg-accent-hover active:bg-emerald-900 text-white font-semibold text-sm
                  transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
         >
           Отследить заказ

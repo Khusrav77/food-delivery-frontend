@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router'
 import {
   MapPin, ChevronDown, Search, ShoppingCart,
-  Heart, User, Star, UtensilsCrossed, LayoutDashboard,
+  Heart, User, Star, UtensilsCrossed,
 } from 'lucide-vue-next'
 import { usePublicHeader } from '../model/usePublicHeader'
 import { LocationPickerModal } from '@/features/location-picker'
@@ -17,8 +17,12 @@ const {
 </script>
 
 <template>
-  <header class="sticky top-0 z-50 bg-surface/90 backdrop-blur-md border-b border-line">
-    <div class="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center gap-3 md:gap-4 lg:gap-5">
+  <header class="sticky top-3 z-50 px-3 md:px-5">
+    <div
+      class="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center gap-3 md:gap-4 lg:gap-5
+             rounded-full border border-line bg-surface/70 backdrop-blur-md
+             shadow-[0_10px_30px_-6px_rgba(0,0,0,0.18)]"
+    >
 
       <!-- Logo -->
       <RouterLink to="/" class="flex items-center gap-2.5 shrink-0">
@@ -54,10 +58,6 @@ const {
         <a
           href="#"
           class="px-3 py-1.5 text-sm font-medium text-muted hover:text-ink hover:bg-surface-soft rounded-lg transition-colors"
-        >Рестораны</a>
-        <a
-          href="#"
-          class="px-3 py-1.5 text-sm font-medium text-muted hover:text-ink hover:bg-surface-soft rounded-lg transition-colors"
         >Акции</a>
       </nav>
 
@@ -83,7 +83,7 @@ const {
           Войти
         </button>
         <button
-          class="hidden md:flex items-center px-3.5 py-1.5 text-sm font-semibold text-accent bg-accent-soft rounded-full hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          class="hidden md:flex items-center px-3.5 py-1.5 text-sm font-semibold text-accent bg-accent-soft rounded-full hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           @click="goToLogin()"
         >
           Бонусы
@@ -92,16 +92,6 @@ const {
 
       <!-- Authed: избранное + аватар + бонус-баланс -->
       <template v-else>
-        <!-- Admin panel link -->
-        <a
-          href="/admin/dashboard"
-          target="_blank"
-          rel="noopener"
-          class="hidden md:flex w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-          title="Открыть панель управления"
-        >
-          <LayoutDashboard :size="15" />
-        </a>
         <button
           class="relative hidden md:flex w-9 h-9 rounded-full border border-line-strong items-center justify-center text-muted hover:text-accent hover:border-accent/30 hover:bg-accent-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           aria-label="Избранное"
@@ -115,7 +105,7 @@ const {
         </button>
 
         <button
-          class="hidden md:flex w-9 h-9 rounded-full bg-accent-soft border border-accent/25 items-center justify-center text-accent text-[13px] font-bold hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          class="hidden md:flex w-9 h-9 rounded-full bg-accent-soft border border-accent/25 items-center justify-center text-accent text-[13px] font-bold hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           :title="`${user?.name} — личный кабинет`"
           @click="goToAccount()"
         >
@@ -124,7 +114,7 @@ const {
 
         <button
           v-if="user && user.bonusBalance !== undefined"
-          class="hidden md:flex items-center gap-1 px-3 py-1.5 bg-accent-soft rounded-full text-sm font-semibold text-accent hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
+          class="hidden md:flex items-center gap-1 px-3 py-1.5 bg-accent-soft rounded-full text-sm font-semibold text-accent hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           @click="goToBonuses()"
         >
           <Star :size="12" class="fill-accent text-accent" />
@@ -135,7 +125,7 @@ const {
       <!-- Mobile profile / login (cart lives in the bottom tab bar on mobile) -->
       <button
         v-if="isAuthenticated"
-        class="flex md:hidden w-9 h-9 rounded-full bg-accent-soft border border-accent/25 items-center justify-center text-accent text-[13px] font-bold hover:bg-orange-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 shrink-0"
+        class="flex md:hidden w-9 h-9 rounded-full bg-accent-soft border border-accent/25 items-center justify-center text-accent text-[13px] font-bold hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 shrink-0"
         :aria-label="`${user?.name ?? 'Профиль'} — личный кабинет`"
         @click="goToAccount()"
       >

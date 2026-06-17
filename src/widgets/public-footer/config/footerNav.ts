@@ -83,7 +83,5 @@ export const FOOTER_CONTACTS = {
   city: 'Санкт-Петербург, ежедневно 10:00–23:00',
 } as const
 
-export const FOOTER_PAYMENTS = ['Visa', 'Mastercard', 'МИР', 'SberPay'] as const
-
 export const FOOTER_TAGLINE =
   'Доставка любимой еды из лучших ресторанов города. Быстро, тепло и с заботой о вкусе.'

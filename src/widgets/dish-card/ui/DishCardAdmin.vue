@@ -23,15 +23,15 @@ const { gallery, sizeParts, tags, isMulti, variantCount, priceLabel, showFrom } 
 
 <template>
   <article
-    class="group bg-surface rounded-3xl border overflow-hidden flex flex-col transition-all duration-300"
+    class="group bg-card rounded-3xl border overflow-hidden flex flex-col transition-all duration-300"
     :class="product.isActive
-      ? 'border-line hover:border-accent/30 hover:shadow-[0_16px_40px_-12px_rgba(251,146,60,0.25)] hover:-translate-y-0.5'
+      ? 'border-line hover:border-accent/30 hover:shadow-[0_16px_40px_-12px_rgba(76,140,70,0.25)] hover:-translate-y-0.5'
       : 'border-line opacity-55'"
   >
     <!-- Gallery — inset -->
     <div class="px-3 pt-3">
       <div
-        class="relative aspect-[4/3] overflow-hidden shrink-0 bg-surface-soft rounded-2xl"
+        class="relative aspect-[4/3] overflow-hidden shrink-0 bg-surface rounded-2xl"
         @mousemove="gallery.onHoverMove"
         @mouseleave="gallery.reset"
       >

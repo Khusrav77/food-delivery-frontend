@@ -13,7 +13,7 @@ const { effectiveTabs } = useMobileTabBar()
   >
     <div
       class="pointer-events-auto mx-auto max-w-md flex items-center justify-around h-16 px-2
-             rounded-full bg-surface/95 backdrop-blur-md border border-line
+             rounded-full bg-surface/70 backdrop-blur-md border border-line
              shadow-[0_10px_30px_-6px_rgba(0,0,0,0.18)]"
     >
       <RouterLink

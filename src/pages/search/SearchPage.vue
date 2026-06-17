@@ -78,7 +78,7 @@ const page = useSearchPage()
     <div v-if="page.loading" class="mt-8 grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <div v-for="i in 8" :key="i" class="bg-surface rounded-3xl border border-line overflow-hidden">
         <div class="px-2.5 pt-2.5">
-          <div class="aspect-[4/3] rounded-2xl bg-surface-soft animate-pulse" />
+          <div class="aspect-[4/3] rounded-2xl bg-surface animate-pulse" />
         </div>
         <div class="p-4 space-y-3">
           <div class="h-4 bg-surface-soft rounded animate-pulse w-3/4" />

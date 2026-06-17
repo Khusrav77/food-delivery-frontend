@@ -77,7 +77,7 @@ const isActive = computed(
         </button>
         <button
           class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-accent-soft text-accent text-sm font-medium
-                 hover:bg-orange-100 transition-colors
+                 hover:bg-accent/10 transition-colors
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
           @click="emit('detail', order.id)"
         >

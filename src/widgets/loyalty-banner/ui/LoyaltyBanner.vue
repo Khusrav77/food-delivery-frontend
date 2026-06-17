@@ -4,7 +4,7 @@ import { Gift } from 'lucide-vue-next'
 </script>
 
 <template>
-  <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-orange-400 via-accent to-amber-600 px-8 py-10 flex items-center justify-between">
+  <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-accent to-emerald-900 px-8 py-10 flex items-center justify-between">
     <!-- Decorative blobs -->
     <div class="absolute right-0 top-0 w-72 h-72 rounded-full bg-white opacity-10 blur-3xl translate-x-24 -translate-y-24 pointer-events-none" />
     <div class="absolute right-40 bottom-0 w-40 h-40 rounded-full bg-white opacity-5 blur-2xl translate-y-12 pointer-events-none" />

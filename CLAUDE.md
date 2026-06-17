@@ -86,7 +86,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 При работе над этим репозиторием следуй **`.claude/docs/AI_TEAM.md`** и правилам из **`.claude/rules/`**. Каждый ответ — на русском, код/коммиты/имена — на английском.
 
-**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind CSS v4). Admin-панель и Client-часть реализованы со строгим разделением UI / Logic / Business Rules. API-слой подключён к реальному бэкенду. Проведён полный аудит + исправления: баги, безопасность (Open Redirect), FSD-нарушения (entities/favorite, DishCardPublic удалён), типографика (Plus Jakarta Sans), мобильный UX (touch targets, carousel swipe, checkout bottom bar). Реализована dark/light тема: `entities/theme` (Pinia, localStorage, раздельно для client/admin), `features/theme-toggle` (кнопка в хедерах), `@custom-variant dark` + `.dark` CSS-переменные в `index.css`.
+**Текущее состояние:** FSD-структура развёрнута, стек установлен (Vue 3 + Pinia + Vue Router + Tailwind CSS v4). Admin-панель и Client-часть реализованы со строгим разделением UI / Logic / Business Rules. API-слой подключён к реальному бэкенду. Проведён полный аудит + исправления: баги, безопасность (Open Redirect), FSD-нарушения (entities/favorite, DishCardPublic удалён), типографика (Plus Jakarta Sans), мобильный UX (touch targets, carousel swipe, checkout bottom bar). Реализована dark/light тема: `entities/theme` (Pinia, localStorage, раздельно для client/admin), `features/theme-toggle` (кнопка в хедерах), `@custom-variant dark` + `.dark` CSS-переменные в `index.css`. Клиентская часть переведена на eco-organic палитру (приглушённый sage-зелёный accent `#4c8c46` вместо оранжевого, белый canvas, отдельный мятный токен `--color-card` под карточки блюд) — см. `index.css`. `PublicHeader` и `MobileTabBar` сделаны плавающими (sticky/fixed, rounded-full, `bg-surface/70` + `backdrop-blur-md`, тень) поверх контента, как iOS-таббар; из хедера убраны пункт «Рестораны» и ссылка на админку. `PublicFooter` без блока платёжных систем, с подписью «Разработано X-DEV».
 
 ## Workflow (Inbox → Active → Outbox)
 
@@ -147,8 +147,8 @@ src/
 │       ├── model/    # useSearchPage.ts — page composable
 │       └── SearchPage.vue
 ├── widgets/
-│   ├── public-header/    # PublicHeader + usePublicHeader
-│   ├── public-footer/    # PublicFooter + footerNav config
+│   ├── public-header/    # PublicHeader (плавающий, sticky top-3, rounded-full, bg-surface/70 + blur) + usePublicHeader
+│   ├── public-footer/    # PublicFooter (без блока платёжных систем, подпись "Разработано X-DEV") + footerNav config
 │   ├── account-sidebar/  # AccountSidebar (desktop) + AccountMobileList (master-список) + AccountMobileHeader («Назад» + заголовок); model/nav.ts (ACCOUNT_NAV)
 │   ├── cart-drawer/      # CartDrawer (side panel)
 │   ├── dish-card/        # DishCardA (client, 4-кол, cart-stepper [−N+]); DishCardAdmin; useDishCard, useImageGallery
@@ -159,7 +159,7 @@ src/
 │   ├── loyalty-banner/   # LoyaltyBanner
 │   ├── admin-sidebar/
 │   ├── admin-header/
-│   ├── mobile-tab-bar/   # MobileTabBar (md:hidden, плавающая пилюля, отступ 20px, только иконки): 4 вкладки (Главная/Поиск/Корзина/Избранное), бейджи cart/favorites, корзина = data-fly-cart-target
+│   ├── mobile-tab-bar/   # MobileTabBar (md:hidden, плавающая пилюля, отступ 20px, bg-surface/70 + blur, только иконки): 4 вкладки (Главная/Поиск/Корзина/Избранное), бейджи cart/favorites, корзина = data-fly-cart-target
 │   ├── menu/             # MenuHeader, ProductFilters, CategoryTabs, ProductGrid, EmptyProducts
 │   └── dashboard/        # DashboardStats, RecentOrdersTable, OrderStatusBreakdown, TopRestaurants
 ├── features/

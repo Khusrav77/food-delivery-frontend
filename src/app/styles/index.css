@@ -9,9 +9,12 @@
   --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   /* Surfaces */
-  --color-canvas: #f1f1f1;
+  --color-canvas: #ffffff;
   --color-surface: #ffffff;
   --color-surface-soft: #f7f7f7;
+
+  /* Product card — muted green */
+  --color-card: #f3f8f2;
 
   /* Ink / text */
   --color-ink: #18181b;
@@ -22,10 +25,10 @@
   --color-line: #e8e8e8;
   --color-line-strong: #d8d8d8;
 
-  /* Soft orange accent */
-  --color-accent: #fb923c;
-  --color-accent-hover: #f97316;
-  --color-accent-soft: #fff7ed;
+  /* Eco organic sage accent */
+  --color-accent: #4c8c46;
+  --color-accent-hover: #2f5233;
+  --color-accent-soft: #eaf3ea;
 }
 
 @layer base {
@@ -48,7 +51,8 @@
     --color-faint: #71717a;
     --color-line: #2e2e31;
     --color-line-strong: #3f3f46;
-    --color-accent-soft: #2a1c10;
+    --color-accent-soft: #1b2e1d;
+    --color-card: #1f2e20;
   }
 }
 

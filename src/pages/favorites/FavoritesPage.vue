@@ -50,7 +50,7 @@ onMounted(() => {
         class="bg-surface rounded-3xl border border-line overflow-hidden animate-pulse"
       >
         <div class="px-2.5 pt-2.5">
-          <div class="aspect-[4/3] bg-surface-soft rounded-2xl" />
+          <div class="aspect-[4/3] bg-surface rounded-2xl" />
         </div>
         <div class="p-4 space-y-3">
           <div class="h-4 bg-line rounded-lg w-3/4" />

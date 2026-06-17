@@ -71,8 +71,8 @@ function decrement(e: MouseEvent): void {
 
 <template>
   <article
-    class="group cursor-pointer bg-surface rounded-3xl border border-line overflow-hidden flex flex-col
-           hover:border-accent/30 hover:shadow-[0_16px_40px_-12px_rgba(251,146,60,0.25)]
+    class="group cursor-pointer bg-card rounded-3xl border border-line overflow-hidden flex flex-col
+           hover:border-accent/30 hover:shadow-[0_16px_40px_-12px_rgba(76,140,70,0.25)]
            transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1
            motion-reduce:transition-none motion-reduce:hover:translate-y-0"
     @click="emit('select', props.product)"
@@ -80,7 +80,7 @@ function decrement(e: MouseEvent): void {
     <!-- Gallery -->
     <div class="px-2.5 pt-2.5">
       <div
-        class="relative aspect-[4/3] overflow-hidden shrink-0 bg-surface-soft rounded-2xl"
+        class="relative aspect-[4/3] overflow-hidden shrink-0 bg-surface rounded-2xl"
         @mousemove="gallery.onHoverMove"
         @mouseleave="gallery.reset"
       >

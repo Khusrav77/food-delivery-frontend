@@ -2,8 +2,7 @@
 import { RouterLink } from 'vue-router'
 import { UtensilsCrossed, Phone, Mail, MapPin, Apple, Smartphone } from 'lucide-vue-next'
 import {
-  FOOTER_COLUMNS, FOOTER_SOCIALS, FOOTER_CONTACTS,
-  FOOTER_PAYMENTS, FOOTER_TAGLINE,
+  FOOTER_COLUMNS, FOOTER_SOCIALS, FOOTER_CONTACTS, FOOTER_TAGLINE,
 } from '../config/footerNav'
 
 const year = new Date().getFullYear()
@@ -116,13 +115,9 @@ const year = new Date().getFullYear()
         <p class="text-[13px] text-faint order-2 md:order-1">
           © {{ year }} FoodHub. Все права защищены.
         </p>
-        <div class="flex items-center gap-2 order-1 md:order-2">
-          <span
-            v-for="payment in FOOTER_PAYMENTS"
-            :key="payment"
-            class="px-2.5 py-1 rounded-md bg-surface-soft border border-line text-[11px] font-semibold text-muted"
-          >{{ payment }}</span>
-        </div>
+        <p class="text-[13px] text-faint order-1 md:order-2">
+          Разработано <span class="font-semibold text-muted">X-DEV</span>
+        </p>
       </div>
 
     </div>

@@ -68,7 +68,7 @@ onUnmounted(() => {
           >
 
             <!-- Image: top on mobile, left on desktop -->
-            <div class="relative aspect-[4/3] sm:aspect-auto sm:w-[44%] shrink-0 bg-surface-soft">
+            <div class="relative aspect-[4/3] sm:aspect-auto sm:w-[44%] shrink-0 bg-surface">
               <img
                 v-if="displayImage"
                 ref="imgEl"
@@ -127,7 +127,7 @@ onUnmounted(() => {
                 <span class="font-display text-2xl font-semibold text-ink flex-1">{{ displayPrice }}</span>
                 <button
                   class="flex items-center gap-2 px-5 py-3
-                         bg-accent hover:bg-accent-hover active:bg-orange-600
+                         bg-accent hover:bg-accent-hover active:bg-emerald-900
                          text-white font-medium rounded-lg transition-colors
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
                   @click="addToCart()"

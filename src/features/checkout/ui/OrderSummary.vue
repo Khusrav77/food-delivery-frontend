@@ -94,7 +94,7 @@ const emit = defineEmits<{ submit: [] }>()
     <button
       type="button"
       class="w-full py-3.5 flex items-center justify-center gap-2
-             bg-accent hover:bg-accent-hover active:bg-orange-600
+             bg-accent hover:bg-accent-hover active:bg-emerald-900
              text-white font-semibold text-sm rounded-xl transition-colors
              disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-accent
              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-1"

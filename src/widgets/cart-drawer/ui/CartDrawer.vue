@@ -81,7 +81,7 @@ function goToCheckout(): void {
             class="flex gap-3 p-3 bg-surface-soft rounded-2xl group/item"
           >
             <!-- Image -->
-            <div class="w-[68px] h-[68px] rounded-xl overflow-hidden shrink-0 bg-line flex items-center justify-center">
+            <div class="w-[68px] h-[68px] rounded-xl overflow-hidden shrink-0 bg-surface flex items-center justify-center">
               <img
                 v-if="item.image"
                 :src="item.image"
@@ -152,7 +152,7 @@ function goToCheckout(): void {
           </div>
           <button
             class="w-full py-3.5 flex items-center justify-center gap-2
-                   bg-accent hover:bg-accent-hover active:bg-orange-600
+                   bg-accent hover:bg-accent-hover active:bg-emerald-900
                    text-white font-semibold text-sm rounded-xl transition-colors
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-1"
             @click="goToCheckout"

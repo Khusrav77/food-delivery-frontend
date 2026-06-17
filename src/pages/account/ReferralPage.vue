@@ -60,7 +60,7 @@ onMounted(store.fetchInfo)
 
     <template v-else-if="info">
       <!-- Gradient banner -->
-      <div class="relative bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-5 text-white overflow-hidden">
+      <div class="relative bg-gradient-to-br from-accent to-emerald-900 rounded-2xl p-5 text-white overflow-hidden">
         <div class="absolute -right-6 -top-6 w-32 h-32 rounded-full bg-white/10" />
         <div class="absolute -right-2 bottom-2 opacity-20">
           <Gift :size="72" />
